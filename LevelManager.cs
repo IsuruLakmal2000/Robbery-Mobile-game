@@ -38,6 +38,7 @@ public class LevelManager : MonoBehaviour
             levelTarget = 0f;
             CarController.instance.CompleteLevel();
             GameManager.instance.isStoppingSpawnPolice = true;
+            return;
             //   VictoryMenu();
 
         }

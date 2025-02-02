@@ -12,6 +12,8 @@ public class PoliceCarSpawner : MonoBehaviour
         // Start the spawning coroutine
 
         StartCoroutine(SpawnPoliceCars());
+        playerCar = GameObject.FindWithTag("PlayerCar").transform;
+
     }
 
     private System.Collections.IEnumerator SpawnPoliceCars()

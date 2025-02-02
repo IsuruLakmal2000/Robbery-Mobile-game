@@ -3,8 +3,25 @@ using UnityEngine.EventSystems;
 
 public class ButtonControl : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    public CarController carController; // Reference to your CarController script
+    private CarController carController; // Reference to your CarController script
     public float inputValue; // Set this to -1 for left and 1 for right in the Inspector
+
+    public static ButtonControl instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
+    void Start()
+    {
+        carController = GameObject.FindWithTag("PlayerCar").GetComponent<CarController>();
+    }
+    public void LoadScript()
+    {
+        carController = GameObject.FindWithTag("PlayerCar").GetComponent<CarController>();
+    }
+
 
     public void OnPointerDown(PointerEventData eventData)
     {
