@@ -11,7 +11,7 @@ public class BottomBarController : MonoBehaviour
     private Button businessBtn;
     private Animator animator;
     private bool isPanelVisible = true;
-    [SerializeField] private GameObject vehiclePanelPrefab;
+    //[SerializeField] private GameObject vehiclePanelPrefab;
     [SerializeField] private GameObject backBtnOnGarage;
     [SerializeField] private GameObject garagePropSidePanelPrefab;
 
@@ -46,7 +46,9 @@ public class BottomBarController : MonoBehaviour
         Debug.Log("on garage clicked ");
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
         TogglePanel();
-        vehiclePanelPrefab.GetComponent<VehiclePanelController>().TogglePanel();
+        VehiclePanelController.instance.TogglePanel();
+
+        // vehiclePanelPrefab.GetComponent<VehiclePanelController>().TogglePanel();
 
 
     }
@@ -82,7 +84,10 @@ public class BottomBarController : MonoBehaviour
     private void BackButtonPressed()
     {
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
-        vehiclePanelPrefab.GetComponent<VehiclePanelController>().TogglePanel();
+        VehiclePanelController.instance.ClosePanel();
+        UpgradePanelController.instance.ClosePanel();
+        GunsPanelController.instance.ClosePanel();
+        //vehiclePanelPrefab.GetComponent<VehiclePanelController>().TogglePanel();
         TogglePanel();
         backBtnOnGarage.SetActive(false);
     }

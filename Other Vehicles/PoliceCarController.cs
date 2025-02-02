@@ -14,7 +14,6 @@ public class PoliceCarController : MonoBehaviour
     public float laneChangeChance = 0.05f; // Chance of changing lanes
     public float laneWidth = 1f; // Width of the lanes for lane changes
     private float targetLaneX; // Target x position for lane
-    private bool isHit = false; // Flag to check if police car was hit
 
     private void Start()
     {

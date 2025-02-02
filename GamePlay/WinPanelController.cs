@@ -25,8 +25,9 @@ public class WinPanelController : MonoBehaviour
     private void OnNextBtnClick()
     {
         Debug.Log("on next clicked ");
+        Time.timeScale = 1;
         SceneManager.LoadScene("Menu");
-        // Load next level
+
     }
 
     public void SetRobbedMoney(int money)
