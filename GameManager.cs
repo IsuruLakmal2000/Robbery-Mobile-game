@@ -28,7 +28,9 @@ public class GameManager : MonoBehaviour
     void LoadLevelConfig()
     {
         // Load JSON file from Resources folder
-        TextAsset jsonFile = Resources.Load<TextAsset>("levelConfigs/Level1");
+        int currentLevel = PlayerPrefs.GetInt("current_level", 1);
+        string fileName = $"levelConfigs/Level{currentLevel}";
+        TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
 
         if (jsonFile != null)
         {

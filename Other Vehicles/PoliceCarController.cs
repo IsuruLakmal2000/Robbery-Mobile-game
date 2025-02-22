@@ -21,7 +21,7 @@ public class PoliceCarController : MonoBehaviour
     [SerializeField] private GameObject hitPrefab;
 
     [SerializeField] private GameObject exPlosionPrefab;
-
+    [SerializeField] private GameObject moneyBoomExplosionPrefab;
 
     private void Start()
     {
@@ -133,7 +133,10 @@ public class PoliceCarController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            LevelManager.instance.totalDestriyedPoliceVehiclesCount++;
             GameObject explosion = Instantiate(exPlosionPrefab, transform.position, Quaternion.identity);
+            GameObject moneyBoomExplosion = Instantiate(moneyBoomExplosionPrefab, transform.position, Quaternion.identity);
+            Destroy(moneyBoomExplosion, 1f);
             Destroy(explosion, 1f);
             Destroy(gameObject);
 

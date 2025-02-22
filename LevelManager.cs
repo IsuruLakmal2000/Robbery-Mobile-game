@@ -9,12 +9,21 @@ public class LevelManager : MonoBehaviour
     public float targetReductionRate = 1f; // Rate at which the target distance reduces
     public int robbedMoney = 0;
     public bool isLevelComplete = false;
+    public int totalDestriyedPoliceVehiclesCount = 0;
 
     [SerializeField] private TextMeshProUGUI distanceToTravelTxt;
+
+    public static LevelManager instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
         isLevelComplete = false;
+        totalDestriyedPoliceVehiclesCount = 0;
         levelTarget = GameManager.instance.levelConfig.levelDistance;
         //  robbedMoney = GameManager.instance.levelConfig.robbedMoney;
     }

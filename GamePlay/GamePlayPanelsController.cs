@@ -6,7 +6,7 @@ public class GamePlayPanelsController : MonoBehaviour
 {
     [SerializeField] private GameObject winPanel;
     public static GamePlayPanelsController instance;
-    private Canvas canvas;
+    [SerializeField] private Canvas canvas;
 
     void Awake()
     {
@@ -14,7 +14,7 @@ public class GamePlayPanelsController : MonoBehaviour
     }
     void Start()
     {
-        canvas = FindObjectOfType<Canvas>();
+
 
     }
 
@@ -25,7 +25,7 @@ public class GamePlayPanelsController : MonoBehaviour
         winPanelInstance.transform.SetAsLastSibling();
         int totalMoneyInthisLevel = GameRobbedMoney.instance.robbedMoneyCount;
         WinPanelController.instance.SetRobbedMoney(totalMoneyInthisLevel);
-        PlayerPrefs.SetInt("total_money", PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel);
+
 
     }
 }
