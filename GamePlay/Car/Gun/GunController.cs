@@ -12,12 +12,14 @@ public class GunController : MonoBehaviour
     [SerializeField] private GameObject v4Prefab;
 
     [SerializeField] private GameObject bulletPrefab;  // Assign your bullet prefab
-    [SerializeField] private float fireRate = 0.5f;    // Fire rate in seconds
+    private float fireRate = 0.2f;    // Fire rate in seconds
     [SerializeField] private float bulletSpeed = 10f;  // Speed of the bullet
     [SerializeField] private int bulletDamage = 10;    // Damage per bullet
 
     private float nextFire = 0f;                         // Track when the next bullet can be fired
     private bool isFiring = false;
+
+    private Animator gunAnimator;
 
     private Transform gunArm; // Assign in Inspector
     public float rotationSpeed = 5f; // Speed of rotation
@@ -25,8 +27,16 @@ public class GunController : MonoBehaviour
     private Transform player; // Player's position
     private Transform nearestPolice; // Closest police car
 
+    public static GunController instance;
+
+    void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
+
         player = GameObject.FindGameObjectWithTag("PlayerCar").transform;
         String activatedGun = PlayerPrefs.GetString("SelectedGun", "V1");
 
@@ -46,15 +56,10 @@ public class GunController : MonoBehaviour
                 break;
         }
         gunArm = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
+        gunAnimator = gunArm.GetComponent<Animator>();
         nextFire = Time.time;
 
-        // Add button event listeners
-        // GameObject fireButton = GameObject.Find("FireButton");
-        // if (fireButton != null)
-        // {
-        //     fireButton.GetComponent<Button>().onClick.AddListener(OnFireButtonDown);
-        //     fireButton.GetComponent<Button>().onClick.AddListener(OnFireButtonUp);
-        // }
+
     }
 
     void Update()
@@ -62,7 +67,7 @@ public class GunController : MonoBehaviour
         // Find all police cars in the scene
         GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
 
-        // Find the nearest police car within range
+        // // Find the nearest police car within range
         nearestPolice = FindNearestPolice(policeCars);
 
         if (nearestPolice != null)
@@ -71,41 +76,30 @@ public class GunController : MonoBehaviour
             RotateTowardsTarget(nearestPolice.position);
         }
         isFiring = true;
+
+    }
+    public void FireBullet()
+    {
         if (isFiring && Time.time >= nextFire && nearestPolice != null)
         {
+            gunAnimator.SetTrigger("Fire");
+            GameObject bullet = Instantiate(bulletPrefab, gunArm.position, gunArm.rotation);
 
-            // Fire a bullet
-            FireBullet();
+            // Get the Bullet script and set its properties
+            Bullet bulletScript = bullet.GetComponent<Bullet>();
+            if (bulletScript != null)
+            {
+                bulletScript.speed = bulletSpeed;
+                bulletScript.damage = bulletDamage;
+                bulletScript.target = nearestPolice.position;
+            }
 
-            // Update the next fire time based on fire rate
+            // Optional: Add a debug line to show the bullet's path
+            Debug.DrawLine(gunArm.position, nearestPolice.position, Color.red, 0.1f);
             nextFire = Time.time + fireRate;
         }
-    }
-    void FireBullet()
-    {
         // Instantiate the bullet at the tip of the gun arm
-        GameObject bullet = Instantiate(bulletPrefab, gunArm.position, gunArm.rotation);
 
-        // Get the Bullet script and set its properties
-        Bullet bulletScript = bullet.GetComponent<Bullet>();
-        if (bulletScript != null)
-        {
-            bulletScript.speed = bulletSpeed;
-            bulletScript.damage = bulletDamage;
-            bulletScript.target = nearestPolice.position;
-        }
-
-        // Optional: Add a debug line to show the bullet's path
-        Debug.DrawLine(gunArm.position, nearestPolice.position, Color.red, 0.1f);
-    }
-    void OnFireButtonDown()
-    {
-        isFiring = true;
-    }
-
-    void OnFireButtonUp()
-    {
-        isFiring = false;
     }
 
     // Call this method to adjust the fire rate and bullet damage

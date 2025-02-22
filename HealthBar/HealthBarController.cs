@@ -31,7 +31,7 @@ public class HealthBarController : MonoBehaviour
     }
     public bool CheckHealthEnd()
     {
-        if (currentCarHealth < 4)
+        if (currentCarHealth == 0)
         {
             return true;
         }
@@ -42,7 +42,15 @@ public class HealthBarController : MonoBehaviour
     }
     public void ReduceHealth(int count)
     {
-        currentCarHealth = currentCarHealth - count;
+        if (currentCarHealth <= count)
+        {
+            currentCarHealth = 0;
+        }
+        else
+        {
+            currentCarHealth = currentCarHealth - count;
+        }
+
     }
 
     private void Update()

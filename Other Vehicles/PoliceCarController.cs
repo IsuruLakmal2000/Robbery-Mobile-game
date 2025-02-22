@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PoliceCarController : MonoBehaviour
 {
@@ -14,6 +15,13 @@ public class PoliceCarController : MonoBehaviour
     public float laneChangeChance = 0.05f; // Chance of changing lanes
     public float laneWidth = 1f; // Width of the lanes for lane changes
     private float targetLaneX; // Target x position for lane
+    public Slider healthBar; // Assign this in the Inspector
+    public float maxHealth = 10f;
+    private float currentHealth;
+    [SerializeField] private GameObject hitPrefab;
+
+    [SerializeField] private GameObject exPlosionPrefab;
+
 
     private void Start()
     {
@@ -36,14 +44,16 @@ public class PoliceCarController : MonoBehaviour
 
         // Set initial lane position based on player's position
         targetLaneX = GetLaneXPosition();
-        // Start the police car just below the player's car
-        // Vector3 spawnPosition = playerCar.position + new Vector3(0, -followDistance, 0);
-        // transform.position = transform.position;
+        currentHealth = maxHealth;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
     }
+
+
 
     private void Update()
     {
-        if (isMovingUncontrollably)
+        if (playerCar == null)
         {
             // Calculate the movement direction based on the vehicle's rotation
             Vector3 moveDirection = Vector3.down;
@@ -101,14 +111,35 @@ public class PoliceCarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerCar"))
         {
-            HandleCollisionWithPlayer(collision);
+            // HandleCollisionWithPlayer(collision);
         }
 
         if (collision.gameObject.CompareTag("Area"))
         {
             Destroy(gameObject);
         }
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            TakeDamage(1f);
+            GameObject hitEffect = Instantiate(hitPrefab, transform);
+            Destroy(hitEffect, 1f);
+        }
     }
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+        healthBar.value = currentHealth;
+
+        if (currentHealth <= 0)
+        {
+            GameObject explosion = Instantiate(exPlosionPrefab, transform.position, Quaternion.identity);
+            Destroy(explosion, 1f);
+            Destroy(gameObject);
+
+        }
+    }
+
 
     private void HandleCollisionWithPlayer(Collision2D collision)
     {

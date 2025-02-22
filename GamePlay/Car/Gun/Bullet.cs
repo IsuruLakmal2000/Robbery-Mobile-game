@@ -12,10 +12,20 @@ public class Bullet : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, step);
 
         // Destroy the bullet when it reaches the target or after a certain time
-        if (Vector3.Distance(transform.position, target) < 0.1f)
+        if (Vector3.Distance(transform.position, target) < 0.001f)
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("PoliceCar"))
+        {
+            Destroy(gameObject);
+        }
+
+
     }
 
 }

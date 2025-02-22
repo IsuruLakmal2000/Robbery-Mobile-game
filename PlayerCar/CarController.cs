@@ -72,15 +72,15 @@ public class CarController : MonoBehaviour
         GameRobbedMoney.instance.ReduceMoneyWhenHit(200);
         if (collision.gameObject.CompareTag("OtherCar"))
         {
-            Debug.Log("collide with other------");
+
             ContactPoint2D contact = collision.contacts[0];
             GameObject vfxInstance = Instantiate(vehicleDamageVfx, contact.point, Quaternion.identity);
             Destroy(vfxInstance, 1f);
             if (HealthBarController.instance.CheckHealthEnd())
             {
-                Destroy(gameObject);
-                GameObject explosionVfxInstance = Instantiate(explosionVfx, transform);
-                Destroy(explosionVfx, 1f);
+
+                Instantiate(explosionVfx, transform);
+                Destroy(gameObject, 0.3f);
             }
             else
             {
@@ -92,9 +92,9 @@ public class CarController : MonoBehaviour
         {
             if (HealthBarController.instance.CheckHealthEnd())
             {
-                Destroy(gameObject);
-                GameObject explosionVfxInstance = Instantiate(explosionVfx, transform);
-                Destroy(explosionVfx, 1f);
+
+                Instantiate(explosionVfx, transform);
+                Destroy(gameObject, 0.3f);
             }
             else
             {
@@ -107,7 +107,7 @@ public class CarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Coin"))
         {
-            Debug.Log("collide with coin----");
+
             GameRobbedMoney.instance.IncreaseMoneyWhenCollect(100);
             GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, transform.Find("Canvas").transform);
             Destroy(moneyIncreaseEffectInstance, 0.5f);

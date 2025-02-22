@@ -79,12 +79,6 @@ public class RandomVehicleController : MonoBehaviour
     {
         collisionCount++;
         Debug.Log($"Collision detected with player! Collision count: {collisionCount}");
-
-        // Randomly rotate the vehicle upon collision
-        // float randomAngle = Random.Range(-30f, 30f); // Adjust the range as needed
-        // transform.Rotate(0, 0, randomAngle); // Rotate the vehicle
-
-        // Set the vehicle to move uncontrollably
         isMovingUncontrollably = true; // Indicate that the vehicle is now moving in a new direction
     }
 }
