@@ -19,6 +19,11 @@ public class GameRobbedMoney : MonoBehaviour
     }
     public void ReduceMoneyWhenHit(int count)
     {
+        if (robbedMoneyCount - count < 0)
+        {
+            robbedMoneyCount = 0;
+            return;
+        }
         robbedMoneyCount = robbedMoneyCount - count;
     }
     public void IncreaseMoneyWhenCollect(int count)

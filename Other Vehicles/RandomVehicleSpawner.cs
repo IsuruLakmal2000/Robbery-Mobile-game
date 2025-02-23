@@ -13,7 +13,7 @@ public class RandomVehicleSpawner : MonoBehaviour
         lanePositions[1] = new Vector3(-0.43f, transform.position.y, transform.position.z);
         lanePositions[2] = new Vector3(0.5f, transform.position.y, transform.position.z);
         lanePositions[3] = new Vector3(1.43f, transform.position.y, transform.position.z);
-
+        spawnInterval = GameManager.instance.levelConfig.otherVehicleSpawnInterval;
         StartCoroutine(SpawnRandomCars());
 
     }

@@ -17,7 +17,7 @@ public class BackgroundController : MonoBehaviour
     void Start()
     {
         speed = GameManager.instance.levelConfig.mapRotationSpeed;
-        Debug.Log("saddada+" + GameManager.instance.levelConfig.mapRotationSpeed);
+
     }
 
     private void Update()

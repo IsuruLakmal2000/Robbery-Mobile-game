@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,15 +20,20 @@ public class PoliceCarController : MonoBehaviour
     public float maxHealth = 10f;
     private float currentHealth;
     [SerializeField] private GameObject hitPrefab;
+    [SerializeField] private int destroyEarning = 500;
 
     [SerializeField] private GameObject exPlosionPrefab;
+    [SerializeField] private GameObject redLight;
+    [SerializeField] private GameObject blueLight;
     [SerializeField] private GameObject moneyBoomExplosionPrefab;
+    // [SerializeField] private GameObject moneyIncreaseEffect;
+    [SerializeField] private Canvas canvas;
 
     private void Start()
     {
         // Store the original rotation
         originalRotation = transform.rotation;
-
+        StartCoroutine(BlinkLights());
         // Find the player car by tag if not assigned
         if (playerCar == null)
         {
@@ -133,11 +139,15 @@ public class PoliceCarController : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            // GameObject moneyIncreaseVfx = Instantiate(moneyIncreaseEffect, canvas.transform);
             LevelManager.instance.totalDestriyedPoliceVehiclesCount++;
             GameObject explosion = Instantiate(exPlosionPrefab, transform.position, Quaternion.identity);
             GameObject moneyBoomExplosion = Instantiate(moneyBoomExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(moneyBoomExplosion, 1f);
+            // Destroy(moneyIncreaseVfx, 1f);
             Destroy(explosion, 1f);
+            // Time.timeScale = 0f;
+            GameRobbedMoney.instance.IncreaseMoneyWhenCollect(destroyEarning);
             Destroy(gameObject);
 
         }
@@ -204,6 +214,22 @@ public class PoliceCarController : MonoBehaviour
         // Choose a random lane position
         int laneIndex = Random.Range(0, lanePositions.Length);
         return lanePositions[laneIndex];
+    }
+
+
+    private IEnumerator BlinkLights()
+    {
+        float blinkInterval = 0.2f;
+        while (true) // Infinite loop
+        {
+            redLight.SetActive(true);
+            blueLight.SetActive(false);
+            yield return new WaitForSeconds(blinkInterval); // Wait
+
+            redLight.SetActive(false);
+            blueLight.SetActive(true);
+            yield return new WaitForSeconds(blinkInterval); // Wait
+        }
     }
 
 

@@ -7,6 +7,7 @@ public class LevelProperties
     public float levelDistance;
     public int robbedMoney;
     public int rideExpences;
+    public float otherVehicleSpawnInterval;
     public float otherVehicleSpeed;
 
 }
