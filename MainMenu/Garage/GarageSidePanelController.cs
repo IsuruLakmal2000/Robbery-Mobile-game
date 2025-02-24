@@ -11,6 +11,8 @@ public class GarageSidePanelController : MonoBehaviour
     [SerializeField] private GameObject vehiclePanel;
     [SerializeField] private GameObject upgradePanel;
     [SerializeField] private GameObject gunsPanel;
+    [SerializeField] private GameObject healthBar;
+    public GameObject healthBarInstance;
 
 
     void Start()
@@ -22,21 +24,27 @@ public class GarageSidePanelController : MonoBehaviour
     }
     private void OnVehiclesSelectBtnClick()
     {
-        Debug.Log("on vehicles select clicked ");
+        if (healthBarInstance != null)
+        {
+            Destroy(healthBarInstance);
+        }
         vehiclePanel.GetComponent<VehiclePanelController>().OpenPanel();
         upgradePanel.GetComponent<UpgradePanelController>().ClosePanel();
         gunsPanel.GetComponent<GunsPanelController>().ClosePanel();
     }
     private void OnUpgradeBtnClick()
     {
-        Debug.Log("on upgrade clicked ");
+        healthBarInstance = Instantiate(healthBar, transform.parent);
         vehiclePanel.GetComponent<VehiclePanelController>().ClosePanel();
         upgradePanel.GetComponent<UpgradePanelController>().OpenPanel();
         gunsPanel.GetComponent<GunsPanelController>().ClosePanel();
     }
     private void OnGunsBtnClick()
     {
-        Debug.Log("on guns clicked ");
+        if (healthBarInstance != null)
+        {
+            Destroy(healthBarInstance);
+        }
         vehiclePanel.GetComponent<VehiclePanelController>().ClosePanel();
         upgradePanel.GetComponent<UpgradePanelController>().ClosePanel();
         gunsPanel.GetComponent<GunsPanelController>().OpenPanel();
@@ -53,6 +61,7 @@ public class GarageSidePanelController : MonoBehaviour
             animator.SetBool("SidePanelOpen", true);
         }
         isPanelVisible = !isPanelVisible;
+
     }
 
 

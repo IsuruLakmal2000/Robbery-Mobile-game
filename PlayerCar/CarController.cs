@@ -124,7 +124,7 @@ public class CarController : MonoBehaviour
         {
             if (transform.position.y > Camera.main.orthographicSize + 1) // Adjust as needed
             {
-                Time.timeScale = 0;
+                // Time.timeScale = 0f;
                 isMovingOffScreen = false; // Stop moving
             }
         }

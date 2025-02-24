@@ -38,7 +38,7 @@ public class GunController : MonoBehaviour
     {
 
         player = GameObject.FindGameObjectWithTag("PlayerCar").transform;
-        String activatedGun = PlayerPrefs.GetString("SelectedGun", "V1");
+        String activatedGun = PlayerPrefs.GetString("SelectedGun", "none");
 
         switch (activatedGun)
         {
@@ -55,9 +55,13 @@ public class GunController : MonoBehaviour
                 Instantiate(v4Prefab, transform);
                 break;
         }
-        gunArm = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
-        gunAnimator = gunArm.GetComponent<Animator>();
-        nextFire = Time.time;
+        if (activatedGun != "none")
+        {
+            gunArm = gameObject.transform.GetChild(0).GetChild(0).GetChild(0).transform;
+            gunAnimator = gunArm.GetComponent<Animator>();
+            nextFire = Time.time;
+        }
+
 
 
     }
@@ -65,17 +69,20 @@ public class GunController : MonoBehaviour
     void Update()
     {
         // Find all police cars in the scene
-        GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
-
-        // // Find the nearest police car within range
-        nearestPolice = FindNearestPolice(policeCars);
-
-        if (nearestPolice != null)
+        if (gunArm != null)
         {
-            // Rotate the gun arm towards the nearest police car
-            RotateTowardsTarget(nearestPolice.position);
+            GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
+
+            // // Find the nearest police car within range
+            nearestPolice = FindNearestPolice(policeCars);
+
+            if (nearestPolice != null)
+            {
+                // Rotate the gun arm towards the nearest police car
+                RotateTowardsTarget(nearestPolice.position);
+            }
+            isFiring = true;
         }
-        isFiring = true;
 
     }
     public void FireBullet()

@@ -16,18 +16,7 @@ public class UpgradePanelController : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    // public void TogglePanel()
-    // {
-    //     if (isPanelVisible)
-    //     {
-    //         animator.SetBool("isVehiclePanelOpen", false);
-    //     }
-    //     else
-    //     {
-    //         animator.SetBool("isVehiclePanelOpen", true);
-    //     }
-    //     isPanelVisible = !isPanelVisible;
-    // }
+
     public void OpenPanel()
     {
         animator.SetBool("isVehiclePanelOpen", true);

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using System.Collections;
 
 public class WinPanelController : MonoBehaviour
 {
@@ -12,6 +13,10 @@ public class WinPanelController : MonoBehaviour
     [SerializeField] private GameObject vfxPrefab;
     [SerializeField] private GameObject vfxPrefabConfetti1;
     [SerializeField] private GameObject vfxPrefabConfetti2;
+    [SerializeField] private TextMeshProUGUI earnedXpTxt;
+    [SerializeField] private TextMeshProUGUI currentLevelTxt;
+    private Coroutine xpAnimationCoroutine;
+    private int displayedXP = 0;
     public static WinPanelController instance;
 
     void Awake()
@@ -26,7 +31,11 @@ public class WinPanelController : MonoBehaviour
         Instantiate(vfxPrefab, transform);
         Instantiate(vfxPrefabConfetti1, transform);
         Instantiate(vfxPrefabConfetti2, transform);
-
+        currentLevelTxt.text = PlayerPrefs.GetInt("XP_Level", 1).ToString();
+        int totalEarnedXP = GameManager.instance.levelConfig.levelBonusXp + LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50;
+        //  earnedXpTxt.text = totalEarnedXP.ToString();
+        PlayerPrefs.SetInt("PendingXP", totalEarnedXP);
+        UpdateEarnedXP(totalEarnedXP);
         policeDestroyTxt.text = "You destroyed " + LevelManager.instance.totalDestriyedPoliceVehiclesCount.ToString() + " police cars !";
     }
 
@@ -34,7 +43,7 @@ public class WinPanelController : MonoBehaviour
     {
 
         LevelUp();
-        Time.timeScale = 1;
+        // Time.timeScale = 1f;
         SceneManager.LoadScene("Menu");
 
     }
@@ -54,5 +63,32 @@ public class WinPanelController : MonoBehaviour
         PlayerPrefs.SetInt("current_level", currentLevel + 1);
         PlayerPrefs.SetInt("total_destroyed_police_car", totalDestroyedPoliceCar + LevelManager.instance.totalDestriyedPoliceVehiclesCount);
 
+    }
+    public void UpdateEarnedXP(int totalEarnedXP)
+    {
+        // Stop any existing animation to avoid overlapping
+        if (xpAnimationCoroutine != null)
+        {
+            StopCoroutine(xpAnimationCoroutine);
+        }
+
+        // Start new animation
+        xpAnimationCoroutine = StartCoroutine(AnimateXPIncrease(displayedXP, totalEarnedXP, 1.0f)); // 1s duration
+    }
+    private IEnumerator AnimateXPIncrease(int startXP, int targetXP, float duration)
+    {
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration; // Normalize 0 → 1 over time
+            displayedXP = Mathf.RoundToInt(Mathf.Lerp(startXP, targetXP, t));
+            earnedXpTxt.text = displayedXP.ToString();
+            yield return null;
+        }
+
+        // Ensure final XP is correctly set
+        displayedXP = targetXP;
+        earnedXpTxt.text = displayedXP.ToString();
     }
 }

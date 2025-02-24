@@ -21,7 +21,7 @@ public class SetupSelectedGun : MonoBehaviour
     void Start()
     {
 
-        String selectedGun = PlayerPrefs.GetString("SelectedGun", "V1");
+        String selectedGun = PlayerPrefs.GetString("SelectedGun", "none");
 
         switch (selectedGun)
         {
@@ -42,8 +42,12 @@ public class SetupSelectedGun : MonoBehaviour
 
     public void SetSelectedGun(String gunName)
     {
+        if (gunPoint.transform.childCount > 0)
+        {
+            Destroy(gunPoint.transform.GetChild(0).gameObject);
+        }
 
-        Destroy(gunPoint.transform.GetChild(0).gameObject);
+
         PlayerPrefs.SetString("SelectedGun", gunName);
 
         switch (gunName)

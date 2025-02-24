@@ -8,6 +8,7 @@ public class GarageCurrentCarDisplay : MonoBehaviour
     [SerializeField] private GameObject gtxCar;
     [SerializeField] private GameObject mozdaCar;
     [SerializeField] private GameObject microCar;
+    [SerializeField] private GameObject vfxEffectPrefab;
 
     public static GarageCurrentCarDisplay instance;
 
@@ -25,10 +26,13 @@ public class GarageCurrentCarDisplay : MonoBehaviour
 
     public void DisplayCar(string carName)
     {
+        Debug.Log("sss");
+
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
         }
+        GameObject vfxInstance = Instantiate(vfxEffectPrefab, transform.position, Quaternion.identity, transform);
 
         switch (carName)
         {
@@ -48,6 +52,7 @@ public class GarageCurrentCarDisplay : MonoBehaviour
                 Instantiate(microCar, transform);
                 break;
         }
+        Destroy(vfxInstance, 2f);
     }
 
 }

@@ -84,6 +84,10 @@ public class BottomBarController : MonoBehaviour
     private void BackButtonPressed()
     {
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
+        if (garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().healthBarInstance != null)
+        {
+            Destroy(garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().healthBarInstance);
+        }
         VehiclePanelController.instance.ClosePanel();
         UpgradePanelController.instance.ClosePanel();
         GunsPanelController.instance.ClosePanel();

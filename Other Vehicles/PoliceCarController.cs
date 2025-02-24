@@ -117,7 +117,7 @@ public class PoliceCarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerCar"))
         {
-            // HandleCollisionWithPlayer(collision);
+            //   HandleCollisionWithPlayer(collision);
         }
 
         if (collision.gameObject.CompareTag("Area"))

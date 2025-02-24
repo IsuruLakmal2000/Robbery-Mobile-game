@@ -9,5 +9,6 @@ public class LevelProperties
     public int rideExpences;
     public float otherVehicleSpawnInterval;
     public float otherVehicleSpeed;
+    public int levelBonusXp;
 
 }
