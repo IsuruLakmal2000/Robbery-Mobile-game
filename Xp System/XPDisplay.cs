@@ -20,6 +20,7 @@ public class XPDisplay : MonoBehaviour
 
     private void Update()
     {
+        levelText.text = XPSystem.Instance.currentLevel.ToString();
         xpText.text = $"{XPSystem.Instance.currentXP}/{XPSystem.Instance.xpToNextLevel}";
     }
 }

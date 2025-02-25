@@ -7,6 +7,8 @@ public class UpgradeButtonProp : MonoBehaviour
 
     private Button upgradeButton;
     private TextMeshProUGUI priceTxt;
+    private TextMeshProUGUI levelTxt;
+
     [SerializeField] private int currentLevel;
     [SerializeField] private int maxLevel = 20;
     [SerializeField] private int basePrice = 1000;
@@ -14,13 +16,16 @@ public class UpgradeButtonProp : MonoBehaviour
     void Start()
     {
         priceTxt = transform.Find("price").GetComponent<TextMeshProUGUI>();
+        levelTxt = transform.parent.Find("Level/levelTxt").GetComponent<TextMeshProUGUI>();
+
         upgradeButton = GetComponent<Button>();
         upgradeButton.onClick.AddListener(Upgrade);
         LoadUpgradeData();
+        levelTxt.text = currentLevel.ToString();
     }
     private void LoadUpgradeData()
     {
-        currentLevel = PlayerPrefs.GetInt(gameObject.name + "_Level", 0);
+        currentLevel = PlayerPrefs.GetInt(gameObject.name + "_Level", 1);
         int price = PlayerPrefs.GetInt(gameObject.name + "_Price", basePrice);
 
         priceTxt.text = FormatPrice(price);
@@ -35,8 +40,14 @@ public class UpgradeButtonProp : MonoBehaviour
         }
     }
 
+    void OnGUI()
+    {
+        levelTxt.text = currentLevel.ToString();
+    }
+
     private void Upgrade()
     {
+        Debug.Log("Upgrade");
         if (currentLevel >= maxLevel)
             return; // Max level reached
 
@@ -45,7 +56,9 @@ public class UpgradeButtonProp : MonoBehaviour
         // Check if the player has enough currency (Implement your own currency check here)
         if (!HasEnoughMoney(price))
         {
-            Debug.Log("Not enough money!");
+            Debug.Log("Not enough money");
+            //dont have money
+            MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need more money to upgrade this item.");
             return;
         }
 

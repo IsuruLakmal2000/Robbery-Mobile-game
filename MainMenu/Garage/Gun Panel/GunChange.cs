@@ -75,6 +75,7 @@ public class GunChange : MonoBehaviour
         }
         else
         {
+            MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need more money to upgrade this item.");
             // show popup not enough money
         }
 

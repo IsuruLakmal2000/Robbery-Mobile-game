@@ -36,8 +36,11 @@ public class WinPanelController : MonoBehaviour
         Instantiate(vfxPrefab, transform);
         Instantiate(vfxPrefabConfetti1, transform);
         Instantiate(vfxPrefabConfetti2, transform);
-        currentLevelTxt.text = PlayerPrefs.GetInt("XP_Level", 1).ToString();
-        int totalEarnedXP = GameManager.instance.levelConfig.levelBonusXp + LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50;
+        int currentXpLevel = PlayerPrefs.GetInt("XP_Level", 1);
+        currentLevelTxt.text = currentXpLevel.ToString();
+        int totalEarnedXP = Mathf.RoundToInt((GameManager.instance.levelConfig.levelBonusXp +
+                                             LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50)
+                                             * currentXpLevel * 0.2f);
         //  earnedXpTxt.text = totalEarnedXP.ToString();
         PlayerPrefs.SetInt("PendingXP", totalEarnedXP);
         UpdateEarnedXP(totalEarnedXP);

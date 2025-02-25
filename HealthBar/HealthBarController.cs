@@ -19,11 +19,13 @@ public class HealthBarController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
     }
 
     private void Start()
     {
         maxCarHealth = PlayerPrefs.GetInt("car_max_health", 30);
+        currentCarHealth = maxCarHealth;
         healthBarSlider.maxValue = maxCarHealth;
         healthBarSlider.value = maxCarHealth;
         maxHealthCountTxt.text = "/ " + maxCarHealth.ToString();
