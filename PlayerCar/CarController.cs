@@ -81,6 +81,7 @@ public class CarController : MonoBehaviour
 
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
+                GamePlayPanelsController.instance.ShowLoosePanel();
             }
             else
             {
@@ -95,6 +96,7 @@ public class CarController : MonoBehaviour
 
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
+                GamePlayPanelsController.instance.ShowLoosePanel();
             }
             else
             {

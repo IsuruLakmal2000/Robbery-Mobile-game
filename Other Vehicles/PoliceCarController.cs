@@ -44,6 +44,7 @@ public class PoliceCarController : MonoBehaviour
             }
             else
             {
+                return;
                 Debug.LogError("Player car not found! Please ensure it is tagged correctly.");
             }
         }

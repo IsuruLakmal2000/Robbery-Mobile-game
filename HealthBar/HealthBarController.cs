@@ -23,7 +23,7 @@ public class HealthBarController : MonoBehaviour
 
     private void Start()
     {
-        maxCarHealth = PlayerPrefs.GetInt("car_max_health", 50);
+        maxCarHealth = PlayerPrefs.GetInt("car_max_health", 30);
         healthBarSlider.maxValue = maxCarHealth;
         healthBarSlider.value = maxCarHealth;
         maxHealthCountTxt.text = "/ " + maxCarHealth.ToString();

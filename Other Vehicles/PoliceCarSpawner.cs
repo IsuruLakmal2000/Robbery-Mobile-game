@@ -28,7 +28,14 @@ public class PoliceCarSpawner : MonoBehaviour
             Vector3 spawnPosition = transform.position;
 
             // Set the spawn position based on the player's lane
-            spawnPosition.x = GetLaneXPosition(playerCar.position.x);
+            if (playerCar != null)
+            {
+                spawnPosition.x = GetLaneXPosition(playerCar.position.x);
+            }
+            else
+            {
+                spawnPosition.x = 0;
+            }
 
             // Instantiate the police car at the calculated position
             Instantiate(policeCarPrefab, spawnPosition, Quaternion.identity);
