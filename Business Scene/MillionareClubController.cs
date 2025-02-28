@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BillionareClubController : MonoBehaviour
+public class MillionareClubController : MonoBehaviour
 {
     [SerializeField] private Button buyBtn;
     [SerializeField] private TextMeshProUGUI profitAmount;
@@ -13,7 +13,7 @@ public class BillionareClubController : MonoBehaviour
     [SerializeField] private GameObject profitAvailableVBtn;
     [SerializeField] private GameObject profitCollectAnim;
 
-    private const int DAILY_LIMIT = 100_000_000; // 100M
+    private const int DAILY_LIMIT = 1000000; // 1M
     private const int EARN_PER_MINUTE = DAILY_LIMIT / (24 * 60); // Earnings per minute
     private const int EARN_PER_SECOND = EARN_PER_MINUTE / 60; // Earnings per second
     private const int EARN_PER_TEN_SECONDS = EARN_PER_SECOND * 10; // Earnings every 10 seconds
@@ -25,43 +25,41 @@ public class BillionareClubController : MonoBehaviour
 
     void Start()
     {
-        CheckUnlockBillionare();
-
-
+        CheckUnlockMillionaire();
     }
-    private void CheckUnlockBillionare()
+    private void CheckUnlockMillionaire()
     {
         int currentMoney = PlayerPrefs.GetInt("total_money", 0);
-        profitAmount.text = FormatPrice(100_000_000) + "/per day income";
-        if (PlayerPrefs.GetInt("is_unlock_billionare_club", 0) == 1)
+        profitAmount.text = FormatPrice(1000000) + "/per day income";
+        if (PlayerPrefs.GetInt("is_unlock_millionare_club", 0) == 1)
         {
             currentEarningTxt.gameObject.SetActive(true);
             // Retrieve the last collection time and calculate the current earnings
-            if (PlayerPrefs.HasKey("LastCollectTime"))
+            if (PlayerPrefs.HasKey("LastCollectTime_millionare_club"))
             {
-                lastCollectTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("LastCollectTime")));
+                lastCollectTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("LastCollectTime_millionare_club")));
                 // Calculate the earnings based on the time elapsed since the last collection
                 TimeSpan timeSinceLastCollect = DateTime.Now - lastCollectTime;
                 int secondsToCalculate = Mathf.Min((int)timeSinceLastCollect.TotalSeconds, 24 * 60 * 60); // Cap to max of 24 hours
                 currentEarnings = secondsToCalculate * EARN_PER_SECOND;
                 currentEarningTxt.text = FormatPrice(currentEarnings) + " / " + FormatPrice(DAILY_LIMIT);
-                InvokeRepeating(nameof(UpdateEarnings), 10f, 10f);
+                InvokeRepeating(nameof(UpdateEarnings), 1f, 1f);
             }
             else
             {
                 lastCollectTime = DateTime.Now;
+                PlayerPrefs.SetString("LastCollectTime_millionare_club", lastCollectTime.ToBinary().ToString());
                 TimeSpan timeSinceLastCollect = DateTime.Now - lastCollectTime;
                 int secondsToCalculate = Mathf.Min((int)timeSinceLastCollect.TotalSeconds, 24 * 60 * 60); // Cap to max of 24 hours
                 currentEarnings = secondsToCalculate * EARN_PER_SECOND;
                 currentEarningTxt.text = FormatPrice(currentEarnings) + " / " + FormatPrice(DAILY_LIMIT);
-                InvokeRepeating(nameof(UpdateEarnings), 10f, 10f);
+                InvokeRepeating(nameof(UpdateEarnings), 1f, 1f);
             }
 
             buyBtn.gameObject.SetActive(false);
         }
         else
         {
-            profitAvailableVBtn.gameObject.SetActive(false);
             currentEarningTxt.gameObject.SetActive(false);
             buyBtn.onClick.AddListener(() =>
             {
@@ -71,10 +69,10 @@ public class BillionareClubController : MonoBehaviour
                     currentMoney -= 10;
                     PlayerPrefs.SetInt("total_money", currentMoney);
 
-                    PlayerPrefs.SetInt("is_unlock_billionare_club", 1);
+                    PlayerPrefs.SetInt("is_unlock_millionare_club", 1);
                     buyBtn.gameObject.SetActive(false);
                     currentEarningTxt.gameObject.SetActive(true);
-                    CheckUnlockBillionare();
+                    CheckUnlockMillionaire();
                 }
                 else
                 {
@@ -82,6 +80,7 @@ public class BillionareClubController : MonoBehaviour
                 }
             });
         }
+
     }
 
     void UpdateEarnings()
@@ -94,6 +93,7 @@ public class BillionareClubController : MonoBehaviour
 
         int newEarnings = secondsToCalculate * EARN_PER_SECOND;
 
+
         currentEarnings = Mathf.Min(newEarnings, DAILY_LIMIT);
 
         // Update the UI to display the current earnings
@@ -105,7 +105,7 @@ public class BillionareClubController : MonoBehaviour
 
         profitAvailableVBtn.GetComponent<Button>().onClick.AddListener(CollectMoney);
 
-        //  UpdateUI();
+        //   UpdateUI();
     }
 
     private string FormatPrice(int price)
@@ -126,7 +126,7 @@ public class BillionareClubController : MonoBehaviour
             int collectedAmount = currentEarnings;
             int currentTotalMoney = PlayerPrefs.GetInt("total_money", 0);
             PlayerPrefs.SetInt("total_money", currentTotalMoney + collectedAmount);
-
+            Debug.Log($"Collected: {collectedAmount}");
 
             // Reset earnings and update last collect time
             currentEarnings = 0;
@@ -134,8 +134,8 @@ public class BillionareClubController : MonoBehaviour
             profitAvailableVBtn.SetActive(false);
             currentEarningTxt.text = FormatPrice(currentEarnings) + " / " + FormatPrice(DAILY_LIMIT);
             // Save state
-            PlayerPrefs.SetString("LastCollectTime", lastCollectTime.ToBinary().ToString());
-            PlayerPrefs.SetInt("CurrentEarnings", currentEarnings); // Store as int
+            PlayerPrefs.SetString("LastCollectTime_millionare_club", lastCollectTime.ToBinary().ToString());
+            //  PlayerPrefs.SetInt("CurrentEarnings", currentEarnings); // Store as int
             PlayerPrefs.Save();
             CollectMoneyWithAnimation();
             //  UpdateUI();
