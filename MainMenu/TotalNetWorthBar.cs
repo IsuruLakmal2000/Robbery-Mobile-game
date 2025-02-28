@@ -24,9 +24,9 @@ public class TotalNetWorthBar : MonoBehaviour
     private string FormatPrice(int price)
     {
         if (price >= 1000000) // 1M and above
-            return (price / 1000000f).ToString("0.#") + "M";
+            return (price / 1000000f).ToString("0.###") + "M";
         else if (price >= 10000) // 1K and above
-            return (price / 1000f).ToString("0.#") + "K";
+            return (price / 1000f).ToString("0.##") + "K";
         else
             return price.ToString(); // If less than 1K, show as is
     }

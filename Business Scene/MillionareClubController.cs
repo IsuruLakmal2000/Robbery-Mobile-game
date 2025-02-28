@@ -113,7 +113,7 @@ public class MillionareClubController : MonoBehaviour
         if (price >= 1000000) // 1M and above
             return (price / 1000000f).ToString("0.###") + "M";
         else if (price >= 1000) // 1K and above
-            return (price / 1000f).ToString("0.#") + "K";
+            return (price / 1000f).ToString("0.###") + "K";
         else
             return price.ToString(); // If less than 1K, show as is
     }
@@ -167,9 +167,9 @@ public class MillionareClubController : MonoBehaviour
 
     private IEnumerator MoveAndPackMoneyIcons(List<Transform> icons, Vector3 targetPos, GameObject parentObject)
     {
-        float duration = 1.5f; // Total animation time
-        float packTime = 1.0f; // Time to pack together
-        float shrinkTime = 0.5f; // Time to shrink
+       float duration = 1f; // Total animation time
+        float packTime = 0.6f; // Time to pack together
+        float shrinkTime = 0.4f; // Time to shrink
 
         float time = 0;
         Vector3[] startPositions = new Vector3[icons.Count];

@@ -10,24 +10,24 @@ public class BusinessManager : MonoBehaviour
     public string businessName = "Business1"; // Unique identifier for PlayerPrefs
     public Button buyButton, upgradeButton, collectButton;
     public TextMeshProUGUI profitText, levelText, upgradeCostText, earningsText;
-[SerializeField] private GameObject profitCollectAnim;
+    [SerializeField] private GameObject profitCollectAnim;
     private int currentLevel;
     private int maxLevel = 20;
-    private int baseUpgradeCost = 10000;
-    private int baseProfit = 50000;
-    private int upgradeIncreaseAmount = 10000; // Increase per level
-    private int profitIncreaseAmount = 25000; // Profit increase per level
- public Transform moneyBar;
+    [SerializeField] private int baseUpgradeCost = 10000;
+    [SerializeField] private int baseProfit = 50000;
+    [SerializeField] private int upgradeIncreaseAmount = 10000; // Increase per level
+    [SerializeField] private int profitIncreaseAmount = 25000; // Profit increase per level
+    public Transform moneyBar;
     private int currentUpgradeCost;
     private int currentProfit;
     private float currentEarnings; // Earnings accumulated over time
     private float profitPerSecond;
-  public Canvas canvas;
+    public Canvas canvas;
     private DateTime lastCollectedTime; // Store last collected time
 
     void Start()
     {
-       
+
         LoadBusinessData();
         CalculateOfflineEarnings();
         UpdateUI();
@@ -122,7 +122,8 @@ public class BusinessManager : MonoBehaviour
     {
         currentEarnings += Time.deltaTime * profitPerSecond;
         PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
-        earningsText.text = currentEarnings.ToString()+"/"+ currentProfit.ToString();
+
+        earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
         collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings available
     }
 
@@ -138,7 +139,7 @@ public class BusinessManager : MonoBehaviour
             currentEarnings = 0;
             PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
             PlayerPrefs.SetString($"{businessName}_lastCollectedTime", DateTime.Now.ToString());
-CollectMoneyWithAnimation();
+            CollectMoneyWithAnimation();
             collectButton.gameObject.SetActive(false);
         }
     }
@@ -162,6 +163,15 @@ CollectMoneyWithAnimation();
     {
         return PlayerPrefs.GetInt("total_money", 0) >= amount;
     }
+    private string FormatPrice(int price)
+    {
+        if (price >= 1000000) // 1M and above
+            return (price / 1000000f).ToString("0.###") + "M";
+        else if (price >= 1000) // 1K and above
+            return (price / 1000f).ToString("0.###") + "K";
+        else
+            return price.ToString(); // If less than 1K, show as is
+    }
 
     private void DeductMoney(int amount)
     {
@@ -172,18 +182,18 @@ CollectMoneyWithAnimation();
 
     private void UpdateUI()
     {
-        //  levelText.text = "Level: " + currentLevel;
+        levelText.text = currentLevel.ToString();
         profitText.text = "Profit/Day: $" + (currentLevel > 0 ? currentProfit.ToString("N0") : "0");
-        upgradeCostText.text = (currentLevel < maxLevel ? currentUpgradeCost.ToString("N0") : "Max Level");
+        upgradeCostText.text = (currentLevel < maxLevel ? FormatPrice(currentUpgradeCost).ToString() : "Max Level");
 
         buyButton.gameObject.SetActive(currentLevel == 0);
         upgradeButton.gameObject.SetActive(currentLevel > 0 && currentLevel < maxLevel);
         collectButton.gameObject.SetActive(currentEarnings >= 1);
     }
 
-     public void CollectMoneyWithAnimation()
+    public void CollectMoneyWithAnimation()
     {
-       
+
         GameObject movingMoneyGroup = Instantiate(profitCollectAnim, canvas.transform);
         movingMoneyGroup.SetActive(true);
 
@@ -200,9 +210,9 @@ CollectMoneyWithAnimation();
 
     private IEnumerator MoveAndPackMoneyIcons(List<Transform> icons, Vector3 targetPos, GameObject parentObject)
     {
-        float duration = 1.5f; // Total animation time
-        float packTime = 1.0f; // Time to pack together
-        float shrinkTime = 0.5f; // Time to shrink
+        float duration = 1f; // Total animation time
+        float packTime = 0.6f; // Time to pack together
+        float shrinkTime = 0.4f; // Time to shrink
 
         float time = 0;
         Vector3[] startPositions = new Vector3[icons.Count];

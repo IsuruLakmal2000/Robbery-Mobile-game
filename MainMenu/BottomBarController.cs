@@ -27,6 +27,7 @@ public class BottomBarController : MonoBehaviour
         garageBtn = transform.Find("Garage Btn").GetComponent<Button>();
         startBtn.onClick.AddListener(OnStartBtnClick);
         garageBtn.onClick.AddListener(OnGarageBtnClick);
+        businessBtn.onClick.AddListener(OnBusinessBtnClick);
         backBtnOnGarage.GetComponent<Button>().onClick.AddListener(BackButtonPressed);
     }
 
@@ -39,6 +40,7 @@ public class BottomBarController : MonoBehaviour
     private void OnBusinessBtnClick()
     {
         Debug.Log("on business clicked ");
+        SceneManager.LoadScene("Business");
     }
     private void OnGarageBtnClick()
     {
