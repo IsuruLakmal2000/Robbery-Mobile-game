@@ -40,8 +40,8 @@ public class WinPanelController : MonoBehaviour
         currentLevelTxt.text = currentXpLevel.ToString();
         int totalEarnedXP = Mathf.RoundToInt((GameManager.instance.levelConfig.levelBonusXp +
                                              LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50)
-                                             * currentXpLevel * 0.2f);
-        //  earnedXpTxt.text = totalEarnedXP.ToString();
+                                             * currentXpLevel * 0.2f + LevelManager.instance.totalDistance * 1.5f);
+
         PlayerPrefs.SetInt("PendingXP", totalEarnedXP);
         UpdateEarnedXP(totalEarnedXP);
         policeDestroyTxt.text = "You destroyed " + LevelManager.instance.totalDestriyedPoliceVehiclesCount.ToString() + " police cars !";

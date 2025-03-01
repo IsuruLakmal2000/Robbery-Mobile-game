@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -27,7 +28,7 @@ public class LoosePanelController : MonoBehaviour
         Instantiate(vfxPrefab, transform);
 
         currentLevelTxt.text = PlayerPrefs.GetInt("XP_Level", 1).ToString();
-        int totalEarnedXP = LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50;
+        int totalEarnedXP = Mathf.RoundToInt(LevelManager.instance.totalDestriyedPoliceVehiclesCount * 50 + LevelManager.instance.totalDistance * 1.5f);
 
         PlayerPrefs.SetInt("PendingXP", totalEarnedXP);
         UpdateEarnedXP(totalEarnedXP);
