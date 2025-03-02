@@ -87,6 +87,7 @@ public class GunController : MonoBehaviour
     }
     public void FireBullet()
     {
+        SoundManager.instance.PlayFireBulletSound();
         if (isFiring && Time.time >= nextFire && nearestPolice != null)
         {
             gunAnimator.SetTrigger("Fire");

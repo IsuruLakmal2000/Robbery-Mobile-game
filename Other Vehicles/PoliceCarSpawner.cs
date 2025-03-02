@@ -3,9 +3,7 @@ using UnityEngine;
 public class PoliceCarSpawner : MonoBehaviour
 {
     public GameObject policeCarPrefab; // Reference to the police car prefab
-    public Transform playerCar; // Reference to the player's car
-    public float spawnDistance = 5f; // Distance behind the player car to spawn new police cars
-    public float spawnInterval = 3f; // Time interval between police car spawns
+    private Transform playerCar;
 
     private void Start()
     {
@@ -13,7 +11,7 @@ public class PoliceCarSpawner : MonoBehaviour
 
         StartCoroutine(SpawnPoliceCars());
         playerCar = GameObject.FindWithTag("PlayerCar").transform;
-
+        Debug.Log("police car spawn interval --" + GameManager.instance.policeSpawnInterval);
     }
 
     private System.Collections.IEnumerator SpawnPoliceCars()
@@ -21,7 +19,8 @@ public class PoliceCarSpawner : MonoBehaviour
         while (!GameManager.instance.isStoppingSpawnPolice)
         {
             // Wait for the spawn interval
-            yield return new WaitForSeconds(spawnInterval);
+
+            yield return new WaitForSeconds(GameManager.instance.policeSpawnInterval);
 
             // Calculate the spawn position behind the player car
             //  Vector3 spawnPosition = playerCar.position + new Vector3(0, -spawnDistance, 0);

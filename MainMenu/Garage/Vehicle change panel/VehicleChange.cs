@@ -30,6 +30,7 @@ public class VehicleChange : MonoBehaviour
             useBtn.gameObject.SetActive(true);
             useBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      ChangeVehicle(gameObject.name);
                  });
         }
@@ -41,6 +42,7 @@ public class VehicleChange : MonoBehaviour
             DisplayVehiclePrice();
             buyBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      BuyVehicle(gameObject.name);
                  });
         }
@@ -61,11 +63,13 @@ public class VehicleChange : MonoBehaviour
             useBtn.gameObject.SetActive(true);
             useBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      ChangeVehicle(gameObject.name);
                  });
         }
         else
         {
+            SoundManager.instance.PlayAlertWarnSound();
             MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need more money to upgrade this item.");
             // show popup not enough money
         }

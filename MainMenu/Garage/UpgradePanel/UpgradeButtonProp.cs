@@ -58,6 +58,7 @@ public class UpgradeButtonProp : MonoBehaviour
         {
             Debug.Log("Not enough money");
             //dont have money
+            SoundManager.instance.PlayAlertWarnSound();
             MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need more money to upgrade this item.");
             return;
         }
@@ -69,12 +70,15 @@ public class UpgradeButtonProp : MonoBehaviour
         switch (gameObject.name)
         {
             case "HealthUpgradeButton":
+                SoundManager.instance.PlayUpgradeSound();
                 HealthBarUpgradeShow.instance.UpdateHealthBar(5);
                 break;
             case "SpeedUpgradeButton":
+                // SoundManager.instance.PlayUpgradeSound();
                 //  SpeedBarUpgradeShow.instance.UpdateSpeedBar(10);
                 break;
             case "DamageUpgradeButton":
+                // SoundManager.instance.PlayUpgradeSound();
                 //  DamageBarUpgradeShow.instance.UpdateDamageBar(10);
                 break;
         }

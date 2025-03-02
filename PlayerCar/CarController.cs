@@ -10,8 +10,12 @@ public class CarController : MonoBehaviour
     private float currentLaneOffset = 0f;
     private float input = 0f;
     [SerializeField] private GameObject vehicleDamageVfx;
+    [SerializeField] private AudioSource audioSourceOnPlayerCar;
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject moneyIncreaseEffect;
+    //---------------------sounds----------------------
+    [SerializeField] private AudioClip PlayerCarCrashSound;
+    [SerializeField] private AudioClip PlayerCarHitSound;
     public static CarController instance;
 
     void Awake()
@@ -38,6 +42,11 @@ public class CarController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, laneChangeSpeed * Time.deltaTime);
     }
 
+    private void PlayCarSound(AudioClip audioClip)
+    {
+        audioSourceOnPlayerCar.PlayOneShot(audioClip);
+    }
+
     private void HandleLaneChange()
     {
         // Update currentLaneOffset based on input
@@ -49,8 +58,13 @@ public class CarController : MonoBehaviour
             currentLaneOffset = Mathf.Clamp(currentLaneOffset, -maxLaneOffset, maxLaneOffset);
 
             // Rotate the car based on lane change direction
-            float targetRotationZ = input * -20f; // Rotate left or right
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationZ), Time.deltaTime * 8f);
+            if (currentLaneOffset != maxLaneOffset && currentLaneOffset != -maxLaneOffset)
+            {
+                float targetRotationZ = input * -20f; // Rotate left or right
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationZ), Time.deltaTime * 8f);
+            }
+
+
         }
         else
         {
@@ -78,7 +92,7 @@ public class CarController : MonoBehaviour
             Destroy(vfxInstance, 1f);
             if (HealthBarController.instance.CheckHealthEnd())
             {
-
+                PlayCarSound(PlayerCarCrashSound);
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
                 GamePlayPanelsController.instance.ShowLoosePanel();
@@ -93,7 +107,7 @@ public class CarController : MonoBehaviour
         {
             if (HealthBarController.instance.CheckHealthEnd())
             {
-
+                PlayCarSound(PlayerCarCrashSound);
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
                 GamePlayPanelsController.instance.ShowLoosePanel();
@@ -109,7 +123,7 @@ public class CarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Coin"))
         {
-
+            SoundManager.instance.PlayMoneyPickupSound();
             GameRobbedMoney.instance.IncreaseMoneyWhenCollect(100);
             GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, transform.Find("Canvas").transform);
             Destroy(moneyIncreaseEffectInstance, 0.5f);

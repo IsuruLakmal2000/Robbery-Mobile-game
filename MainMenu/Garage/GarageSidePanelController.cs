@@ -34,6 +34,7 @@ public class GarageSidePanelController : MonoBehaviour
     }
     private void OnUpgradeBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         healthBarInstance = Instantiate(healthBar, transform.parent);
         vehiclePanel.GetComponent<VehiclePanelController>().ClosePanel();
         upgradePanel.GetComponent<UpgradePanelController>().OpenPanel();
@@ -41,6 +42,7 @@ public class GarageSidePanelController : MonoBehaviour
     }
     private void OnGunsBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         if (healthBarInstance != null)
         {
             Destroy(healthBarInstance);

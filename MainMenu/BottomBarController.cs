@@ -33,17 +33,20 @@ public class BottomBarController : MonoBehaviour
 
     private void OnStartBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         Debug.Log("on start clicked ");
         StartCoroutine(LoadSceneAsync("GameLevel"));
     }
 
     private void OnBusinessBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         Debug.Log("on business clicked ");
         SceneManager.LoadScene("Business");
     }
     private void OnGarageBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         backBtnOnGarage.SetActive(true);
         Debug.Log("on garage clicked ");
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
@@ -85,6 +88,7 @@ public class BottomBarController : MonoBehaviour
 
     private void BackButtonPressed()
     {
+        SoundManager.instance.PlayButtonClick();
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
         if (garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().healthBarInstance != null)
         {

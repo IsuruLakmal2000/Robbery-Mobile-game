@@ -42,7 +42,7 @@ public class LevelManager : MonoBehaviour
                 ShowWinPanel();
             }
 
-            Debug.Log("level end");
+           
 
             levelTarget = 0f;
             CarController.instance.CompleteLevel();

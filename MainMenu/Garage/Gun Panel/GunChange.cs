@@ -34,6 +34,7 @@ public class GunChange : MonoBehaviour
             useBtn.gameObject.SetActive(true);
             useBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      ChangeGun(gameObject.name);
                  });
         }
@@ -45,6 +46,7 @@ public class GunChange : MonoBehaviour
             DisplayGunPrice();
             buyBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      BuyGun(gameObject.name);
                  });
         }
@@ -70,6 +72,7 @@ public class GunChange : MonoBehaviour
             useBtn.gameObject.SetActive(true);
             useBtn.onClick.AddListener(() =>
                  {
+                     SoundManager.instance.PlayButtonClick();
                      ChangeGun(gameObject.name);
                  });
         }
