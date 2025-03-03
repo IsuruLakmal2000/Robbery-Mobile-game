@@ -20,14 +20,12 @@ public class BillionareClubController : MonoBehaviour
     private int currentEarnings = 0; // Changed from double to int
     private DateTime lastCollectTime;
 
-    public Transform moneyBar; // Assign the UI money bar (target position)
+    public Transform moneyBar;
     public Canvas canvas;
 
     void Start()
     {
         CheckUnlockBillionare();
-
-
     }
     private void CheckUnlockBillionare()
     {
@@ -65,6 +63,7 @@ public class BillionareClubController : MonoBehaviour
             currentEarningTxt.gameObject.SetActive(false);
             buyBtn.onClick.AddListener(() =>
             {
+                SoundManager.instance.PlayButtonClick();
                 //100000000
                 if (currentMoney >= 10)
                 {
@@ -79,6 +78,7 @@ public class BillionareClubController : MonoBehaviour
                 else
                 {
                     Debug.Log("Not enough money");
+
                 }
             });
         }
@@ -137,6 +137,7 @@ public class BillionareClubController : MonoBehaviour
             PlayerPrefs.SetString("LastCollectTime", lastCollectTime.ToBinary().ToString());
             PlayerPrefs.SetInt("CurrentEarnings", currentEarnings); // Store as int
             PlayerPrefs.Save();
+            SoundManager.instance.PlayMoneyIncreaseSound();
             CollectMoneyWithAnimation();
             //  UpdateUI();
         }

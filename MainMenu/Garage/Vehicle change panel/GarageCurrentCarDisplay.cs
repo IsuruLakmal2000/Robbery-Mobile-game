@@ -32,6 +32,7 @@ public class GarageCurrentCarDisplay : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
+        SoundManager.instance.PlayPopSound();
         GameObject vfxInstance = Instantiate(vfxEffectPrefab, transform.position, Quaternion.identity, transform);
 
         switch (carName)

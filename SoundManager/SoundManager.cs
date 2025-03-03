@@ -12,6 +12,7 @@ public class SoundManager : MonoBehaviour
     public AudioClip moneyPickupSound;
     public AudioClip moneyIncreaseSound;
     public AudioClip alertWarnSound;
+    public AudioClip popSoundEffect;
     public AudioClip firingSound;
     public AudioClip levelComplete;
 
@@ -27,6 +28,11 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void PlayPopSound()
+    {
+        audioSource.PlayOneShot(popSoundEffect);
     }
 
     public void PlayButtonClick()
@@ -47,7 +53,18 @@ public class SoundManager : MonoBehaviour
     }
     public void PlayMoneyPickupSound()
     {
-        audioSource.PlayOneShot(moneyPickupSound);
+        audioSource.clip = moneyPickupSound;
+        audioSource.volume = 0.3f;
+        audioSource.loop = false;
+        audioSource.Play();
+    }
+
+    public void PlayMoneyIncreaseSound()
+    {
+        audioSource.clip = moneyIncreaseSound;
+        audioSource.volume = 1f;
+        audioSource.loop = false;
+        audioSource.Play();
     }
 
     public void PlayFireBulletSound()

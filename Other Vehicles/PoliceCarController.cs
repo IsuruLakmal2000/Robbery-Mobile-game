@@ -5,20 +5,21 @@ using UnityEngine.UI;
 public class PoliceCarController : MonoBehaviour
 {
     private bool isMovingUncontrollably = false;
-    private Quaternion originalRotation; // Store the original rotation
-    public Transform playerCar; // Reference to the player's car
-    public float followDistance = 2f; // Desired distance behind the player's car
-    public float speed = 4f; // Speed of the police car
-    public float hitDistance = 0.5f; // Distance to trigger collision
-    public float resetDistance = 5f; // Distance to reset the police car position after hitting
-    public float passDistance = 1.5f; // Distance to pass the player car
-    public float collisionChance = 0.3f; // Chance of attempting to collide with the player car
-    public float laneChangeChance = 0.05f; // Chance of changing lanes
-    public float laneWidth = 1f; // Width of the lanes for lane changes
-    private float targetLaneX; // Target x position for lane
-    public Slider healthBar; // Assign this in the Inspector
+    private Quaternion originalRotation;
+    public Transform playerCar;
+    public float followDistance = 2f;
+    public float speed = 4f;
+    public float hitDistance = 0.5f;
+    public float resetDistance = 5f;
+    public float passDistance = 1.5f;
+    public float collisionChance = 0.3f;
+    public float laneChangeChance = 0.05f;
+    public float laneWidth = 1f;
+    private float targetLaneX;
+    public Slider healthBar;
     public float maxHealth = 10f;
     private float currentHealth;
+    private bool isWalkieTalkieSoundPlayed = false;
     [SerializeField] private GameObject hitPrefab;
     [SerializeField] private int destroyEarning = 500;
 
@@ -26,15 +27,21 @@ public class PoliceCarController : MonoBehaviour
     [SerializeField] private GameObject redLight;
     [SerializeField] private GameObject blueLight;
     [SerializeField] private GameObject moneyBoomExplosionPrefab;
-    // [SerializeField] private GameObject moneyIncreaseEffect;
+
+    [SerializeField] private AudioSource policeCarAudioSource;
+    private float targetVolume = 0f;
+    [SerializeField] private AudioClip sirenSound;
+    [SerializeField] private AudioClip walkietalkiesound;
+    public float volumeChangeSpeed = 0.2f;
+    private float maxDistance = 5f;
+    private float minDistance = 0.1f;
+
     [SerializeField] private Canvas canvas;
 
     private void Start()
     {
-        // Store the original rotation
         originalRotation = transform.rotation;
         StartCoroutine(BlinkLights());
-        // Find the player car by tag if not assigned
         if (playerCar == null)
         {
             GameObject playerCarObject = GameObject.FindWithTag("PlayerCar");
@@ -45,9 +52,12 @@ public class PoliceCarController : MonoBehaviour
             else
             {
                 return;
-
             }
         }
+        policeCarAudioSource.clip = sirenSound;
+        policeCarAudioSource.volume = 0f; // Start with no sound
+        policeCarAudioSource.loop = true; // Ensure the siren loops
+        policeCarAudioSource.Play();
 
         // Set initial lane position based on player's position
         targetLaneX = GetLaneXPosition();
@@ -55,9 +65,6 @@ public class PoliceCarController : MonoBehaviour
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
     }
-
-
-
     private void Update()
     {
         if (playerCar == null)
@@ -67,15 +74,12 @@ public class PoliceCarController : MonoBehaviour
             // Normalize the direction to maintain speed
             moveDirection.Normalize();
             transform.position += moveDirection * speed * 2 * Time.deltaTime; // Move the vehicle in the determined direction
-
-            // Optionally, add logic to stop moving uncontrollably after a certain time or condition
         }
         else
         {
+            PoliceCarSirenController();
             FollowPlayer();
         }
-
-
         // Smoothly rotate back to the original rotation if needed
         if (Quaternion.Angle(transform.rotation, originalRotation) > 0.1f)
         {
@@ -83,13 +87,43 @@ public class PoliceCarController : MonoBehaviour
         }
     }
 
+    private void PlayWalkieTalkieSound()
+    {
+        policeCarAudioSource.volume = 0.3f;
+        policeCarAudioSource.PlayOneShot(walkietalkiesound);
+    }
+    private void PoliceCarSirenController()
+    {
+        float distance = Vector2.Distance(new Vector2(transform.position.x, transform.position.y), new Vector2(playerCar.position.x, playerCar.position.y));
+
+        if (distance < 1f && !isWalkieTalkieSoundPlayed)
+        {
+            PlayWalkieTalkieSound();
+            isWalkieTalkieSoundPlayed = true;
+        }
+        // Determine the target volume based on distance
+        if (distance < 0.1f)
+        {
+            targetVolume = 0.3f; // Full volume
+        }
+        else if (distance > maxDistance)
+        {
+            Debug.Log("Police car far from player: " + distance);
+            targetVolume = 0f; // No sound
+        }
+        else
+        {
+            targetVolume = 0.3f * (1 - (distance - minDistance) / (maxDistance - minDistance));
+        }
+        policeCarAudioSource.volume = Mathf.Lerp(policeCarAudioSource.volume, targetVolume, Time.deltaTime * volumeChangeSpeed);
+    }
+
     private void FollowPlayer()
     {
-        // Calculate target position directly behind the player with lane adjustment
+
         Vector3 targetPosition = new Vector3(playerCar.position.x, playerCar.position.y - followDistance, playerCar.position.z);
         targetPosition.x = targetLaneX; // Ensure it stays in the target lane
 
-        // Check for collision with the player's car
         if (Vector3.Distance(transform.position, playerCar.position) < hitDistance)
         {
             // Handle collision logic if needed
@@ -118,7 +152,7 @@ public class PoliceCarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerCar"))
         {
-            //   HandleCollisionWithPlayer(collision);
+            StartCoroutine(UncontrollableMovement(collision));
         }
 
         if (collision.gameObject.CompareTag("Area"))
@@ -131,6 +165,45 @@ public class PoliceCarController : MonoBehaviour
             GameObject hitEffect = Instantiate(hitPrefab, transform);
             Destroy(hitEffect, 1f);
         }
+    }
+    private IEnumerator UncontrollableMovement(Collision2D collision)
+    {
+        // Check the contact point to determine the side of the hit
+        Vector2 contactPoint = collision.contacts[0].point;
+        Vector2 policeCarPosition = transform.position;
+
+        // Set the uncontrollable movement flag
+        isMovingUncontrollably = true;
+
+        // Randomly rotate the vehicle upon collision
+        float randomAngle = Random.Range(-30f, 30f);
+        Quaternion targetRotation = Quaternion.Euler(0, 0, transform.eulerAngles.z + randomAngle);
+
+        // Uncontrollable movement for 2 seconds
+        float duration = 2f;
+        float timer = 0f;
+
+        while (timer < duration)
+        {
+            // Smoothly rotate towards the target rotation
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 200 * Time.deltaTime);
+
+            // Move based on the side of impact
+            if (contactPoint.x < policeCarPosition.x) // Hit on the left side
+            {
+                transform.position += new Vector3(0.5f * Time.deltaTime, 0, 0); // Move right
+            }
+            else // Hit on the right side
+            {
+                transform.position += new Vector3(-0.5f * Time.deltaTime, 0, 0); // Move left
+            }
+
+            timer += Time.deltaTime;
+            yield return null; // Wait for the next frame
+        }
+
+        // After 2 seconds, reset the flag
+        isMovingUncontrollably = false;
     }
     public void TakeDamage(float damage)
     {
@@ -153,31 +226,12 @@ public class PoliceCarController : MonoBehaviour
 
         }
     }
-
-
-    private void HandleCollisionWithPlayer(Collision2D collision)
-    {
-        // Store the original rotation before applying randomness
-        originalRotation = transform.rotation;
-
-        // Randomly rotate the vehicle upon collision
-        float randomAngle = Random.Range(-30f, 30f); // Adjust the range as needed
-        Quaternion targetRotation = Quaternion.Euler(0, 0, transform.eulerAngles.z + randomAngle);
-
-        // Smoothly rotate towards the target rotation
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 200 * Time.deltaTime);
-
-        // Set the vehicle to move uncontrollably
-        isMovingUncontrollably = true; // Indicate that the vehicle is now moving in a new direction
-    }
-
     private void ChangeLane()
     {
         // Choose a new lane position
         float newLaneX = targetLaneX + (Random.value < 0.5f ? -laneWidth : laneWidth);
         targetLaneX = Mathf.Clamp(newLaneX, -3f, 3f); // Adjust boundaries as needed
     }
-
     private void PassPlayer()
     {
         // Move the police car upwards to pass the player car
@@ -207,7 +261,6 @@ public class PoliceCarController : MonoBehaviour
             transform.position += avoidanceDirection * speed * Time.deltaTime;
         }
     }
-
     private float GetLaneXPosition()
     {
         // Define your lane positions
@@ -216,7 +269,6 @@ public class PoliceCarController : MonoBehaviour
         int laneIndex = Random.Range(0, lanePositions.Length);
         return lanePositions[laneIndex];
     }
-
 
     private IEnumerator BlinkLights()
     {
@@ -232,6 +284,4 @@ public class PoliceCarController : MonoBehaviour
             yield return new WaitForSeconds(blinkInterval); // Wait
         }
     }
-
-
 }

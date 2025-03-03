@@ -102,8 +102,10 @@ public class BusinessManager : MonoBehaviour
 
     private void UpgradeBusiness()
     {
+
         if (currentLevel > 0 && currentLevel < maxLevel && CanAfford(currentUpgradeCost))
         {
+            SoundManager.instance.PlayUpgradeSound();
             DeductMoney(currentUpgradeCost);
             currentLevel++;
             currentUpgradeCost += upgradeIncreaseAmount; // Increase cost dynamically
@@ -115,6 +117,14 @@ public class BusinessManager : MonoBehaviour
 
             UpdateProfitPerSecond();
             UpdateUI();
+        }
+        else if (currentLevel == maxLevel)
+        {
+            //show popup that max level reached
+        }
+        else
+        {
+            //show popup that not enough money
         }
     }
 
@@ -129,6 +139,7 @@ public class BusinessManager : MonoBehaviour
 
     private void CollectEarnings()
     {
+
         int earningsToCollect = Mathf.FloorToInt(currentEarnings);
         if (earningsToCollect > 0)
         {
@@ -139,6 +150,7 @@ public class BusinessManager : MonoBehaviour
             currentEarnings = 0;
             PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
             PlayerPrefs.SetString($"{businessName}_lastCollectedTime", DateTime.Now.ToString());
+            SoundManager.instance.PlayMoneyIncreaseSound();
             CollectMoneyWithAnimation();
             collectButton.gameObject.SetActive(false);
         }

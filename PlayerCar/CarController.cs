@@ -14,8 +14,9 @@ public class CarController : MonoBehaviour
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject moneyIncreaseEffect;
     //---------------------sounds----------------------
-    [SerializeField] private AudioClip PlayerCarCrashSound;
+    [SerializeField] private AudioClip PlayerDestroySound;
     [SerializeField] private AudioClip PlayerCarHitSound;
+    [SerializeField] private AudioClip CarTurningSound;
     public static CarController instance;
 
     void Awake()
@@ -42,9 +43,12 @@ public class CarController : MonoBehaviour
         transform.position = Vector3.Lerp(transform.position, targetPosition, laneChangeSpeed * Time.deltaTime);
     }
 
-    private void PlayCarSound(AudioClip audioClip)
+    private void PlayCarSound(AudioClip audioClip, float volume)
     {
-        audioSourceOnPlayerCar.PlayOneShot(audioClip);
+        audioSourceOnPlayerCar.clip = audioClip;
+        audioSourceOnPlayerCar.volume = 0.3f;
+        audioSourceOnPlayerCar.loop = false;
+        audioSourceOnPlayerCar.Play();
     }
 
     private void HandleLaneChange()
@@ -60,6 +64,7 @@ public class CarController : MonoBehaviour
             // Rotate the car based on lane change direction
             if (currentLaneOffset != maxLaneOffset && currentLaneOffset != -maxLaneOffset)
             {
+                PlayCarSound(CarTurningSound, 0.2f);
                 float targetRotationZ = input * -20f; // Rotate left or right
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, targetRotationZ), Time.deltaTime * 8f);
             }
@@ -92,7 +97,7 @@ public class CarController : MonoBehaviour
             Destroy(vfxInstance, 1f);
             if (HealthBarController.instance.CheckHealthEnd())
             {
-                PlayCarSound(PlayerCarCrashSound);
+                PlayCarSound(PlayerDestroySound, 1f);
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
                 GamePlayPanelsController.instance.ShowLoosePanel();
@@ -107,7 +112,7 @@ public class CarController : MonoBehaviour
         {
             if (HealthBarController.instance.CheckHealthEnd())
             {
-                PlayCarSound(PlayerCarCrashSound);
+                PlayCarSound(PlayerDestroySound, 1f);
                 Instantiate(explosionVfx, transform);
                 Destroy(gameObject, 0.3f);
                 GamePlayPanelsController.instance.ShowLoosePanel();

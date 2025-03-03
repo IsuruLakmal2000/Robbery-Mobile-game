@@ -64,8 +64,11 @@ public class MillionareClubController : MonoBehaviour
             buyBtn.onClick.AddListener(() =>
             {
                 //100000000
+
+                SoundManager.instance.PlayButtonClick();
                 if (currentMoney >= 10)
                 {
+                    SoundManager.instance.PlayUpgradeSound();
                     currentMoney -= 10;
                     PlayerPrefs.SetInt("total_money", currentMoney);
 
@@ -137,6 +140,7 @@ public class MillionareClubController : MonoBehaviour
             PlayerPrefs.SetString("LastCollectTime_millionare_club", lastCollectTime.ToBinary().ToString());
             //  PlayerPrefs.SetInt("CurrentEarnings", currentEarnings); // Store as int
             PlayerPrefs.Save();
+            SoundManager.instance.PlayMoneyIncreaseSound();
             CollectMoneyWithAnimation();
             //  UpdateUI();
         }
@@ -167,7 +171,7 @@ public class MillionareClubController : MonoBehaviour
 
     private IEnumerator MoveAndPackMoneyIcons(List<Transform> icons, Vector3 targetPos, GameObject parentObject)
     {
-       float duration = 1f; // Total animation time
+        float duration = 1f; // Total animation time
         float packTime = 0.6f; // Time to pack together
         float shrinkTime = 0.4f; // Time to shrink
 

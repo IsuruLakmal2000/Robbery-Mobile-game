@@ -12,6 +12,7 @@ public class BusinessSceneController : MonoBehaviour
     {
         backBtn.onClick.AddListener(() =>
         {
+            SoundManager.instance.PlayButtonClick();
             SceneManager.LoadScene("Menu");
         });
     }

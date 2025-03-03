@@ -24,6 +24,7 @@ public class GarageSidePanelController : MonoBehaviour
     }
     private void OnVehiclesSelectBtnClick()
     {
+        SoundManager.instance.PlayButtonClick();
         if (healthBarInstance != null)
         {
             Destroy(healthBarInstance);
