@@ -35,6 +35,7 @@ public class BillionareClubController : MonoBehaviour
         {
             currentEarningTxt.gameObject.SetActive(true);
             // Retrieve the last collection time and calculate the current earnings
+            UpdateEarnings();
             if (PlayerPrefs.HasKey("LastCollectTime"))
             {
                 lastCollectTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("LastCollectTime")));
@@ -126,9 +127,6 @@ public class BillionareClubController : MonoBehaviour
             int collectedAmount = currentEarnings;
             int currentTotalMoney = PlayerPrefs.GetInt("total_money", 0);
             PlayerPrefs.SetInt("total_money", currentTotalMoney + collectedAmount);
-
-
-            // Reset earnings and update last collect time
             currentEarnings = 0;
             lastCollectTime = DateTime.Now;
             profitAvailableVBtn.SetActive(false);
