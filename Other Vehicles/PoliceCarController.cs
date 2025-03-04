@@ -32,6 +32,7 @@ public class PoliceCarController : MonoBehaviour
     private float targetVolume = 0f;
     [SerializeField] private AudioClip sirenSound;
     [SerializeField] private AudioClip walkietalkiesound;
+
     public float volumeChangeSpeed = 0.2f;
     private float maxDistance = 5f;
     private float minDistance = 0.1f;
@@ -55,8 +56,8 @@ public class PoliceCarController : MonoBehaviour
             }
         }
         policeCarAudioSource.clip = sirenSound;
-        policeCarAudioSource.volume = 0f; // Start with no sound
-        policeCarAudioSource.loop = true; // Ensure the siren loops
+        policeCarAudioSource.volume = 0f;
+        policeCarAudioSource.loop = true;
         policeCarAudioSource.Play();
 
         // Set initial lane position based on player's position
@@ -86,6 +87,7 @@ public class PoliceCarController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, originalRotation, 200 * Time.deltaTime);
         }
     }
+
 
     private void PlayWalkieTalkieSound()
     {
@@ -218,6 +220,7 @@ public class PoliceCarController : MonoBehaviour
             GameObject explosion = Instantiate(exPlosionPrefab, transform.position, Quaternion.identity);
             GameObject moneyBoomExplosion = Instantiate(moneyBoomExplosionPrefab, transform.position, Quaternion.identity);
             Destroy(moneyBoomExplosion, 1f);
+            SoundManager.instance.PlayVehicleDestroyedSound();
             // Destroy(moneyIncreaseVfx, 1f);
             Destroy(explosion, 1f);
             // Time.timeScale = 0f;

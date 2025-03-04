@@ -42,7 +42,7 @@ public class LevelManager : MonoBehaviour
                 ShowWinPanel();
             }
 
-           
+
 
             levelTarget = 0f;
             CarController.instance.CompleteLevel();
@@ -67,6 +67,7 @@ public class LevelManager : MonoBehaviour
 
     private void ShowWinPanel()
     {
+        SoundManager.instance.PlayLevelCompleteSound();
         GamePlayPanelsController.instance.ShowWinPanel();
     }
 

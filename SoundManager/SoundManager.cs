@@ -15,7 +15,10 @@ public class SoundManager : MonoBehaviour
     public AudioClip popSoundEffect;
     public AudioClip firingSound;
     public AudioClip levelComplete;
-
+    public AudioClip walkieTalkieSound;
+    public AudioClip levelFailed
+    ;
+    [SerializeField] private AudioClip[] policeCarDestroyedSound;
 
     private void Awake()
     {
@@ -35,6 +38,21 @@ public class SoundManager : MonoBehaviour
         audioSource.PlayOneShot(popSoundEffect);
     }
 
+    public void PlayLevelFailedSound()
+    {
+        audioSource.PlayOneShot(alertWarnSound);
+        audioSource.PlayOneShot(walkieTalkieSound);
+    }
+
+    public void PlayLevelCompleteSound()
+    {
+        audioSource.PlayOneShot(levelComplete);
+    }
+    public void PlayVehicleDestroyedSound()
+    {
+        int randomIndex = Random.Range(0, policeCarDestroyedSound.Length);
+        audioSource.PlayOneShot(policeCarDestroyedSound[randomIndex]);
+    }
     public void PlayButtonClick()
     {
         audioSource.PlayOneShot(buttonClick);

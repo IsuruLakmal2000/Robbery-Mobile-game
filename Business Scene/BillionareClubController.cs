@@ -65,9 +65,9 @@ public class BillionareClubController : MonoBehaviour
             {
                 SoundManager.instance.PlayButtonClick();
                 //100000000
-                if (currentMoney >= 10)
+                if (currentMoney >= 80000000)
                 {
-                    currentMoney -= 10;
+                    currentMoney -= 80000000;
                     PlayerPrefs.SetInt("total_money", currentMoney);
 
                     PlayerPrefs.SetInt("is_unlock_billionare_club", 1);
@@ -77,7 +77,7 @@ public class BillionareClubController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Not enough money");
+                    MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need 800M to join Billionare Club");
 
                 }
             });

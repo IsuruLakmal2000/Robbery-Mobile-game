@@ -33,6 +33,7 @@ public class MillionareClubController : MonoBehaviour
         profitAmount.text = FormatPrice(1000000) + "/per day income";
         if (PlayerPrefs.GetInt("is_unlock_millionare_club", 0) == 1)
         {
+
             currentEarningTxt.gameObject.SetActive(true);
             // Retrieve the last collection time and calculate the current earnings
             if (PlayerPrefs.HasKey("LastCollectTime_millionare_club"))
@@ -60,16 +61,15 @@ public class MillionareClubController : MonoBehaviour
         }
         else
         {
+            profitAvailableVBtn.SetActive(false);
             currentEarningTxt.gameObject.SetActive(false);
             buyBtn.onClick.AddListener(() =>
             {
-                //100000000
-
                 SoundManager.instance.PlayButtonClick();
-                if (currentMoney >= 10)
+                if (currentMoney >= 1000000)
                 {
                     SoundManager.instance.PlayUpgradeSound();
-                    currentMoney -= 10;
+                    currentMoney -= 1000000;
                     PlayerPrefs.SetInt("total_money", currentMoney);
 
                     PlayerPrefs.SetInt("is_unlock_millionare_club", 1);
@@ -79,7 +79,7 @@ public class MillionareClubController : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("Not enough money");
+                    MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need " + FormatPrice(1000000) + " to join Millionare Club");
                 }
             });
         }
@@ -104,11 +104,13 @@ public class MillionareClubController : MonoBehaviour
 
         // Show popup if money is available
         if (currentEarnings > 0)
+        {
             profitAvailableVBtn.SetActive(true);
+            profitAvailableVBtn.GetComponent<Button>().onClick.AddListener(CollectMoney);
+        }
 
-        profitAvailableVBtn.GetComponent<Button>().onClick.AddListener(CollectMoney);
 
-        //   UpdateUI();
+
     }
 
     private string FormatPrice(int price)

@@ -87,12 +87,12 @@ public class GunController : MonoBehaviour
     }
     public void FireBullet()
     {
-        SoundManager.instance.PlayFireBulletSound();
+
         if (isFiring && Time.time >= nextFire && nearestPolice != null)
         {
             gunAnimator.SetTrigger("Fire");
             GameObject bullet = Instantiate(bulletPrefab, gunArm.position, gunArm.rotation);
-
+            SoundManager.instance.PlayFireBulletSound();
             // Get the Bullet script and set its properties
             Bullet bulletScript = bullet.GetComponent<Bullet>();
             if (bulletScript != null)

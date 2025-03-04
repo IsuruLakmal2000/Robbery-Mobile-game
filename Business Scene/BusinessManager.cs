@@ -15,6 +15,7 @@ public class BusinessManager : MonoBehaviour
     private int maxLevel = 20;
     [SerializeField] private int baseUpgradeCost = 10000;
     [SerializeField] private int baseProfit = 50000;
+    [SerializeField] private int InitialCost = 50000;
     [SerializeField] private int upgradeIncreaseAmount = 10000; // Increase per level
     [SerializeField] private int profitIncreaseAmount = 25000; // Profit increase per level
     public Transform moneyBar;
@@ -82,9 +83,9 @@ public class BusinessManager : MonoBehaviour
 
     private void BuyBusiness()
     {
-        if (currentLevel == 0 && CanAfford(50000))
+        if (currentLevel == 0 && CanAfford(InitialCost))
         {
-            DeductMoney(50000);
+            DeductMoney(InitialCost);
             currentLevel = 1;
             PlayerPrefs.SetInt($"{businessName}_level", currentLevel);
             PlayerPrefs.SetInt($"{businessName}_profit", baseProfit);
@@ -97,6 +98,10 @@ public class BusinessManager : MonoBehaviour
             upgradeButton.onClick.AddListener(UpgradeBusiness);
             UpdateProfitPerSecond();
             UpdateUI();
+        }
+        else
+        {
+            MainMenuPanelController.Instance.ShowPopupPanel("Not enough money", "You need " + FormatPrice(InitialCost) + " to buy this business");
         }
     }
 

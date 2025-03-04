@@ -99,7 +99,10 @@ public class CarController : MonoBehaviour
             {
                 PlayCarSound(PlayerDestroySound, 1f);
                 Instantiate(explosionVfx, transform);
+                SoundManager.instance.PlayVehicleDestroyedSound();
+                SoundManager.instance.PlayLevelFailedSound();
                 Destroy(gameObject, 0.3f);
+
                 GamePlayPanelsController.instance.ShowLoosePanel();
             }
             else
@@ -114,7 +117,10 @@ public class CarController : MonoBehaviour
             {
                 PlayCarSound(PlayerDestroySound, 1f);
                 Instantiate(explosionVfx, transform);
+                SoundManager.instance.PlayVehicleDestroyedSound();
+                SoundManager.instance.PlayLevelFailedSound();
                 Destroy(gameObject, 0.3f);
+
                 GamePlayPanelsController.instance.ShowLoosePanel();
             }
             else
