@@ -55,7 +55,6 @@ public class BillionareClubController : MonoBehaviour
                 currentEarningTxt.text = FormatPrice(currentEarnings) + " / " + FormatPrice(DAILY_LIMIT);
                 InvokeRepeating(nameof(UpdateEarnings), 10f, 10f);
             }
-
             buyBtn.gameObject.SetActive(false);
         }
         else
