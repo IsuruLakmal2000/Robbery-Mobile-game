@@ -10,9 +10,11 @@ public class AchievementBar : MonoBehaviour
 
     private Image iconImage;
     private Image rewardImg;
-    private TextMeshProUGUI rewardCoundText;
-    private TextMeshProUGUI taskNameText;
+    [SerializeField] private TextMeshProUGUI rewardCoundText;
+    [SerializeField] private TextMeshProUGUI taskNameText;
     private Slider barSlider;
+    [SerializeField] private string achievementID;
+    [SerializeField] private AchievementConfig achievementConfigInThisBar;
 
 
     private
@@ -21,6 +23,7 @@ public class AchievementBar : MonoBehaviour
     void Awake()
     {
         TaskCompleted.SetActive(false);
+        TaskDetails.SetActive(true);
         iconImage = TaskDetails.transform.Find("icon/IconImg").GetComponent<Image>();
         rewardCoundText = TaskDetails.transform.Find("Reward/rewardCountTxt").GetComponent<TextMeshProUGUI>();
         taskNameText = TaskDetails.transform.Find("TaskName").GetComponent<TextMeshProUGUI>();
@@ -31,26 +34,84 @@ public class AchievementBar : MonoBehaviour
 
     public void SetTaskDetails(AchievementConfig achievementConfig)
     {
-        string achivementID = achievementConfig.achievementID;
-        Debug.Log("achivementID" + achivementID);
-        //load achievemnt current level 
-        int currentLevel = PlayerPrefs.GetInt("achievement_current_level" + achivementID, 1);
-        Debug.Log("sub task -" + achievementConfig.subAchievements[currentLevel - 1].taskName + "current level" + currentLevel);
-        // iconImage.sprite = Resources.Load<Sprite>("Achievements/" + achievementConfig.subAchievements[currentLevel - 1].iconName);
+        TaskDetails.SetActive(true);
+        TaskCompleted.SetActive(false);
+        achievementConfigInThisBar = achievementConfig;
+        achievementID = achievementConfig.achievementID;
+
+        int currentLevel = PlayerPrefs.GetInt("achievement_current_level" + achievementID, 1);
+        Debug.Log("current level is " + currentLevel);
+        Debug.Log("currentlevel task - " + achievementConfig.subAchievements[currentLevel - 1].taskName);
+        Debug.Log("previous task- " + achievementConfig.subAchievements[currentLevel].taskName);
+        rewardImg.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.subAchievements[currentLevel - 1].rewardType);
+        iconImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.iconID);
         taskNameText.text = achievementConfig.subAchievements[currentLevel - 1].taskName;
         rewardCoundText.text = achievementConfig.subAchievements[currentLevel - 1].rewardCount.ToString();
-        // here use switch case to get specific data from palyer prefs ,because eahc achivements currnt slider value depend on the playeprefs values
-        // barSlider.value = achievementConfig.subAchievements[currentLevel - 1].progress;
+        barSlider.maxValue = achievementConfig.subAchievements[currentLevel - 1].barMaxValue;
+        barSlider.value = GetSliderValue(achievementID);
+        barSlider.gameObject.transform.Find("text").GetComponent<TextMeshProUGUI>().text = barSlider.value + "/" + barSlider.maxValue;
+        CheckTaskCompleted(currentLevel, achievementConfig);
+
     }
 
 
-    private void CheckTaskCompleted()
+    private void CheckTaskCompleted(int currentLevel, AchievementConfig achievementConfig)
     {
-        if (barSlider.value == 1)
+
+        if (barSlider.value >= achievementConfigInThisBar.subAchievements[currentLevel - 1].barMaxValue)
         {
+
             TaskDetails.SetActive(false);
             TaskCompleted.SetActive(true);
+            taskNameText = TaskCompleted.transform.Find("TaskName").GetComponent<TextMeshProUGUI>();
+            taskNameText.text = achievementConfigInThisBar.subAchievements[currentLevel - 1].taskName;
+            rewardCoundText = TaskCompleted.transform.Find("Reward/count").GetComponent<TextMeshProUGUI>();
+            rewardCoundText.text = achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardCount.ToString();
+            rewardImg = TaskCompleted.transform.Find("Reward").GetComponent<Image>();
+            rewardImg.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardType);
+            iconImage = TaskCompleted.transform.Find("IconImg").GetComponent<Image>();
+            iconImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/check");
+            TaskCompleted.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                ClaimReward(currentLevel);
+            });
+
+        }
+        else
+        {
+            Debug.Log("task not complete");
+            return;
         }
     }
+
+    private void ClaimReward(int currentLevel)
+    {
+        Debug.Log("Claimed reward for " + achievementConfigInThisBar.subAchievements[currentLevel - 1].taskName);
+        PlayerPrefs.SetInt("achievement_current_level" + achievementID, currentLevel + 1);
+        PlayerPrefs.Save();
+        TaskDetails.SetActive(true);
+        TaskCompleted.SetActive(false);
+        SetTaskDetails(achievementConfigInThisBar);
+    }
+
+
+    public float GetSliderValue(string achievementID)
+    {
+        switch (achievementID)
+        {
+            case "ach_1":
+                int currentEarnedMoney = PlayerPrefs.GetInt("total_money", 0);
+                // float currentEarnedMoneyFloat = (float)currentEarnedMoney;
+                return currentEarnedMoney;
+            case "ach_2":
+                int xpLevel = PlayerPrefs.GetInt("XP_Level", 0);
+                //float xpLevelFloat = (float)xpLevel;
+                return xpLevel;
+
+            default:
+                return 0;
+        }
+    }
+
 }
 

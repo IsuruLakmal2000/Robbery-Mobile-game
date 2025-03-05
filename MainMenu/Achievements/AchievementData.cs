@@ -3,16 +3,21 @@ public class AchievementData
 {
     public string iconName;    // The name of the icon for the achievement
     public string taskName;     // The name of the task
-    public int rewardCount;     // The count of rewards associated with the achievement
-    public float progress;       // The progress towards completing the achievement
+    public int rewardCount;
+    public string rewardType;
+
+    public int barMaxValue;
+    // The progress towards completing the achievement
 
     // Constructor for easy instantiation
-    public AchievementData(string iconName, string taskName, int rewardCount, float progress)
+    public AchievementData(string iconName, string taskName, int rewardCount, int barMaxValue, string rewardType)
     {
-        //  this.iconName = iconName;
+        this.iconName = iconName;
         this.taskName = taskName;
-        //  this.rewardCount = rewardCount;
-        //  this.progress = progress;
+        this.rewardCount = rewardCount;
+        this.barMaxValue = barMaxValue;
+        this.rewardType = rewardType;
+
     }
 }
 
@@ -21,5 +26,6 @@ public class AchievementData
 public class AchievementConfig
 {
     public string achievementID;
+    public string iconID;
     public AchievementData[] subAchievements;
 }
