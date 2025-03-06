@@ -14,6 +14,7 @@ public class BottomBarController : MonoBehaviour
     //[SerializeField] private GameObject vehiclePanelPrefab;
     [SerializeField] private GameObject backBtnOnGarage;
     [SerializeField] private GameObject garagePropSidePanelPrefab;
+    [SerializeField] private GameObject leftSidePanelPrefab;
 
 
     void Start()
@@ -78,10 +79,12 @@ public class BottomBarController : MonoBehaviour
         if (isPanelVisible)
         {
             animator.SetBool("bottomBarOpen", false);
+            leftSidePanelPrefab.SetActive(false);
         }
         else
         {
             animator.SetBool("bottomBarOpen", true);
+            leftSidePanelPrefab.SetActive(true);
         }
         isPanelVisible = !isPanelVisible;
     }

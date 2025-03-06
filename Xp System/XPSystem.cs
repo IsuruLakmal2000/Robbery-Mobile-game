@@ -8,11 +8,14 @@ public class XPSystem : MonoBehaviour
     public int currentLevel;
     public int currentXP;
     public int xpToNextLevel;
+    [SerializeField] private GameObject levelUpPanel;
+    private Canvas canvas;
 
     public event Action<int> OnLevelUp;
 
     private void Awake()
     {
+        canvas = FindObjectOfType<Canvas>();
         if (Instance == null)
             Instance = this;
 
@@ -37,6 +40,7 @@ public class XPSystem : MonoBehaviour
         while (currentXP >= xpToNextLevel)
         {
             LevelUp();
+            ShowLevelUpPanel();
         }
 
         SaveXPData();
@@ -69,5 +73,11 @@ public class XPSystem : MonoBehaviour
         currentXP = PlayerPrefs.GetInt("XP_Amount", 0);
         xpToNextLevel = PlayerPrefs.GetInt("XP_NextLevel", 1000);
         Debug.Log($"XP Data Loaded: Level {currentLevel}, XP {currentXP}/{xpToNextLevel}");
+    }
+    private void ShowLevelUpPanel()
+    {
+        GameObject levelUpPanelInstance = Instantiate(levelUpPanel, canvas.transform);
+        levelUpPanelInstance.transform.SetAsLastSibling();
+        levelUpPanelInstance.GetComponent<LevelUpPanelController>().SetLevel(currentLevel);
     }
 }

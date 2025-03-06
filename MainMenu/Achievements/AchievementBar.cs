@@ -15,6 +15,7 @@ public class AchievementBar : MonoBehaviour
     private Slider barSlider;
     [SerializeField] private string achievementID;
     [SerializeField] private AchievementConfig achievementConfigInThisBar;
+    [SerializeField] private GameObject rewardPanelPrefab;
 
 
     private
@@ -39,18 +40,30 @@ public class AchievementBar : MonoBehaviour
         achievementConfigInThisBar = achievementConfig;
         achievementID = achievementConfig.achievementID;
 
+
+        iconImage = TaskDetails.transform.Find("icon/IconImg").GetComponent<Image>();
+        rewardCoundText = TaskDetails.transform.Find("Reward/rewardCountTxt").GetComponent<TextMeshProUGUI>();
+        taskNameText = TaskDetails.transform.Find("TaskName").GetComponent<TextMeshProUGUI>();
+        barSlider = TaskDetails.transform.Find("Slider").GetComponent<Slider>();
+        rewardImg = TaskDetails.transform.Find("Reward").GetComponent<Image>();
+
         int currentLevel = PlayerPrefs.GetInt("achievement_current_level" + achievementID, 1);
-        Debug.Log("current level is " + currentLevel);
-        Debug.Log("currentlevel task - " + achievementConfig.subAchievements[currentLevel - 1].taskName);
-        Debug.Log("previous task- " + achievementConfig.subAchievements[currentLevel].taskName);
-        rewardImg.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.subAchievements[currentLevel - 1].rewardType);
-        iconImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.iconID);
-        taskNameText.text = achievementConfig.subAchievements[currentLevel - 1].taskName;
-        rewardCoundText.text = achievementConfig.subAchievements[currentLevel - 1].rewardCount.ToString();
-        barSlider.maxValue = achievementConfig.subAchievements[currentLevel - 1].barMaxValue;
-        barSlider.value = GetSliderValue(achievementID);
-        barSlider.gameObject.transform.Find("text").GetComponent<TextMeshProUGUI>().text = barSlider.value + "/" + barSlider.maxValue;
-        CheckTaskCompleted(currentLevel, achievementConfig);
+        if (currentLevel > achievementConfig.subAchievements.Length)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            rewardImg.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.subAchievements[currentLevel - 1].rewardType);
+            iconImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfig.iconID);
+            taskNameText.text = achievementConfig.subAchievements[currentLevel - 1].taskName;
+            rewardCoundText.text = achievementConfig.subAchievements[currentLevel - 1].rewardCount.ToString();
+            barSlider.maxValue = achievementConfig.subAchievements[currentLevel - 1].barMaxValue;
+            barSlider.value = GetSliderValue(achievementID);
+            barSlider.gameObject.transform.Find("text").GetComponent<TextMeshProUGUI>().text = barSlider.value + "/" + barSlider.maxValue;
+            CheckTaskCompleted(currentLevel, achievementConfig);
+        }
+
 
     }
 
@@ -71,8 +84,21 @@ public class AchievementBar : MonoBehaviour
             rewardImg.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardType);
             iconImage = TaskCompleted.transform.Find("IconImg").GetComponent<Image>();
             iconImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/check");
-            TaskCompleted.GetComponent<Button>().onClick.AddListener(() =>
+            Button claimButton = TaskCompleted.GetComponent<Button>();
+            claimButton.onClick.RemoveAllListeners();
+            claimButton.onClick.AddListener(() =>
             {
+                if (achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardType == "Money")
+                {
+                    SoundManager.instance.PlayMoneyIncreaseSound();
+                }
+                else
+                {
+                    SoundManager.instance.PlayAlertInfoSound();
+                }
+                GameObject rewardPanelInstance = Instantiate(rewardPanelPrefab, transform.parent.parent.parent.parent.parent.parent);
+                rewardPanelInstance.GetComponent<RewardPanelController>().SetRewardDetails(achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardType, achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardCount);
+                SaveRewards(achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardType, achievementConfigInThisBar.subAchievements[currentLevel - 1].rewardCount);
                 ClaimReward(currentLevel);
             });
 
@@ -86,7 +112,6 @@ public class AchievementBar : MonoBehaviour
 
     private void ClaimReward(int currentLevel)
     {
-        Debug.Log("Claimed reward for " + achievementConfigInThisBar.subAchievements[currentLevel - 1].taskName);
         PlayerPrefs.SetInt("achievement_current_level" + achievementID, currentLevel + 1);
         PlayerPrefs.Save();
         TaskDetails.SetActive(true);
@@ -110,6 +135,31 @@ public class AchievementBar : MonoBehaviour
 
             default:
                 return 0;
+        }
+    }
+
+    private void SaveRewards(string rewardType, int rewardCount)
+    {
+        switch (rewardType)
+        {
+            case "Money":
+                int currentMoney = PlayerPrefs.GetInt("total_money", 0);
+                currentMoney += rewardCount;
+                PlayerPrefs.SetInt("total_money", currentMoney);
+                PlayerPrefs.Save();
+                break;
+
+            case "Exp":
+                //int currentXP = PlayerPrefs.GetInt("XP_Level", 0);
+                XPSystem.Instance.AddXP(rewardCount);
+                // currentXP += rewardCount;
+                // PlayerPrefs.SetInt("XP_Level", currentXP);
+                // PlayerPrefs.Save();
+                break;
+
+            default:
+                Debug.Log("Reward type not found");
+                break;
         }
     }
 
