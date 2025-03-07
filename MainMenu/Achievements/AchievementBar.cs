@@ -178,10 +178,10 @@ public class AchievementBar : MonoBehaviour
                 // PlayerPrefs.Save();
                 break;
             case "Gem":
-                // int currentGem = PlayerPrefs.GetInt("total_gem", 0);
-                // currentGem += rewardCount;
-                // PlayerPrefs.SetInt("total_gem", currentGem);
-                // PlayerPrefs.Save();
+                int currentGem = PlayerPrefs.GetInt("total_gem", 0);
+                currentGem += rewardCount;
+                PlayerPrefs.SetInt("total_gem", currentGem);
+                PlayerPrefs.Save();
                 break;
 
             default:

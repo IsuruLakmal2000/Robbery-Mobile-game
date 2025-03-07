@@ -30,6 +30,7 @@ public class MillionareClubController : MonoBehaviour
     private void CheckUnlockMillionaire()
     {
         int currentMoney = PlayerPrefs.GetInt("total_money", 0);
+        int totalGem = PlayerPrefs.GetInt("total_gem", 0);
         profitAmount.text = FormatPrice(1000000) + "/per day income";
         if (PlayerPrefs.GetInt("is_unlock_millionare_club", 0) == 1)
         {
@@ -68,14 +69,24 @@ public class MillionareClubController : MonoBehaviour
                 SoundManager.instance.PlayButtonClick();
                 if (currentMoney >= 1000000)
                 {
-                    SoundManager.instance.PlayUpgradeSound();
-                    currentMoney -= 1000000;
-                    PlayerPrefs.SetInt("total_money", currentMoney);
+                    if (totalGem >= 100)
+                    {
+                        SoundManager.instance.PlayUpgradeSound();
+                        totalGem -= 100;
+                        PlayerPrefs.SetInt("total_gem", totalGem);
+                        currentMoney -= 1000000;
+                        PlayerPrefs.SetInt("total_money", currentMoney);
 
-                    PlayerPrefs.SetInt("is_unlock_millionare_club", 1);
-                    buyBtn.gameObject.SetActive(false);
-                    currentEarningTxt.gameObject.SetActive(true);
-                    CheckUnlockMillionaire();
+                        PlayerPrefs.SetInt("is_unlock_millionare_club", 1);
+                        buyBtn.gameObject.SetActive(false);
+                        currentEarningTxt.gameObject.SetActive(true);
+                        CheckUnlockMillionaire();
+                    }
+                    else
+                    {
+                        MainMenuPanelController.Instance.ShowPopupPanel("Not enough gem", "You need 100 gem to join Millionare Club");
+                    }
+
                 }
                 else
                 {

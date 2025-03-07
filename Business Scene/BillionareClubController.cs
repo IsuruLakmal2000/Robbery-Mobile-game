@@ -30,6 +30,7 @@ public class BillionareClubController : MonoBehaviour
     private void CheckUnlockBillionare()
     {
         int currentMoney = PlayerPrefs.GetInt("total_money", 0);
+        int totalgem = PlayerPrefs.GetInt("total_gem", 0);
         profitAmount.text = FormatPrice(100_000_000) + "/per day income";
         if (PlayerPrefs.GetInt("is_unlock_billionare_club", 0) == 1)
         {
@@ -67,13 +68,22 @@ public class BillionareClubController : MonoBehaviour
                 //100000000
                 if (currentMoney >= 80000000)
                 {
-                    currentMoney -= 80000000;
-                    PlayerPrefs.SetInt("total_money", currentMoney);
+                    if (totalgem >= 500)
+                    {
+                        currentMoney -= 80000000;
+                        PlayerPrefs.SetInt("total_money", currentMoney);
+                        totalgem -= 500;
+                        PlayerPrefs.SetInt("total_gem", totalgem);
+                        PlayerPrefs.SetInt("is_unlock_billionare_club", 1);
+                        buyBtn.gameObject.SetActive(false);
+                        currentEarningTxt.gameObject.SetActive(true);
+                        CheckUnlockBillionare();
+                    }
+                    else
+                    {
+                        MainMenuPanelController.Instance.ShowPopupPanel("Not enough gem", "You need 500 gem to join Billionare Club");
+                    }
 
-                    PlayerPrefs.SetInt("is_unlock_billionare_club", 1);
-                    buyBtn.gameObject.SetActive(false);
-                    currentEarningTxt.gameObject.SetActive(true);
-                    CheckUnlockBillionare();
                 }
                 else
                 {
