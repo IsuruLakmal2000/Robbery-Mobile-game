@@ -132,6 +132,27 @@ public class AchievementBar : MonoBehaviour
                 int xpLevel = PlayerPrefs.GetInt("XP_Level", 0);
                 //float xpLevelFloat = (float)xpLevel;
                 return xpLevel;
+            case "ach_3":
+                int totalDestroyedPoliceVehicles = PlayerPrefs.GetInt("total_destroyed_police_vehicles", 0);
+                return totalDestroyedPoliceVehicles;
+            case "ach_4":
+                int isUnlock = PlayerPrefs.GetInt("coffeShop_level", 0);
+                return isUnlock;
+            case "ach_5":
+                int isUnlockHotel = PlayerPrefs.GetInt("hotel_level", 0);
+                return isUnlockHotel;
+            case "ach_6":
+                int isUnlockMillionare = PlayerPrefs.GetInt("is_unlock_millionare_club", 0);
+                return isUnlockMillionare;
+            case "ach_7":
+                int isUnlockBillionare = PlayerPrefs.GetInt("is_unlock_billionare_club", 0);
+                return isUnlockBillionare;
+            case "ach_8":
+                int coffeshopLevel = PlayerPrefs.GetInt("coffeShop_level", 0);
+                return coffeshopLevel;
+            case "ach_9":
+                int hotelLevel = PlayerPrefs.GetInt("hotel_level", 0);
+                return hotelLevel;
 
             default:
                 return 0;
@@ -154,6 +175,12 @@ public class AchievementBar : MonoBehaviour
                 XPSystem.Instance.AddXP(rewardCount);
                 // currentXP += rewardCount;
                 // PlayerPrefs.SetInt("XP_Level", currentXP);
+                // PlayerPrefs.Save();
+                break;
+            case "Gem":
+                // int currentGem = PlayerPrefs.GetInt("total_gem", 0);
+                // currentGem += rewardCount;
+                // PlayerPrefs.SetInt("total_gem", currentGem);
                 // PlayerPrefs.Save();
                 break;
 

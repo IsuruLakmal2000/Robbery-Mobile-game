@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameRobbedMoney : MonoBehaviour
 {
     public int robbedMoneyCount = 0;
+    public int gameCollectedGemCount = 0;
     [SerializeField] private TextMeshProUGUI coinCount;
 
     public static GameRobbedMoney instance;
@@ -29,6 +30,10 @@ public class GameRobbedMoney : MonoBehaviour
     public void IncreaseMoneyWhenCollect(int count)
     {
         robbedMoneyCount = robbedMoneyCount + count;
+    }
+    public void IncreaseGemWhenCollect(int count)
+    {
+        gameCollectedGemCount = gameCollectedGemCount + count;
     }
     private void OnGUI()
     {

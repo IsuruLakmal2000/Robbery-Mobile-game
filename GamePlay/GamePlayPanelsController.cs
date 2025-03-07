@@ -26,7 +26,8 @@ public class GamePlayPanelsController : MonoBehaviour
         winPanelInstance.transform.SetAsLastSibling();
 
         int totalMoneyInthisLevel = GameRobbedMoney.instance.robbedMoneyCount;
-        WinPanelController.instance.SetRobbedMoney(totalMoneyInthisLevel);
+        int totalGemsEarnedInthisLevel = GameRobbedMoney.instance.gameCollectedGemCount;
+        WinPanelController.instance.SetRobbedMoney(totalMoneyInthisLevel, totalGemsEarnedInthisLevel);
 
 
     }

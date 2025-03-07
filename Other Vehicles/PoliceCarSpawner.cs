@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PoliceCarSpawner : MonoBehaviour
 {
-    public GameObject policeCarPrefab; // Reference to the police car prefab
+    public GameObject[] policeCarPrefab; // Reference to the police car prefab
     private Transform playerCar;
 
     private void Start()
@@ -35,9 +35,9 @@ public class PoliceCarSpawner : MonoBehaviour
             {
                 spawnPosition.x = 0;
             }
-
+            int prefabIndex = GetPrefabIndexForLevel(GameManager.instance.levelNumber);
             // Instantiate the police car at the calculated position
-            Instantiate(policeCarPrefab, spawnPosition, Quaternion.identity);
+            Instantiate(policeCarPrefab[prefabIndex], spawnPosition, Quaternion.identity);
         }
     }
 
@@ -61,5 +61,94 @@ public class PoliceCarSpawner : MonoBehaviour
         }
 
         return closestLane; // Return the closest lane position
+    }
+
+    private int GetPrefabIndexForLevel(int level)
+    {
+
+        if (level < 5)
+        {
+            return 0;
+        }
+        else if (level < 10)
+        {
+
+            int randomValue = Random.Range(0, 100);
+            if (randomValue < 70)
+            {
+                return 0; // 75% chance for the first prefab
+            }
+            else
+            {
+                return 1; // 25% chance for the second prefab
+            }
+        }
+        else if (level < 15)
+        {
+            return Random.Range(0, 2); // 50% chance for each prefab
+        }
+        else if (level < 20)
+        {
+            int randomValue = Random.Range(0, 100);
+            if (randomValue < 40)
+            {
+                return 0;
+            }
+            else if (randomValue < 80 && randomValue >= 40)
+            {
+                return 1;
+            }
+            else
+            {
+                return 2;
+            }
+
+        }
+        else if (level < 30)
+        {
+            if (Random.Range(0, 100) < 70)
+            {
+                return Random.Range(1, 3);
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else if (level < 40)
+        {
+            if (Random.Range(0, 100) < 70)
+            {
+                return Random.Range(2, 4);
+            }
+            else
+            {
+                return Random.Range(0, 2);
+            }
+
+        }
+        else if (level < 50)
+        {
+            if (Random.Range(0, 100) < 70)
+            {
+                return Random.Range(2, 4);
+            }
+            else
+            {
+                return Random.Range(0, 2);
+            }
+
+        }
+        else
+        {
+            if (Random.Range(0, 100) < 75)
+            {
+                return Random.Range(2, 4);
+            }
+            else
+            {
+                return Random.Range(0, 2);
+            }
+        }
     }
 }

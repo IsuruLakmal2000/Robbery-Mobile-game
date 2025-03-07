@@ -1,3 +1,4 @@
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private AudioSource audioSourceOnPlayerCar;
     [SerializeField] private GameObject explosionVfx;
     [SerializeField] private GameObject moneyIncreaseEffect;
+    [SerializeField] private GameObject gemIncreaseEffect;
     //---------------------sounds----------------------
     [SerializeField] private AudioClip PlayerDestroySound;
     [SerializeField] private AudioClip PlayerCarHitSound;
@@ -137,6 +139,13 @@ public class CarController : MonoBehaviour
             SoundManager.instance.PlayMoneyPickupSound();
             GameRobbedMoney.instance.IncreaseMoneyWhenCollect(100);
             GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, transform.Find("Canvas").transform);
+            Destroy(moneyIncreaseEffectInstance, 0.5f);
+        }
+        if (collision.gameObject.CompareTag("Gem"))
+        {
+            SoundManager.instance.PlayMoneyPickupSound();
+            GameRobbedMoney.instance.IncreaseGemWhenCollect(1);
+            GameObject moneyIncreaseEffectInstance = Instantiate(gemIncreaseEffect, transform.Find("Canvas").transform);
             Destroy(moneyIncreaseEffectInstance, 0.5f);
         }
     }

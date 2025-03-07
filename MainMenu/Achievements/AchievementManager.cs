@@ -5,7 +5,7 @@ public class AchievementManager : MonoBehaviour
 
     [SerializeField] private GameObject achievementBarPrefab;
 
-    private int maxAchievementCount = 2;
+    private int maxAchievementCount = 9;
 
     void Start()
     {

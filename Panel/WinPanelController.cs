@@ -9,6 +9,7 @@ public class WinPanelController : MonoBehaviour
 
     [SerializeField] private Button nextBtn;
     [SerializeField] private TextMeshProUGUI robbedMoneyTxt;
+    [SerializeField] private TextMeshProUGUI collectedGemCountTxt;
     [SerializeField] private TextMeshProUGUI policeDestroyTxt;
     [SerializeField] private GameObject vfxPrefab;
     [SerializeField] private GameObject vfxPrefabConfetti1;
@@ -57,9 +58,11 @@ public class WinPanelController : MonoBehaviour
 
     }
 
-    public void SetRobbedMoney(int money)
+    public void SetRobbedMoney(int money, int gem)
     {
         robbedMoneyTxt.text = money.ToString();
+        collectedGemCountTxt.text = gem.ToString();
+
     }
 
     private void LevelUp()
@@ -68,6 +71,8 @@ public class WinPanelController : MonoBehaviour
         int currentLevel = PlayerPrefs.GetInt("current_level", 1);
         int totalDestroyedPoliceCar = PlayerPrefs.GetInt("total_destroyed_police_car", 0);
         int totalMoneyInthisLevel = GameRobbedMoney.instance.robbedMoneyCount;
+        int totalGemsEarnedInthisLevel = GameRobbedMoney.instance.gameCollectedGemCount;
+        PlayerPrefs.SetInt("total_gem", PlayerPrefs.GetInt("total_gem", 0) + totalGemsEarnedInthisLevel);
         PlayerPrefs.SetInt("total_money", PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel);
         PlayerPrefs.SetInt("current_level", currentLevel + 1);
         PlayerPrefs.SetInt("total_destroyed_police_car", totalDestroyedPoliceCar + LevelManager.instance.totalDestriyedPoliceVehiclesCount);

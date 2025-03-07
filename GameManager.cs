@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     // for normal values 
     //--------------------------------------------------------------------------------------
-    private int levelNumber;
+    public int levelNumber;
     public float mapRotationSpeed;
     public float levelDistance;
     public int robbedMoney;
