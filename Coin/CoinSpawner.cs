@@ -4,6 +4,7 @@ public class CoinSpawner : MonoBehaviour
 {
     public GameObject[] coinPrefab;
     public GameObject gemPrefab;
+    public GameObject adMoneyPrefab;
     public float spawnInterval = 1f;
 
     private Vector3[] lanePositions = new Vector3[4];
@@ -22,18 +23,22 @@ public class CoinSpawner : MonoBehaviour
     private System.Collections.IEnumerator SpawnCoins()
     {
         float elapsedTime = 0f; // Track elapsed time
-
         while (true)
         {
-            SpawnCoin();
-            yield return new WaitForSeconds(spawnInterval);
-            elapsedTime += spawnInterval;
-
-
-            if (elapsedTime >= 15f && !gemSpawned)
+            if (elapsedTime % 20 == 0)
             {
                 SpawnGem();
-                gemSpawned = true; // Mark gem as spawned
+                //gemSpawned = true;
+            }
+            else if (elapsedTime == 10 || elapsedTime == 30 || elapsedTime == 55 || elapsedTime == 80 || elapsedTime == 100)
+            {
+                SpawnAdMoney();
+            }
+            else
+            {
+                SpawnCoin();
+                yield return new WaitForSeconds(spawnInterval);
+                elapsedTime += spawnInterval;
             }
         }
     }
@@ -45,6 +50,14 @@ public class CoinSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, 0);
 
         Instantiate(coinPrefab[randomIndex], spawnPosition, Quaternion.identity);
+    }
+
+    private void SpawnAdMoney()
+    {
+        float xPosition = lanePositions[Random.Range(0, lanePositions.Length)].x;
+        Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, 0);
+
+        Instantiate(adMoneyPrefab, spawnPosition, Quaternion.identity);
     }
 
     private void SpawnGem()

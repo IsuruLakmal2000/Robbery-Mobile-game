@@ -148,6 +148,12 @@ public class CarController : MonoBehaviour
             GameObject moneyIncreaseEffectInstance = Instantiate(gemIncreaseEffect, transform.Find("Canvas").transform);
             Destroy(moneyIncreaseEffectInstance, 0.5f);
         }
+        if (collision.gameObject.CompareTag("AdMoney"))
+        {
+            SoundManager.instance.PlayAlertInfoSound();
+            Debug.Log("open add money pop");
+            //Time.timeScale = 0f;
+        }
     }
 
     private void MoveCarOffScreen()

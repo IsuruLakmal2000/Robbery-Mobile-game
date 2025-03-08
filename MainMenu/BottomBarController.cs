@@ -47,6 +47,7 @@ public class BottomBarController : MonoBehaviour
     }
     private void OnGarageBtnClick()
     {
+        AdManager.instance.ShowRewardedInterstitialAd();
         SoundManager.instance.PlayButtonClick();
         backBtnOnGarage.SetActive(true);
         Debug.Log("on garage clicked ");
@@ -91,6 +92,7 @@ public class BottomBarController : MonoBehaviour
 
     private void BackButtonPressed()
     {
+        AdManager.instance.ShowInterstitialAd();
         SoundManager.instance.PlayButtonClick();
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
         if (garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().healthBarInstance != null)
