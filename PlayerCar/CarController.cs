@@ -1,3 +1,4 @@
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
@@ -151,6 +152,9 @@ public class CarController : MonoBehaviour
         if (collision.gameObject.CompareTag("AdMoney"))
         {
             SoundManager.instance.PlayAlertInfoSound();
+            string rewardTxt = collision.gameObject.transform.Find("Canvas/rewardCount").gameObject.GetComponent<TextMeshProUGUI>().text;
+            double exactPrice = ParseFormattedPrice(rewardTxt);
+            GamePlayPanelsController.instance.ShowWatchAddPopup(exactPrice, "watch ad ?", "watch add to collect this money");
             Debug.Log("open add money pop");
             //Time.timeScale = 0f;
         }
@@ -178,6 +182,39 @@ public class CarController : MonoBehaviour
         isMovingOffScreen = true;
 
 
+    }
+
+    private double ParseFormattedPrice(string formattedPrice)
+    {
+        formattedPrice = formattedPrice.Trim();
+
+        if (formattedPrice.EndsWith("M"))
+        {
+            // Remove "M" and parse as a million
+            if (double.TryParse(formattedPrice.Substring(0, formattedPrice.Length - 1), out double value))
+            {
+                return value * 1000000;
+            }
+        }
+        else if (formattedPrice.EndsWith("K"))
+        {
+            // Remove "K" and parse as a thousand
+            if (double.TryParse(formattedPrice.Substring(0, formattedPrice.Length - 1), out double value))
+            {
+                return value * 1000;
+            }
+        }
+        else
+        {
+            // Parse as a regular number
+            if (double.TryParse(formattedPrice, out double value))
+            {
+                return value;
+            }
+        }
+
+        // Return 0 if parsing fails
+        return 0;
     }
 
 }

@@ -71,7 +71,7 @@ public class XPSystem : MonoBehaviour
     {
         currentLevel = PlayerPrefs.GetInt("XP_Level", 1);
         currentXP = PlayerPrefs.GetInt("XP_Amount", 0);
-        xpToNextLevel = PlayerPrefs.GetInt("XP_NextLevel", 1000);
+        xpToNextLevel = PlayerPrefs.GetInt("XP_NextLevel", 200);
         Debug.Log($"XP Data Loaded: Level {currentLevel}, XP {currentXP}/{xpToNextLevel}");
     }
     private void ShowLevelUpPanel()

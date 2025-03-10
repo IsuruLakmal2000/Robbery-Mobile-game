@@ -66,7 +66,7 @@ public class BottomBarController : MonoBehaviour
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 
         // Optionally, you can display a loading screen or progress bar here
-
+        Debug.Log("loading scene");
 
         while (!asyncLoad.isDone)
         {

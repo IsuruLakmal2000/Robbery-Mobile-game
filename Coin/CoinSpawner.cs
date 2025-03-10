@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class CoinSpawner : MonoBehaviour
@@ -28,11 +29,15 @@ public class CoinSpawner : MonoBehaviour
             if (elapsedTime % 20 == 0)
             {
                 SpawnGem();
+                yield return new WaitForSeconds(spawnInterval);
+                elapsedTime += spawnInterval;
                 //gemSpawned = true;
             }
             else if (elapsedTime == 10 || elapsedTime == 30 || elapsedTime == 55 || elapsedTime == 80 || elapsedTime == 100)
             {
                 SpawnAdMoney();
+                yield return new WaitForSeconds(spawnInterval);
+                elapsedTime += spawnInterval;
             }
             else
             {
@@ -56,8 +61,12 @@ public class CoinSpawner : MonoBehaviour
     {
         float xPosition = lanePositions[Random.Range(0, lanePositions.Length)].x;
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, 0);
+        float currentWatchAddPrice = PlayerPrefs.GetFloat("watch_ads_current_price", 1000);
+        GameObject admoneyInstance = Instantiate(adMoneyPrefab, spawnPosition, Quaternion.identity);
+        admoneyInstance.transform.Find("Canvas/rewardCount").GetComponent<TextMeshProUGUI>().text = FormatPrice(currentWatchAddPrice).ToString();
+        currentWatchAddPrice = currentWatchAddPrice * 1.2f;
+        PlayerPrefs.SetFloat("watch_ads_current_price", currentWatchAddPrice);
 
-        Instantiate(adMoneyPrefab, spawnPosition, Quaternion.identity);
     }
 
     private void SpawnGem()
@@ -66,5 +75,15 @@ public class CoinSpawner : MonoBehaviour
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, 0);
 
         Instantiate(gemPrefab, spawnPosition, Quaternion.identity);
+    }
+
+    private string FormatPrice(float price)
+    {
+        if (price >= 1000000) // 1M and above
+            return (price / 1000000f).ToString("0.###") + "M";
+        else if (price >= 1000) // 1K and above
+            return (price / 1000f).ToString("0.###") + "K";
+        else
+            return price.ToString(); // If less than 1K, show as is
     }
 }

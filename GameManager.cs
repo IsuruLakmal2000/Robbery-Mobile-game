@@ -2,6 +2,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+//com.CircularX.com.GetawayTycoon
+/// <summary>
+/// Getaway Tycoon – Escape with cash, invest, and build your empire.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
     public int totalCoinCount = 0;
@@ -20,6 +24,9 @@ public class GameManager : MonoBehaviour
     public float otherVehicleSpawnInterval;
     public int rideExpences;
     private float growthFactor = 1.12f;
+
+
+
 
 
     /// -----------------------------------------------------------------------------

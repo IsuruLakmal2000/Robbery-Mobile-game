@@ -6,6 +6,7 @@ public class GamePlayPanelsController : MonoBehaviour
 {
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject loosePanel;
+    [SerializeField] private GameObject watchAdPopupPanel;
     public static GamePlayPanelsController instance;
     [SerializeField] private Canvas canvas;
 
@@ -39,5 +40,11 @@ public class GamePlayPanelsController : MonoBehaviour
         int fine = 1000;
 
         LoosePanelController.instance.SetFine(fine);
+    }
+
+    public void ShowWatchAddPopup(double price, string titile, string content)
+    {
+        GameObject watchAddPopupInstance = Instantiate(watchAdPopupPanel, transform);
+        watchAddPopupInstance.GetComponentInChildren<WatchAdsPopupPanelController>().SetData(content, titile, price, "Money");
     }
 }
