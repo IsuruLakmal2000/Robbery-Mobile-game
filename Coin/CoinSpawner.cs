@@ -10,14 +10,14 @@ public class CoinSpawner : MonoBehaviour
 
     private Vector3[] lanePositions = new Vector3[4];
     private bool gemSpawned = false;
-
+    private float currentWatchAddPrice = 0;
     private void Start()
     {
         lanePositions[0] = new Vector3(-1.33f, transform.position.y, transform.position.z);
         lanePositions[1] = new Vector3(-0.43f, transform.position.y, transform.position.z);
         lanePositions[2] = new Vector3(0.5f, transform.position.y, transform.position.z);
         lanePositions[3] = new Vector3(1.43f, transform.position.y, transform.position.z);
-
+        currentWatchAddPrice = GameManager.instance.levelNumber * 1000;
         StartCoroutine(SpawnCoins());
     }
 
@@ -61,11 +61,11 @@ public class CoinSpawner : MonoBehaviour
     {
         float xPosition = lanePositions[Random.Range(0, lanePositions.Length)].x;
         Vector3 spawnPosition = new Vector3(xPosition, transform.position.y, 0);
-        float currentWatchAddPrice = PlayerPrefs.GetFloat("watch_ads_current_price", 1000);
+        //float currentWatchAddPrice = PlayerPrefs.GetFloat("watch_ads_current_price", 1000);
         GameObject admoneyInstance = Instantiate(adMoneyPrefab, spawnPosition, Quaternion.identity);
         admoneyInstance.transform.Find("Canvas/rewardCount").GetComponent<TextMeshProUGUI>().text = FormatPrice(currentWatchAddPrice).ToString();
         currentWatchAddPrice = currentWatchAddPrice * 1.2f;
-        PlayerPrefs.SetFloat("watch_ads_current_price", currentWatchAddPrice);
+
 
     }
 

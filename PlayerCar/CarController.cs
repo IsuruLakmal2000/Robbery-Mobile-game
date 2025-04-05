@@ -143,17 +143,7 @@ public class CarController : MonoBehaviour
             Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
             GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, screenPos, Quaternion.identity, transform.Find("Canvas").transform);
             moneyIncreaseEffectInstance.GetComponent<MoneyPopup>().Setup(100);
-            // Destroy(gameObject); // destroy money object
-            // // Instantiate the effect
-            // GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, Vector3.zero, Quaternion.identity);
-
-            // // Set the parent to the car's Canvas
-            // moneyIncreaseEffectInstance.transform.SetParent(transform.Find("Canvas").transform, false);
-
-            // // Set the local position under the Canvas
-            // moneyIncreaseEffectInstance.transform.localPosition = new Vector3(localPosition.x, 0, 0); // Adjust Y and Z as needed
-
-            // Destroy(moneyIncreaseEffectInstance, 0.5f);
+          
         }
         if (collision.gameObject.CompareTag("Gem"))
         {
