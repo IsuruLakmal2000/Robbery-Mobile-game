@@ -1,6 +1,7 @@
 using UnityEngine;
 using GoogleMobileAds;
 using GoogleMobileAds.Api;
+
 public class AdManager : MonoBehaviour
 {
     private string _adUnitId = "ca-app-pub-3940256099942544/4411468910";
@@ -29,6 +30,7 @@ public class AdManager : MonoBehaviour
 
         });
         LoadInterstitialAd();
+        LoadRewardedInterstitialAd();
     }
 
     public void LoadInterstitialAd()
@@ -111,18 +113,35 @@ public class AdManager : MonoBehaviour
         }
     }
 
-    public void ShowRewardedInterstitialAd()
+    public void ShowRewardedInterstitialAd(string rewardType, int rewardCount)
     {
+        Debug.Log("isnide rewarded");
         const string rewardMsg =
-            "Rewarded interstitial ad rewarded the user. Type: {0}, amount: {1}.";
+           "Rewarded interstitial ad rewarded the user. Type: {0}, amount: {1}.";
 
         if (_rewardedInterstitialAd != null && _rewardedInterstitialAd.CanShowAd())
         {
+            Debug.Log(" showing");
             _rewardedInterstitialAd.Show((Reward reward) =>
             {
-                // TODO: Reward the user.
+                Rewarded(rewardType, rewardCount);
                 Debug.Log(System.String.Format(rewardMsg, reward.Type, reward.Amount));
             });
+        }
+    }
+
+    private void Rewarded(string type, int amount)
+    {
+        switch (type)
+        {
+            case "watch_ad_money_gameplay":
+                GameRobbedMoney.instance.IncreaseMoneyWhenCollect(amount);
+                break;
+            case "watch_ad_gem_gameplay":
+                GameRobbedMoney.instance.IncreaseGemWhenCollect(amount);
+                break;
+
+
         }
     }
 
@@ -139,12 +158,14 @@ public class AdManager : MonoBehaviour
             Debug.Log("full screen content closed");
             _interstitialAd.Destroy();
             LoadInterstitialAd();
+            Time.timeScale = 1f;
         };
         // Raised when the ad failed to open full screen content.
         interstitialAd.OnAdFullScreenContentFailed += (AdError error) =>
         {
             _interstitialAd.Destroy();
             LoadInterstitialAd();
+            Time.timeScale = 1f;
         };
     }
 
@@ -160,12 +181,14 @@ public class AdManager : MonoBehaviour
         {
             _rewardedInterstitialAd.Destroy();
             LoadRewardedInterstitialAd();
+            Time.timeScale = 1f;
         };
         // Raised when the ad failed to open full screen content.
         ad.OnAdFullScreenContentFailed += (AdError error) =>
         {
             _rewardedInterstitialAd.Destroy();
             LoadRewardedInterstitialAd();
+            Time.timeScale = 1f;
         };
     }
 }

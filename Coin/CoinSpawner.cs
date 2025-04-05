@@ -26,14 +26,14 @@ public class CoinSpawner : MonoBehaviour
         float elapsedTime = 0f; // Track elapsed time
         while (true)
         {
-            if (elapsedTime % 20 == 0)
+            if (elapsedTime % 20 == 0 && elapsedTime > 1)
             {
                 SpawnGem();
                 yield return new WaitForSeconds(spawnInterval);
                 elapsedTime += spawnInterval;
                 //gemSpawned = true;
             }
-            else if (elapsedTime == 10 || elapsedTime == 30 || elapsedTime == 55 || elapsedTime == 80 || elapsedTime == 100)
+            else if (elapsedTime == 5 || elapsedTime == 10 || elapsedTime == 90 || elapsedTime == 120)
             {
                 SpawnAdMoney();
                 yield return new WaitForSeconds(spawnInterval);
@@ -80,9 +80,9 @@ public class CoinSpawner : MonoBehaviour
     private string FormatPrice(float price)
     {
         if (price >= 1000000) // 1M and above
-            return (price / 1000000f).ToString("0.###") + "M";
+            return (price / 1000000f).ToString("0.##") + "M";
         else if (price >= 1000) // 1K and above
-            return (price / 1000f).ToString("0.###") + "K";
+            return (price / 1000f).ToString("0.##") + "K";
         else
             return price.ToString(); // If less than 1K, show as is
     }

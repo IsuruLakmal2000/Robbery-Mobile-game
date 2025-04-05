@@ -42,9 +42,10 @@ public class GamePlayPanelsController : MonoBehaviour
         LoosePanelController.instance.SetFine(fine);
     }
 
-    public void ShowWatchAddPopup(double price, string titile, string content)
+    public void ShowWatchAddPopup(int price, string titile, string content, string type)
     {
-        GameObject watchAddPopupInstance = Instantiate(watchAdPopupPanel, transform);
-        watchAddPopupInstance.GetComponentInChildren<WatchAdsPopupPanelController>().SetData(content, titile, price, "Money");
+
+        GameObject watchAddPopupInstance = Instantiate(watchAdPopupPanel, canvas.transform);
+        watchAddPopupInstance.GetComponentInChildren<WatchAdsPopupPanelController>().SetData(content, titile, price, type);
     }
 }

@@ -1,5 +1,5 @@
 using TMPro;
-using Unity.Mathematics;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -139,8 +139,21 @@ public class CarController : MonoBehaviour
         {
             SoundManager.instance.PlayMoneyPickupSound();
             GameRobbedMoney.instance.IncreaseMoneyWhenCollect(100);
-            GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, transform.Find("Canvas").transform);
-            Destroy(moneyIncreaseEffectInstance, 0.5f);
+
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position);
+            GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, screenPos, Quaternion.identity, transform.Find("Canvas").transform);
+            moneyIncreaseEffectInstance.GetComponent<MoneyPopup>().Setup(100);
+            // Destroy(gameObject); // destroy money object
+            // // Instantiate the effect
+            // GameObject moneyIncreaseEffectInstance = Instantiate(moneyIncreaseEffect, Vector3.zero, Quaternion.identity);
+
+            // // Set the parent to the car's Canvas
+            // moneyIncreaseEffectInstance.transform.SetParent(transform.Find("Canvas").transform, false);
+
+            // // Set the local position under the Canvas
+            // moneyIncreaseEffectInstance.transform.localPosition = new Vector3(localPosition.x, 0, 0); // Adjust Y and Z as needed
+
+            // Destroy(moneyIncreaseEffectInstance, 0.5f);
         }
         if (collision.gameObject.CompareTag("Gem"))
         {
@@ -153,10 +166,11 @@ public class CarController : MonoBehaviour
         {
             SoundManager.instance.PlayAlertInfoSound();
             string rewardTxt = collision.gameObject.transform.Find("Canvas/rewardCount").gameObject.GetComponent<TextMeshProUGUI>().text;
-            double exactPrice = ParseFormattedPrice(rewardTxt);
-            GamePlayPanelsController.instance.ShowWatchAddPopup(exactPrice, "watch ad ?", "watch add to collect this money");
-            Debug.Log("open add money pop");
-            //Time.timeScale = 0f;
+            Debug.Log("reard texxt --" + rewardTxt);
+            int exactPrice = ParseFormattedPrice(rewardTxt);
+            Debug.Log("rewarded money on ad money === " + exactPrice);
+            GamePlayPanelsController.instance.ShowWatchAddPopup(exactPrice, "watch ad ?", "watch add to collect this money", "watch_ad_money_gameplay");
+            Time.timeScale = 0f;
         }
     }
 
@@ -184,16 +198,16 @@ public class CarController : MonoBehaviour
 
     }
 
-    private double ParseFormattedPrice(string formattedPrice)
+    private int ParseFormattedPrice(string formattedPrice)
     {
         formattedPrice = formattedPrice.Trim();
-
+        Debug.Log("FORMATTED PRICE -----" + formattedPrice);
         if (formattedPrice.EndsWith("M"))
         {
             // Remove "M" and parse as a million
             if (double.TryParse(formattedPrice.Substring(0, formattedPrice.Length - 1), out double value))
             {
-                return value * 1000000;
+                return (int)(value * 1000000);
             }
         }
         else if (formattedPrice.EndsWith("K"))
@@ -201,13 +215,13 @@ public class CarController : MonoBehaviour
             // Remove "K" and parse as a thousand
             if (double.TryParse(formattedPrice.Substring(0, formattedPrice.Length - 1), out double value))
             {
-                return value * 1000;
+                return (int)(value * 1000);
             }
         }
         else
         {
             // Parse as a regular number
-            if (double.TryParse(formattedPrice, out double value))
+            if (int.TryParse(formattedPrice, out int value))
             {
                 return value;
             }

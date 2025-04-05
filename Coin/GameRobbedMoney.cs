@@ -16,7 +16,7 @@ public class GameRobbedMoney : MonoBehaviour
     {
         robbedMoneyCount = GameManager.instance.levelConfig.robbedMoney;
 
-        coinCount.text = robbedMoneyCount.ToString();
+        coinCount.text = FormatPrice(robbedMoneyCount).ToString();
     }
     public void ReduceMoneyWhenHit(int count)
     {
@@ -39,5 +39,13 @@ public class GameRobbedMoney : MonoBehaviour
     {
         coinCount.text = robbedMoneyCount.ToString();
     }
-
+    private string FormatPrice(double price)
+    {
+        if (price >= 1000000) // 1M and above
+            return (price / 1000000f).ToString("0.###") + "M";
+        else if (price >= 1000) // 1K and above
+            return (price / 1000f).ToString("0.###") + "K";
+        else
+            return price.ToString(); // If less than 1K, show as is
+    }
 }

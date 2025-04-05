@@ -47,7 +47,7 @@ public class BottomBarController : MonoBehaviour
     }
     private void OnGarageBtnClick()
     {
-        AdManager.instance.ShowRewardedInterstitialAd();
+
         SoundManager.instance.PlayButtonClick();
         backBtnOnGarage.SetActive(true);
         Debug.Log("on garage clicked ");

@@ -4,12 +4,15 @@ public class MainMenuPanelController : MonoBehaviour
 {
 
     [SerializeField] private GameObject popupPanel;
+    [SerializeField] private GameObject createAccountPanel;
     private Canvas canvas;
 
     public static MainMenuPanelController Instance;
 
     void Awake()
     {
+
+
         if (Instance == null)
         {
             Instance = this;
@@ -18,12 +21,20 @@ public class MainMenuPanelController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+
     }
 
     void Start()
     {
-        canvas = FindObjectOfType<Canvas>();
+        canvas = FindFirstObjectByType<Canvas>();
+        if (PlayerPrefs.GetInt("IsFirstTime", 1) == 1)
+        {
 
+            GameObject createAccInstance = Instantiate(createAccountPanel, canvas.transform);
+            createAccInstance.transform.SetAsLastSibling();
+
+        }
     }
 
 

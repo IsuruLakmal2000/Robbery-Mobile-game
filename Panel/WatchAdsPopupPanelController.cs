@@ -10,29 +10,35 @@ public class WatchAdsPopupPanelController : MonoBehaviour
     [SerializeField] private Button okBtn;
     [SerializeField] private Button closeBtn;
     [SerializeField] private GameObject moneyIcon;
+    private int RewardAmount = 0;
+    private string RewardType = "";
 
     void Start()
     {
         closeBtn.onClick.AddListener(() =>
         {
+            Time.timeScale = 1f;
             Destroy(gameObject);
         });
         okBtn.onClick.AddListener(() =>
         {
+            AdManager.instance.ShowRewardedInterstitialAd(RewardType, RewardAmount);
             Destroy(gameObject);
 
         });
 
     }
 
-    public void SetData(string content, string title, double price, string type)
+    public void SetData(string content, string title, int price, string type)
     {
         contentTxt.text = content;
         titleTxt.text = title;
+        RewardAmount = price;
+        RewardType = type;
 
         switch (type)
         {
-            case "money":
+            case "watch_ad_money_gameplay":
                 GameObject MoneyInstance = Instantiate(moneyIcon, transform);
                 MoneyInstance.transform.Find("rewardCount").GetComponent<TextMeshProUGUI>().text = FormatPrice(price).ToString();
                 break;
