@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Threading.Tasks;
 
 public class XPSystem : MonoBehaviour
 {
@@ -58,9 +59,10 @@ public class XPSystem : MonoBehaviour
         SaveXPData(); // Save XP & Level
     }
 
-    private void SaveXPData()
+    private async Task SaveXPData()
     {
         PlayerPrefs.SetInt("XP_Level", currentLevel);
+        await FirebaseController.instance.UpdateXPLevel(PlayerPrefs.GetString("UserId"), currentLevel);
         PlayerPrefs.SetInt("XP_Amount", currentXP);
         PlayerPrefs.SetInt("XP_NextLevel", xpToNextLevel);
         PlayerPrefs.Save();

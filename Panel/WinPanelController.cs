@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class WinPanelController : MonoBehaviour
 {
@@ -65,7 +66,7 @@ public class WinPanelController : MonoBehaviour
 
     }
 
-    private void LevelUp()
+    private async Task LevelUp()
     {
 
         int currentLevel = PlayerPrefs.GetInt("current_level", 1);
@@ -73,7 +74,9 @@ public class WinPanelController : MonoBehaviour
         int totalMoneyInthisLevel = GameRobbedMoney.instance.robbedMoneyCount;
         int totalGemsEarnedInthisLevel = GameRobbedMoney.instance.gameCollectedGemCount;
         PlayerPrefs.SetInt("total_gem", PlayerPrefs.GetInt("total_gem", 0) + totalGemsEarnedInthisLevel);
-        PlayerPrefs.SetInt("total_money", PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel);
+        int totalMoney = PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel;
+        PlayerPrefs.SetInt("total_money", totalMoney);
+        await FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
         PlayerPrefs.SetInt("current_level", currentLevel + 1);
         PlayerPrefs.SetFloat("watch_ads_current_price", 1000 * (currentLevel + 1));
         PlayerPrefs.SetInt("total_destroyed_police_car", totalDestroyedPoliceCar + LevelManager.instance.totalDestriyedPoliceVehiclesCount);

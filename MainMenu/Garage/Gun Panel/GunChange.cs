@@ -66,6 +66,7 @@ public class GunChange : MonoBehaviour
         if (price <= balance)
         {
             balance = balance - price;
+
             PlayerPrefs.SetInt("total_money", balance);
             PlayerPrefs.SetInt("is_unlock_" + gunName, 1);
             buyBtn.gameObject.SetActive(false);

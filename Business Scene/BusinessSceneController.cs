@@ -10,8 +10,10 @@ public class BusinessSceneController : MonoBehaviour
 
     void Start()
     {
-        backBtn.onClick.AddListener(() =>
+        backBtn.onClick.AddListener(async () =>
         {
+            int totalMoney = PlayerPrefs.GetInt("total_money", 0);
+            await FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
             SoundManager.instance.PlayButtonClick();
             SceneManager.LoadScene("Menu");
         });
