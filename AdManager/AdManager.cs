@@ -5,7 +5,7 @@ using GoogleMobileAds.Api;
 public class AdManager : MonoBehaviour
 {
     private string _adUnitId = "ca-app-pub-3940256099942544/4411468910";
-    private string _rewardAdUnitId = "ca-app-pub-3940256099942544/5354046379";
+    private string _rewardAdUnitId = "ca-app-pub-9764584713102923/9554888985";
     private InterstitialAd _interstitialAd;
     private RewardedInterstitialAd _rewardedInterstitialAd;
 
@@ -80,7 +80,7 @@ public class AdManager : MonoBehaviour
         adRequest.Keywords.Add("unity-admob-sample");
 
 
-        RewardedInterstitialAd.Load(_adUnitId, adRequest,
+        RewardedInterstitialAd.Load(_rewardAdUnitId, adRequest,
             (RewardedInterstitialAd ad, LoadAdError error) =>
             {
 
@@ -127,6 +127,10 @@ public class AdManager : MonoBehaviour
                 Rewarded(rewardType, rewardCount);
                 Debug.Log(System.String.Format(rewardMsg, reward.Type, reward.Amount));
             });
+        }
+        else
+        {
+            //Time.timeScale = 1f;
         }
     }
 
@@ -190,5 +194,6 @@ public class AdManager : MonoBehaviour
             LoadRewardedInterstitialAd();
             Time.timeScale = 1f;
         };
+
     }
 }

@@ -1,14 +1,16 @@
 using Firebase.Database;
+using Firebase;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using System;
 
 public class FirebaseController : MonoBehaviour
 {
     private DatabaseReference databaseReference;
     public static FirebaseController instance;
 
-    void Awake()
+    private async void Awake()
     {
         if (instance == null)
         {
@@ -18,28 +20,42 @@ public class FirebaseController : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
+        }
+
+        try
+        {
+            var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
+            if (dependencyStatus == DependencyStatus.Available)
+            {
+                FirebaseApp app = FirebaseApp.DefaultInstance;
+#if UNITY_EDITOR
+                FirebaseDatabase database = FirebaseDatabase.GetInstance(app, "https://getawaytycoon-default-rtdb.asia-southeast1.firebasedatabase.app/");
+                databaseReference = database.RootReference;
+#endif
+
+#if UNITY_ANDROID
+                databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+#endif
+                Debug.Log("App name: " + FirebaseApp.DefaultInstance.Name);
+                Debug.Log("Database URL: " + FirebaseApp.DefaultInstance.Options.DatabaseUrl);
+                Debug.Log("Database reference: " + databaseReference.ToString());
+                Debug.Log("Firebase Initialized Successfully");
+            }
+            else
+            {
+                Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
+            }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Error initializing Firebase: {ex.Message}");
         }
     }
     private async void Start()
     {
-        // Check and fix Firebase dependencies
-        var dependencyStatus = await Firebase.FirebaseApp.CheckAndFixDependenciesAsync();
-        if (dependencyStatus == Firebase.DependencyStatus.Available)
-        {
-            // Firebase is ready to use
-            var app = Firebase.FirebaseApp.DefaultInstance;
-
-            // Initialize the database reference
-            FirebaseDatabase database = FirebaseDatabase.GetInstance(app, "https://getawaytycoon-default-rtdb.asia-southeast1.firebasedatabase.app");
-            databaseReference = database.RootReference;
-
-            Debug.Log("Firebase initialized successfully.");
-        }
-        else
-        {
-            // Log an error if Firebase dependencies are not resolved
-            Debug.LogError($"Could not resolve all Firebase dependencies: {dependencyStatus}");
-        }
+        // FirebaseDatabase database = FirebaseDatabase.DefaultInstance;
+        // databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     public async Task SaveNewUser(string username)
@@ -98,7 +114,7 @@ public class FirebaseController : MonoBehaviour
             // Create a dictionary to update the CurrentNetworth field
             var updates = new Dictionary<string, object>
         {
-            { "currentNetworth", newNetworth }
+            { "currentNetWorth", newNetworth }
         };
 
             // Update the user's CurrentNetworth in the database
@@ -154,7 +170,7 @@ public class FirebaseController : MonoBehaviour
 
             // Query to get top 50 users sorted by totalNetworth
             var snapshot = await databaseReference.Child("users")
-                .OrderByChild("currentNetworth")
+                .OrderByChild("currentNetWorth")
                 .LimitToLast(50) // Get the top 50 users
                 .GetValueAsync();
 
@@ -164,12 +180,13 @@ public class FirebaseController : MonoBehaviour
                 foreach (var childSnapshot in snapshot.Children)
                 {
                     string json = childSnapshot.GetRawJsonValue();
+
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
                     users.Add(user);
                 }
 
                 // Sort in descending order (Firebase returns ascending order by default)
-                users.Sort((a, b) => b.currentNetworth.CompareTo(a.currentNetworth));
+                users.Sort((a, b) => b.currentNetWorth.CompareTo(a.currentNetWorth));
                 return users;
             }
             else
@@ -208,6 +225,8 @@ public class FirebaseController : MonoBehaviour
                 {
                     string json = childSnapshot.GetRawJsonValue();
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
+                    print("json: " + json);
+                    print("user: " + user.username + " xpLevel: " + user.xpLevel.ToString() + " currentNetWorth: " + user.currentNetWorth.ToString());
                     users.Add(user);
                 }
 

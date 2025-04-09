@@ -5,16 +5,16 @@ public class LeaderboardPlayerDetails
     public string frameId;    // The name of the icon for the achievement
     public string username
     ;     // The name of the task
-    public int currentNetworth;
+    public int currentNetWorth;
     public int xpLevel;
 
 
-    public LeaderboardPlayerDetails(string avatarId, string frameId, string username, int currentNetworth, int xpLevel)
+    public LeaderboardPlayerDetails(string avatarId, string frameId, string username, int currentNetWorth, int xpLevel)
     {
         this.avatarId = avatarId;
         this.frameId = frameId;
         this.username = username;
-        this.currentNetworth = currentNetworth;
+        this.currentNetWorth = currentNetWorth;
         this.xpLevel = xpLevel;
 
     }

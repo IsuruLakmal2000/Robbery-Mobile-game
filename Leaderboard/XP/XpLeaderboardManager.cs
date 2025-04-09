@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class XpLeaderboardManager : MonoBehaviour
     [SerializeField] private Button networthLeaderbardBtn;
     [SerializeField] private GameObject xpLeaderboardPanel; // Panel to show XP leaderboard
     [SerializeField] private GameObject networthLeaderboardPanel; // Panel to show net worth leaderboard
+    [SerializeField] private TextMeshProUGUI xpLoading; // Panel to show leaderboard
 
     void Start()
     {
@@ -20,6 +22,7 @@ public class XpLeaderboardManager : MonoBehaviour
     }
     public async void LoadXpLeaderboard()
     {
+        xpLoading.text = "Loading...";
         // Clear existing leaderboard bars
         foreach (Transform child in gameObject.transform)
         {
@@ -30,8 +33,9 @@ public class XpLeaderboardManager : MonoBehaviour
         List<LeaderboardPlayerDetails> topUsers = await FirebaseController.instance.GetTopUsersByXPLevel();
         foreach (var user in topUsers)
         {
-            Debug.Log($"Player Name- in xo: {user.username}, Net Worth: {user.currentNetworth}");
+            Debug.Log($"Player Name- in xo: {user.username}, Net Worth: {user.currentNetWorth}");
         }
+        xpLoading.gameObject.SetActive(false);
         if (topUsers != null)
         {
             int index = 1;
@@ -40,7 +44,7 @@ public class XpLeaderboardManager : MonoBehaviour
             {
 
                 GameObject bar = Instantiate(leaderboardBarPrefab, transform);
-                Debug.Log("User: " + user.username + " Net Worth: " + user.currentNetworth.ToString() + " XP Level: " + user.xpLevel.ToString());
+                Debug.Log("User: " + user.username + " Net Worth: " + user.currentNetWorth.ToString() + " XP Level: " + user.xpLevel.ToString());
                 bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(user, index);
                 index++;
 
