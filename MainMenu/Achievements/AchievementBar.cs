@@ -133,7 +133,7 @@ public class AchievementBar : MonoBehaviour
                 //float xpLevelFloat = (float)xpLevel;
                 return xpLevel;
             case "ach_3":
-                int totalDestroyedPoliceVehicles = PlayerPrefs.GetInt("total_destroyed_police_vehicles", 0);
+                int totalDestroyedPoliceVehicles = PlayerPrefs.GetInt("total_destroyed_police_car", 0);
                 return totalDestroyedPoliceVehicles;
             case "ach_4":
                 int isUnlock = PlayerPrefs.GetInt("coffeShop_level", 0);

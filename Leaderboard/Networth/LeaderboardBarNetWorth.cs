@@ -17,6 +17,12 @@ public class LeaderboardBarNetWorth : MonoBehaviour
     {
         //  avatarImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + leaderboardConfig.avatarId);
         //   frameImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + leaderboardConfig.frameId);
+        if (leaderboardConfig.userId == PlayerPrefs.GetString("UserId"))
+        {
+            print("iside current user");
+            gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>().color = new Color(255, 205, 0, 255);
+        }
+
         playerNameText.text = leaderboardConfig.username;
         playerNetworthText.text = FormatPrice(leaderboardConfig.currentNetWorth).ToString();
         playerRankText.text = rank.ToString();

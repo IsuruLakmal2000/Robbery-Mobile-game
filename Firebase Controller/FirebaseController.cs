@@ -182,6 +182,7 @@ public class FirebaseController : MonoBehaviour
                     string json = childSnapshot.GetRawJsonValue();
 
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
+                    user.userId = childSnapshot.Key;
                     users.Add(user);
                 }
 
@@ -225,8 +226,9 @@ public class FirebaseController : MonoBehaviour
                 {
                     string json = childSnapshot.GetRawJsonValue();
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
+                    user.userId = childSnapshot.Key; // Assign the user ID from the snapshot key
                     print("json: " + json);
-                    print("user: " + user.username + " xpLevel: " + user.xpLevel.ToString() + " currentNetWorth: " + user.currentNetWorth.ToString());
+                    print("userId: " + user.userId + " username: " + user.username + " xpLevel: " + user.xpLevel.ToString() + " currentNetWorth: " + user.currentNetWorth.ToString());
                     users.Add(user);
                 }
 
@@ -246,4 +248,37 @@ public class FirebaseController : MonoBehaviour
             return null;
         }
     }
+
+    public async Task UpdateProfile(string userId, string newAvatar, string newFrame)
+{
+    try
+    {
+        if (databaseReference == null)
+        {
+            Debug.LogError("Database reference is null. Ensure Firebase is initialized.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(userId))
+        {
+            Debug.LogError("User ID is null or empty. Cannot update profile.");
+            return;
+        }
+
+        // Create a dictionary to update the avatar and frame fields
+        var updates = new Dictionary<string, object>
+        {
+            { "avatar", newAvatar },
+            { "frame", newFrame }
+        };
+
+        // Update the user's avatar and frame in the database
+        await databaseReference.Child("users").Child(userId).UpdateChildrenAsync(updates);
+        Debug.Log($"Successfully updated profile for user ID: {userId}");
+    }
+    catch (System.Exception ex)
+    {
+        Debug.LogError("Error updating profile: " + ex.Message);
+    }
+}
 }

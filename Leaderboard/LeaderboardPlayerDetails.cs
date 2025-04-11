@@ -1,6 +1,7 @@
 [System.Serializable]
 public class LeaderboardPlayerDetails
 {
+    public string userId;
     public string avatarId;
     public string frameId;    // The name of the icon for the achievement
     public string username
@@ -9,8 +10,9 @@ public class LeaderboardPlayerDetails
     public int xpLevel;
 
 
-    public LeaderboardPlayerDetails(string avatarId, string frameId, string username, int currentNetWorth, int xpLevel)
+    public LeaderboardPlayerDetails(string userId, string avatarId, string frameId, string username, int currentNetWorth, int xpLevel)
     {
+        this.userId = userId;
         this.avatarId = avatarId;
         this.frameId = frameId;
         this.username = username;
