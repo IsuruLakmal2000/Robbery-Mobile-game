@@ -10,5 +10,5 @@ public class LevelProperties
     public float otherVehicleSpawnInterval;
     public float otherVehicleSpeed;
     public int levelBonusXp;
-
+    public float coinsMoveSpeed;
 }

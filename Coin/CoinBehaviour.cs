@@ -35,6 +35,7 @@ public class CoinBehaviour : MonoBehaviour
         // Set target position (moving down the road)
         targetPosition = new Vector3(transform.position.x, transform.position.y - 13f, transform.position.z); // Adjust Y value as needed
         rb = GetComponent<Rigidbody2D>();
+        speed = GameManager.instance.levelConfig.coinsMoveSpeed; // Set the speed from level properties
         // Set the increased speed after collision
     }
 

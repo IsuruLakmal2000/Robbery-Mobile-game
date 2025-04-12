@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     //--------------------------------------------------------------------------------------
     public int levelNumber;
     public float mapRotationSpeed;
+    public float coinsMoveSpeed;
     public float levelDistance;
     public int robbedMoney;
     public float otherVehicleSpeed;
@@ -62,25 +63,83 @@ public class GameManager : MonoBehaviour
 
     private void LoadNormalLevels()
     {
-        float baseMapRotationSpeed = 0.5f;
+        float baseMapRotationSpeed = 0.4f;
         float baseLevelDistance = 30f;
         float baseOtherVehicleSpeed = 2f;
         int baseLevelBonusXp = 200;
-        // float basePoliceSpawnInterval = 8f;
         float baseOtherVehicleSpawnInterval = 8f;
         int baseRideExpences = 200;
-
+        float basecoinsMoveSpeed = baseMapRotationSpeed * 10;
         float levelMultiplier = Mathf.Max(1, levelNumber - 1);
-        mapRotationSpeed = baseMapRotationSpeed + (0.5f * Mathf.Floor((levelNumber - 1) / 10));
-        otherVehicleSpeed = baseOtherVehicleSpeed + (0.5f * Mathf.Floor((levelNumber - 1) / 10));
+
+        // Adjust mapRotationSpeed and otherVehicleSpeed based on level ranges
+        if (levelNumber >= 1 && levelNumber <= 10)
+        {
+            mapRotationSpeed = baseMapRotationSpeed;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+            otherVehicleSpeed = baseOtherVehicleSpeed;
+        }
+        else
+        if (levelNumber > 10 && levelNumber <= 20)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.05f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.05f;
+        }
+        else if (levelNumber > 20 && levelNumber <= 30)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.1f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.1f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 30)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.15f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.15f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 40 && levelNumber <= 50)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.2f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.2f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 50 && levelNumber <= 60)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.25f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.25f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 60 && levelNumber <= 70)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.3f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.3f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 70 && levelNumber <= 80)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.35f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.35f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else if (levelNumber > 80 && levelNumber <= 90)
+        {
+            mapRotationSpeed = baseMapRotationSpeed + 0.4f;
+            otherVehicleSpeed = baseOtherVehicleSpeed + 0.4f;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+        else
+        {
+            mapRotationSpeed = baseMapRotationSpeed;
+            otherVehicleSpeed = baseOtherVehicleSpeed;
+            coinsMoveSpeed = mapRotationSpeed * 10;
+        }
+
         robbedMoney = CalculateRobbedMoney(levelNumber);
         levelDistance = baseLevelDistance + (levelMultiplier * 3);
         levelBonusXp = Mathf.RoundToInt(baseLevelBonusXp + (levelMultiplier * 40));
-        // policeSpawnInterval = Mathf.Max(2f, basePoliceSpawnInterval - (0.1f * levelMultiplier));
-        // otherVehicleSpawnInterval = 1f;
         otherVehicleSpawnInterval = Mathf.Max(1f, baseOtherVehicleSpawnInterval - (0.1f * levelMultiplier));
         rideExpences = Mathf.RoundToInt(baseRideExpences + (levelMultiplier * 40));
-        // -asign those values in to leevl prop class
 
         levelConfig.levelNumber = levelNumber;
         levelConfig.mapRotationSpeed = mapRotationSpeed;
@@ -90,6 +149,24 @@ public class GameManager : MonoBehaviour
         levelConfig.levelBonusXp = levelBonusXp;
         levelConfig.otherVehicleSpawnInterval = otherVehicleSpawnInterval;
         levelConfig.rideExpences = rideExpences;
+        levelConfig.coinsMoveSpeed = coinsMoveSpeed;
+        // For level 9:
+        // mapRotationSpeed = 0.5f
+        // otherVehicleSpeed = 2.0f
+        // robbedMoney = 2,143
+        // levelDistance = 54
+        // levelBonusXp = 520
+        // otherVehicleSpawnInterval = 7.2f
+        // rideExpences = 520
+
+        // For level 11:
+        // mapRotationSpeed = 0.6f
+        // otherVehicleSpeed = 2.1f
+        // robbedMoney = 4,152
+        // levelDistance = 60
+        // levelBonusXp = 600
+        // otherVehicleSpawnInterval = 7.0f
+        // rideExpences = 600
     }
 
     private float GetPoliceSpawnInterval(int levelNumber)

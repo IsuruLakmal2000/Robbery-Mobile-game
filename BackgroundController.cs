@@ -3,7 +3,7 @@ using UnityEngine;
 public class BackgroundController : MonoBehaviour
 {
     public Renderer meshRenderer;
-    private float speed = 0.5f;
+    public float speed = 0.5f;
     private float stopDuration = 1f; // Duration to stop smoothly
     private bool isStopping = false; // Flag to indicate if stopping
     private float targetSpeed;

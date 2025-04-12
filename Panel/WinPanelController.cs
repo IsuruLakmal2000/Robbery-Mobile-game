@@ -50,12 +50,16 @@ public class WinPanelController : MonoBehaviour
         Invoke("PauseGame", 0.5f);
     }
 
-    private void OnNextBtnClick()
+    private async void OnNextBtnClick()
     {
 
-        LevelUp();
+        await LevelUp();
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Menu");
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Menu");
+        while (!asyncLoad.isDone)
+        {
+            await Task.Yield();
+        }
 
     }
 
@@ -77,6 +81,7 @@ public class WinPanelController : MonoBehaviour
         int totalMoney = PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel;
         PlayerPrefs.SetInt("total_money", totalMoney);
         await FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
+
         PlayerPrefs.SetInt("current_level", currentLevel + 1);
         PlayerPrefs.SetFloat("watch_ads_current_price", 1000 * (currentLevel + 1));
         PlayerPrefs.SetInt("total_destroyed_police_car", totalDestroyedPoliceCar + LevelManager.instance.totalDestriyedPoliceVehiclesCount);
