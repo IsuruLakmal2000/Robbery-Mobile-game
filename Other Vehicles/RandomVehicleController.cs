@@ -59,6 +59,7 @@ public class RandomVehicleController : MonoBehaviour
             // Move straight down when not in an uncontrollable state
             transform.position += Vector3.down * speed * Time.deltaTime; // Move the vehicle downward
         }
+        // transform.position += Vector3.down * speed * Time.deltaTime; // Move the vehicle downward
     }
 
 

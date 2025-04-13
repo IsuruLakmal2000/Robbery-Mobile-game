@@ -218,6 +218,8 @@ public class GameManager : MonoBehaviour
         {
             // Deserialize JSON to LevelConfig object
             levelConfig = JsonUtility.FromJson<LevelProperties>(jsonFile.text);
+            float rotationSpeed = levelConfig.mapRotationSpeed;
+            levelConfig.coinsMoveSpeed = rotationSpeed * 10;
             Debug.Log("Level Config Loaded Successfully!");
         }
         else

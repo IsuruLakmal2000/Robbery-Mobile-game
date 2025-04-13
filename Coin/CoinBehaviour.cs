@@ -55,7 +55,6 @@ public class CoinBehaviour : MonoBehaviour
         if (collision.CompareTag("PlayerCar")) // Ensure your player car has the tag "Player"
         {
             StartCoroutine(MoveAndDestroy());
-
         }
         if (collision.gameObject.CompareTag("Area"))
         {

@@ -154,7 +154,7 @@ public class PoliceCarController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("PlayerCar"))
         {
-            StartCoroutine(UncontrollableMovement(collision));
+            // StartCoroutine(UncontrollableMovement(collision));
         }
 
         if (collision.gameObject.CompareTag("Area"))
@@ -177,9 +177,20 @@ public class PoliceCarController : MonoBehaviour
         // Set the uncontrollable movement flag
         isMovingUncontrollably = true;
 
+        // Get the Rigidbody2D component
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb == null)
+        {
+            yield break; // Exit if no Rigidbody2D is attached
+        }
+
+        // Apply an initial velocity based on the collision impact
+        Vector2 impactDirection = (policeCarPosition - contactPoint).normalized;
+        rb.linearVelocity = impactDirection * speed;
+
         // Randomly rotate the vehicle upon collision
-        float randomAngle = Random.Range(-30f, 30f);
-        Quaternion targetRotation = Quaternion.Euler(0, 0, transform.eulerAngles.z + randomAngle);
+        float randomTorque = Random.Range(-50f, 50f);
+        rb.AddTorque(randomTorque);
 
         // Uncontrollable movement for 2 seconds
         float duration = 2f;
@@ -187,25 +198,17 @@ public class PoliceCarController : MonoBehaviour
 
         while (timer < duration)
         {
-            // Smoothly rotate towards the target rotation
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 200 * Time.deltaTime);
-
-            // Move based on the side of impact
-            if (contactPoint.x < policeCarPosition.x) // Hit on the left side
-            {
-                transform.position += new Vector3(0.5f * Time.deltaTime, 0, 0); // Move right
-            }
-            else // Hit on the right side
-            {
-                transform.position += new Vector3(-0.5f * Time.deltaTime, 0, 0); // Move left
-            }
+            // Gradually reduce the velocity to simulate friction
+            rb.linearVelocity = Vector2.Lerp(rb.linearVelocity, Vector2.zero, timer / duration);
 
             timer += Time.deltaTime;
             yield return null; // Wait for the next frame
         }
 
-        // After 2 seconds, reset the flag
+        // After 2 seconds, reset the flag and stop the vehicle
         isMovingUncontrollably = false;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
     }
     public void TakeDamage(float damage)
     {
@@ -225,7 +228,7 @@ public class PoliceCarController : MonoBehaviour
             Destroy(explosion, 1f);
             // Time.timeScale = 0f;
             GameRobbedMoney.instance.IncreaseMoneyWhenCollect(destroyEarning);
-            Destroy(gameObject);
+            gameObject.SetActive(false);
 
         }
     }
@@ -286,5 +289,21 @@ public class PoliceCarController : MonoBehaviour
             blueLight.SetActive(true);
             yield return new WaitForSeconds(blinkInterval); // Wait
         }
+    }
+
+    public void ResetPoliceCar()
+    {
+        // Reset health
+        currentHealth = maxHealth;
+        healthBar.value = currentHealth;
+
+        // Reset position and rotation
+        //  transform.position = Vector3.zero;
+        // transform.rotation = Quaternion.identity;
+
+        // Reset any other properties
+        isMovingUncontrollably = false;
+        GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+        GetComponent<Rigidbody2D>().angularVelocity = 0f;
     }
 }
