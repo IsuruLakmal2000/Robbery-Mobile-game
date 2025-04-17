@@ -135,11 +135,20 @@ public class BusinessManager : MonoBehaviour
 
     private void CalculateEarnings()
     {
+
         currentEarnings += Time.deltaTime * profitPerSecond;
+        if (currentEarnings >= currentProfit)
+        {
+            currentEarnings = currentProfit; // Cap earnings to current profit
+
+        }
+
         PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
 
         earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
         collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings available
+
+
     }
 
     private void CollectEarnings()

@@ -16,8 +16,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip firingSound;
     public AudioClip levelComplete;
     public AudioClip walkieTalkieSound;
-    public AudioClip levelFailed
-    ;
+    public AudioClip levelFailed;
+    public AudioClip CarTurningSound;
+
     [SerializeField] private AudioClip[] policeCarDestroyedSound;
 
     private void Awake()
@@ -42,6 +43,11 @@ public class SoundManager : MonoBehaviour
     {
         audioSource.PlayOneShot(alertWarnSound);
         audioSource.PlayOneShot(walkieTalkieSound);
+    }
+    public void PlayCarTurningSound()
+    {
+        audioSource.PlayOneShot(CarTurningSound);
+
     }
 
     public void PlayLevelCompleteSound()

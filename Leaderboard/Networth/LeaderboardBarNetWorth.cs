@@ -15,8 +15,15 @@ public class LeaderboardBarNetWorth : MonoBehaviour
 
     public void SetLeaderboardDetails(LeaderboardPlayerDetails leaderboardConfig, int rank)
     {
-        //  avatarImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + leaderboardConfig.avatarId);
-        //   frameImage.sprite = Resources.Load<Sprite>("Sprites/Task/icons/" + leaderboardConfig.frameId);
+        avatarImage.sprite = Resources.Load<Sprite>("Sprites/avatars/" + leaderboardConfig.avatarId);
+        if (leaderboardConfig.frameId != "none")
+        {
+            frameImage.sprite = Resources.Load<Sprite>("Sprites/frames/" + leaderboardConfig.frameId);
+        }
+        else
+        {
+            frameImage.gameObject.SetActive(false);
+        }
         if (leaderboardConfig.userId == PlayerPrefs.GetString("UserId"))
         {
             print("iside current user");

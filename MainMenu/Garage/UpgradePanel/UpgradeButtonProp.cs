@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class UpgradeButtonProp : MonoBehaviour
 {
 
-    private Button upgradeButton;
-    private TextMeshProUGUI priceTxt;
-    private TextMeshProUGUI levelTxt;
+    [SerializeField] private Button upgradeButton;
+    [SerializeField] private TextMeshProUGUI priceTxt;
+    [SerializeField] private TextMeshProUGUI levelTxt;
 
     [SerializeField] private int currentLevel;
     [SerializeField] private int maxLevel = 20;
@@ -15,11 +15,15 @@ public class UpgradeButtonProp : MonoBehaviour
     [SerializeField] private float priceMultiplier = 1.2f; // Price increases by 20%
     void Start()
     {
-        priceTxt = transform.Find("price").GetComponent<TextMeshProUGUI>();
-        levelTxt = transform.parent.Find("Level/levelTxt").GetComponent<TextMeshProUGUI>();
+        // priceTxt = transform.Find("price").GetComponent<TextMeshProUGUI>();
+        //levelTxt = transform.parent.Find("Level/levelTxt").GetComponent<TextMeshProUGUI>();
 
-        upgradeButton = GetComponent<Button>();
-        upgradeButton.onClick.AddListener(Upgrade);
+        // upgradeButton = gameObject.GetComponent<Button>();
+        // upgradeButton.onClick.AddListener(() =>
+        // {
+        //     Debug.Log("Upgrade button clicked: " + gameObject.name);
+        //     Upgrade();
+        // });
         LoadUpgradeData();
         levelTxt.text = currentLevel.ToString();
     }
@@ -45,7 +49,7 @@ public class UpgradeButtonProp : MonoBehaviour
         levelTxt.text = currentLevel.ToString();
     }
 
-    private void Upgrade()
+    public void Upgrade()
     {
         Debug.Log("Upgrade");
         if (currentLevel >= maxLevel)
@@ -73,12 +77,20 @@ public class UpgradeButtonProp : MonoBehaviour
                 SoundManager.instance.PlayUpgradeSound();
                 HealthBarUpgradeShow.instance.UpdateHealthBar(5);
                 break;
-            case "SpeedUpgradeButton":
-                // SoundManager.instance.PlayUpgradeSound();
+            case "PrimaryFireRateUpgradeButton":
+                SoundManager.instance.PlayUpgradeSound();
+                float CurrentfireRate = PlayerPrefs.GetFloat("PrimaryGunFireRate", 0.3f);
+                CurrentfireRate -= 0.01f;
+                PlayerPrefs.SetFloat("PrimaryGunFireRate", CurrentfireRate);
+
                 //  SpeedBarUpgradeShow.instance.UpdateSpeedBar(10);
                 break;
-            case "DamageUpgradeButton":
-                // SoundManager.instance.PlayUpgradeSound();
+            case "SecondaryFireRateUpgradeButton":
+                SoundManager.instance.PlayUpgradeSound();
+                float CurrentfireRate2 = PlayerPrefs.GetFloat("SecondaryGunFireRate", 0.3f);
+                CurrentfireRate2 -= 0.01f;
+                PlayerPrefs.SetFloat("SecondaryGunFireRate", CurrentfireRate2);
+
                 //  DamageBarUpgradeShow.instance.UpdateDamageBar(10);
                 break;
         }

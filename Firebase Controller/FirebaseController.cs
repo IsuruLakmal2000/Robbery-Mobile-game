@@ -77,7 +77,7 @@ public class FirebaseController : MonoBehaviour
             }
 
             // Create a new user model
-            UserModel newUser = new UserModel(username, 0, 0, "defaultAvatar", "defaultFrame");
+            UserModel newUser = new UserModel(username, 0, 0, "defaultAvatar", "none");
 
             // Convert the user model to JSON and save it under the unique ID
             string json = JsonUtility.ToJson(newUser);
@@ -250,35 +250,35 @@ public class FirebaseController : MonoBehaviour
     }
 
     public async Task UpdateProfile(string userId, string newAvatar, string newFrame)
-{
-    try
     {
-        if (databaseReference == null)
+        try
         {
-            Debug.LogError("Database reference is null. Ensure Firebase is initialized.");
-            return;
-        }
+            if (databaseReference == null)
+            {
+                Debug.LogError("Database reference is null. Ensure Firebase is initialized.");
+                return;
+            }
 
-        if (string.IsNullOrEmpty(userId))
-        {
-            Debug.LogError("User ID is null or empty. Cannot update profile.");
-            return;
-        }
+            if (string.IsNullOrEmpty(userId))
+            {
+                Debug.LogError("User ID is null or empty. Cannot update profile.");
+                return;
+            }
 
-        // Create a dictionary to update the avatar and frame fields
-        var updates = new Dictionary<string, object>
+            // Create a dictionary to update the avatar and frame fields
+            var updates = new Dictionary<string, object>
         {
-            { "avatar", newAvatar },
-            { "frame", newFrame }
+            { "avatarId", newAvatar },
+            { "frameId", newFrame }
         };
 
-        // Update the user's avatar and frame in the database
-        await databaseReference.Child("users").Child(userId).UpdateChildrenAsync(updates);
-        Debug.Log($"Successfully updated profile for user ID: {userId}");
+            // Update the user's avatar and frame in the database
+            await databaseReference.Child("users").Child(userId).UpdateChildrenAsync(updates);
+            Debug.Log($"Successfully updated profile for user ID: {userId}");
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Error updating profile: " + ex.Message);
+        }
     }
-    catch (System.Exception ex)
-    {
-        Debug.LogError("Error updating profile: " + ex.Message);
-    }
-}
 }

@@ -11,6 +11,7 @@ public class SetupSelectedGun : MonoBehaviour
     [SerializeField] private GameObject v4Prefab;
 
     [SerializeField] private GameObject gunPoint;
+    [SerializeField] private GameObject secondaryGunPoint;
     public static SetupSelectedGun instance;
 
     private void Awake()
@@ -22,22 +23,38 @@ public class SetupSelectedGun : MonoBehaviour
     {
 
         String selectedGun = PlayerPrefs.GetString("SelectedGun", "none");
-
-        switch (selectedGun)
+        if (selectedGun != "none")
         {
-            case "V1":
-                Instantiate(v1Prefab, gunPoint.transform);
-                break;
-            case "V2":
-                Instantiate(v2Prefab, gunPoint.transform);
-                break;
-            case "V3":
-                Instantiate(v3Prefab, gunPoint.transform);
-                break;
-            case "V4":
-                Instantiate(v4Prefab, gunPoint.transform);
-                break;
+            Instantiate(v1Prefab, gunPoint.transform);
         }
+        String SecondaryGun = PlayerPrefs.GetString("SecondaryGun", "none");
+        if (SecondaryGun != "none")
+        {
+            Instantiate(v2Prefab, secondaryGunPoint.transform);
+        }
+        // switch (selectedGun)
+        // {
+        //     case "V1":
+        //         Instantiate(v1Prefab, gunPoint.transform);
+        //         break;
+        //     case "V2":
+        //         Instantiate(v2Prefab, secondaryGunPoint.transform);
+        //         break;
+        //     case "V3":
+        //         Instantiate(v3Prefab, gunPoint.transform);
+        //         break;
+        //     case "V4":
+        //         Instantiate(v4Prefab, gunPoint.transform);
+        //         break;
+        // }
+    }
+    public void SetupSecondaryGun(String gunName)
+    {
+        if (secondaryGunPoint.transform.childCount > 0)
+        {
+            Destroy(secondaryGunPoint.transform.GetChild(0).gameObject);
+        }
+        Instantiate(v2Prefab, secondaryGunPoint.transform);
     }
 
     public void SetSelectedGun(String gunName)
@@ -47,23 +64,23 @@ public class SetupSelectedGun : MonoBehaviour
             Destroy(gunPoint.transform.GetChild(0).gameObject);
         }
 
+        Instantiate(v1Prefab, gunPoint.transform);
+        // PlayerPrefs.SetString("SelectedGun", gunName);
 
-        PlayerPrefs.SetString("SelectedGun", gunName);
-
-        switch (gunName)
-        {
-            case "V1":
-                Instantiate(v1Prefab, gunPoint.transform);
-                break;
-            case "V2":
-                Instantiate(v2Prefab, gunPoint.transform);
-                break;
-            case "V3":
-                Instantiate(v3Prefab, gunPoint.transform);
-                break;
-            case "V4":
-                Instantiate(v4Prefab, gunPoint.transform);
-                break;
-        }
+        // switch (gunName)
+        // {
+        //     case "V1":
+        //         Instantiate(v1Prefab, gunPoint.transform);
+        //         break;
+        //     case "V2":
+        //         Instantiate(v2Prefab, gunPoint.transform);
+        //         break;
+        //     case "V3":
+        //         Instantiate(v3Prefab, gunPoint.transform);
+        //         break;
+        //     case "V4":
+        //         Instantiate(v4Prefab, gunPoint.transform);
+        //         break;
+        // }
     }
 }

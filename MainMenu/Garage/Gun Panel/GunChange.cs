@@ -35,7 +35,7 @@ public class GunChange : MonoBehaviour
             useBtn.onClick.AddListener(() =>
                  {
                      SoundManager.instance.PlayButtonClick();
-                     ChangeGun(gameObject.name);
+                     InitizlizeGun(gameObject.name);
                  });
         }
         else
@@ -51,12 +51,22 @@ public class GunChange : MonoBehaviour
                  });
         }
     }
-    public void ChangeGun(string gunName)
+    public void InitizlizeGun(string name)
     {
         setupSelectedGunScript = currentCar.transform.GetChild(0).GetComponent<SetupSelectedGun>();
         backgroundColor.color = new Color32(60, 243, 49, 255);
-        setupSelectedGunScript.SetSelectedGun(gunName);
-        PlayerPrefs.SetString("SelectedGun", gunName);
+        switch (name)
+        {
+            case "V1":
+                setupSelectedGunScript.SetSelectedGun(name);
+                PlayerPrefs.SetString("SelectedGun", name);
+                break;
+            case "V2":
+                setupSelectedGunScript.SetupSecondaryGun(name);
+                PlayerPrefs.SetString("SecondaryGun", name);
+                break;
+        }
+
 
     }
     private void BuyGun(String gunName)
@@ -74,7 +84,7 @@ public class GunChange : MonoBehaviour
             useBtn.onClick.AddListener(() =>
                  {
                      SoundManager.instance.PlayButtonClick();
-                     ChangeGun(gameObject.name);
+                     InitizlizeGun(gameObject.name);
                  });
         }
         else

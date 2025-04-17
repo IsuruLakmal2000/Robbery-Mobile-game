@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +13,9 @@ public class GameManager : MonoBehaviour
     public LevelProperties levelConfig;
     public bool isStoppingSpawnPolice = false;
     public static GameManager instance;
+    [SerializeField] private GameObject levelInitialziePanelPrefab;
+    [SerializeField] Canvas canvas;
+
     // for normal values 
     //--------------------------------------------------------------------------------------
     public int levelNumber;
@@ -45,6 +49,7 @@ public class GameManager : MonoBehaviour
             //load boss levels from configs
             Debug.Log("Boss Level -----level no --" + levelNumber);
             LoadBossLevelConfig(levelNumber);
+
         }
         else
         {
@@ -54,9 +59,35 @@ public class GameManager : MonoBehaviour
         }
 
     }
-
+    private IEnumerator LevelStartCountdown(GameObject levelInitializePanelInstance)
+    {
+        // Example countdown logic
+        levelInitializePanelInstance.transform.GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>().SetText("+" + robbedMoney);
+        TextMeshProUGUI countdownText = levelInitializePanelInstance.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        for (int i = 3; i > 0; i--)
+        {
+            countdownText.SetText(i.ToString());
+            yield return new WaitForSecondsRealtime(1f);
+        }
+        Time.timeScale = 1f;
+        Destroy(levelInitializePanelInstance);
+    }
     void Start()
     {
+
+        Time.timeScale = 0f;
+        GameObject levelInitializePanelInstance = Instantiate(levelInitialziePanelPrefab, canvas.transform);
+        Animator[] animators = levelInitializePanelInstance.GetComponentsInChildren<Animator>();
+        SoundManager.instance.PlayCarTurningSound();
+        SoundManager.instance.PlayMoneyPickupSound();
+        foreach (Animator animator in animators)
+        {
+            if (animator != null)
+            {
+                animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+            }
+        }
+        StartCoroutine(LevelStartCountdown(levelInitializePanelInstance));
 
         //BackgroundController.instance.speed = levelConfig.mapRotationSpeed;
     }
