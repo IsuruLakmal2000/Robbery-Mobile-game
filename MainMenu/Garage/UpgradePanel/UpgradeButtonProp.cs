@@ -15,15 +15,7 @@ public class UpgradeButtonProp : MonoBehaviour
     [SerializeField] private float priceMultiplier = 1.2f; // Price increases by 20%
     void Start()
     {
-        // priceTxt = transform.Find("price").GetComponent<TextMeshProUGUI>();
-        //levelTxt = transform.parent.Find("Level/levelTxt").GetComponent<TextMeshProUGUI>();
-
-        // upgradeButton = gameObject.GetComponent<Button>();
-        // upgradeButton.onClick.AddListener(() =>
-        // {
-        //     Debug.Log("Upgrade button clicked: " + gameObject.name);
-        //     Upgrade();
-        // });
+        //
         LoadUpgradeData();
         levelTxt.text = currentLevel.ToString();
     }
