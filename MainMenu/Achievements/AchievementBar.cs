@@ -171,11 +171,9 @@ public class AchievementBar : MonoBehaviour
                 break;
 
             case "Exp":
-                //int currentXP = PlayerPrefs.GetInt("XP_Level", 0);
+
                 XPSystem.Instance.AddXP(rewardCount);
-                // currentXP += rewardCount;
-                // PlayerPrefs.SetInt("XP_Level", currentXP);
-                // PlayerPrefs.Save();
+
                 break;
             case "Gem":
                 int currentGem = PlayerPrefs.GetInt("total_gem", 0);

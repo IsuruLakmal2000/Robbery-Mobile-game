@@ -18,9 +18,11 @@ public class BottomBarController : MonoBehaviour
     [SerializeField] private GameObject garagePropSidePanelPrefab;
     [SerializeField] private GameObject leftSidePanelPrefab;
     [SerializeField] private GameObject leaderboardPanelPrefab;
-
+    [SerializeField] private GameObject shopPanelPrefab;
+    [SerializeField] private GameObject loadingPanel;
     void Start()
     {
+        loadingPanel.SetActive(false);
         animator = GetComponent<Animator>();
         backBtnOnGarage.SetActive(false);
         startBtn = transform.Find("Start Btn").GetComponent<Button>();
@@ -30,6 +32,7 @@ public class BottomBarController : MonoBehaviour
         garageBtn = transform.Find("Garage Btn").GetComponent<Button>();
         startBtn.onClick.AddListener(OnStartBtnClick);
         leaderboardBtn.onClick.AddListener(OnLeaderboardBtnClick);
+        shopBtn.onClick.AddListener(OnShopBtnClick);
         garageBtn.onClick.AddListener(OnGarageBtnClick);
         businessBtn.onClick.AddListener(OnBusinessBtnClick);
         backBtnOnGarage.GetComponent<Button>().onClick.AddListener(() => StartCoroutine(BackButtonPressedCoroutine()));
@@ -39,6 +42,7 @@ public class BottomBarController : MonoBehaviour
     {
         SoundManager.instance.PlayButtonClick();
         Debug.Log("on start clicked ");
+
         StartCoroutine(LoadSceneAsync("GameLevel"));
     }
 
@@ -46,7 +50,8 @@ public class BottomBarController : MonoBehaviour
     {
         SoundManager.instance.PlayButtonClick();
         Debug.Log("on business clicked ");
-        SceneManager.LoadScene("Business");
+        StartCoroutine(LoadSceneAsync("Business"));
+
     }
     private void OnGarageBtnClick()
     {
@@ -72,8 +77,19 @@ public class BottomBarController : MonoBehaviour
             Destroy(leaderboardPanelInstance);
         });
     }
+    private void OnShopBtnClick()
+    {
+        SoundManager.instance.PlayButtonClick();
+        GameObject shopPanelInstance = Instantiate(shopPanelPrefab, canvas.transform);
+        shopPanelInstance.transform.SetSiblingIndex(4);
+        shopPanelInstance.transform.Find("Back Button").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            Destroy(shopPanelInstance);
+        });
+    }
     private IEnumerator LoadSceneAsync(string sceneName)
     {
+        loadingPanel.SetActive(true);
         // Start loading the scene asynchronously
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneName);
 

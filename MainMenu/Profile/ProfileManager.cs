@@ -6,6 +6,7 @@ public class ProfileManager : MonoBehaviour
     [SerializeField] private Image frame;
     [SerializeField] private Image avatar;
     [SerializeField] private GameObject profilePanelPrefab; // Prefab for the profile panel
+
     private Canvas canvas; // Prefab for the avatar panel
 
     public static ProfileManager instance; // Singleton instance
@@ -28,7 +29,7 @@ public class ProfileManager : MonoBehaviour
     {
         // Load the profile data when the script starts
         canvas = FindAnyObjectByType<Canvas>();
-        string currentAvatar = PlayerPrefs.GetString("CurrentAvatar", "avatar_default");
+        string currentAvatar = PlayerPrefs.GetString("CurrentAvatar", "defaultAvatar");
         string currentFrame = PlayerPrefs.GetString("CurrentFrame", "none");
 
         print($"Current Avatar: {currentAvatar}");
@@ -49,6 +50,7 @@ public class ProfileManager : MonoBehaviour
         if (!string.IsNullOrEmpty(userId))
         {
             // Update the profile in Firebase
+
             await FirebaseController.instance.UpdateProfile(userId, newAvatar, newFrame);
 
             // Update the local UI

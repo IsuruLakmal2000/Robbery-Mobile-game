@@ -52,14 +52,17 @@ public class FirebaseController : MonoBehaviour
             Debug.LogError($"Error initializing Firebase: {ex.Message}");
         }
     }
-    private async void Start()
+    private void Start()
     {
-        // FirebaseDatabase database = FirebaseDatabase.DefaultInstance;
-        // databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-    }
 
+    }
+    // private void ShowloadingPanelInstanceInstance()
+    // {
+
+    // }
     public async Task SaveNewUser(string username)
     {
+
         try
         {
             if (databaseReference == null)
@@ -88,9 +91,11 @@ public class FirebaseController : MonoBehaviour
             PlayerPrefs.SetString("UserId", userId); // Save the user ID in PlayerPrefs
             PlayerPrefs.SetString("UserName", username); // Save the username in PlayerPrefs
             Debug.Log("User saved successfully with ID: " + userId);
+
         }
         catch (System.Exception ex)
         {
+
             Debug.LogError("Error saving user: " + ex.Message);
         }
     }
@@ -120,9 +125,11 @@ public class FirebaseController : MonoBehaviour
             // Update the user's CurrentNetworth in the database
             await databaseReference.Child("users").Child(userId).UpdateChildrenAsync(updates);
             Debug.Log($"Successfully updated CurrentNetworth to {newNetworth} for user ID: {userId}");
+
         }
         catch (System.Exception ex)
         {
+
             Debug.LogError("Error updating CurrentNetworth: " + ex.Message);
         }
     }
@@ -168,6 +175,7 @@ public class FirebaseController : MonoBehaviour
                 return null;
             }
 
+
             // Query to get top 50 users sorted by totalNetworth
             var snapshot = await databaseReference.Child("users")
                 .OrderByChild("currentNetWorth")
@@ -188,10 +196,12 @@ public class FirebaseController : MonoBehaviour
 
                 // Sort in descending order (Firebase returns ascending order by default)
                 users.Sort((a, b) => b.currentNetWorth.CompareTo(a.currentNetWorth));
+
                 return users;
             }
             else
             {
+
                 Debug.LogWarning("No users found in the database.");
                 return null;
             }
@@ -238,12 +248,14 @@ public class FirebaseController : MonoBehaviour
             }
             else
             {
+
                 Debug.LogWarning("No users found in the database.");
                 return null;
             }
         }
         catch (System.Exception ex)
         {
+
             Debug.LogError("Error retrieving top users by XP Level: " + ex.Message);
             return null;
         }
@@ -275,9 +287,11 @@ public class FirebaseController : MonoBehaviour
             // Update the user's avatar and frame in the database
             await databaseReference.Child("users").Child(userId).UpdateChildrenAsync(updates);
             Debug.Log($"Successfully updated profile for user ID: {userId}");
+
         }
         catch (System.Exception ex)
         {
+
             Debug.LogError("Error updating profile: " + ex.Message);
         }
     }

@@ -28,7 +28,6 @@ public class BusinessManager : MonoBehaviour
 
     void Start()
     {
-
         LoadBusinessData();
         CalculateOfflineEarnings();
         UpdateUI();
@@ -39,6 +38,9 @@ public class BusinessManager : MonoBehaviour
             buyButton.gameObject.transform.parent.gameObject.SetActive(false);
             upgradeButton.onClick.AddListener(UpgradeBusiness);
             collectButton.onClick.AddListener(CollectEarnings);
+
+            // Start the coroutine to calculate earnings every 10 seconds
+            StartCoroutine(CalculateEarningsCoroutine());
         }
         else
         {
@@ -50,10 +52,10 @@ public class BusinessManager : MonoBehaviour
 
     void Update()
     {
-        if (currentLevel > 0)
-        {
-            CalculateEarnings();
-        }
+        // if (currentLevel > 0)
+        // {
+        //     CalculateEarnings();
+        // }
     }
 
     private void LoadBusinessData()
@@ -133,23 +135,23 @@ public class BusinessManager : MonoBehaviour
         }
     }
 
-    private void CalculateEarnings()
-    {
+    // private void CalculateEarnings()
+    // {
 
-        currentEarnings += Time.deltaTime * profitPerSecond;
-        if (currentEarnings >= currentProfit)
-        {
-            currentEarnings = currentProfit; // Cap earnings to current profit
+    //     currentEarnings += Time.deltaTime * profitPerSecond;
+    //     if (currentEarnings >= currentProfit)
+    //     {
+    //         currentEarnings = currentProfit; // Cap earnings to current profit
 
-        }
+    //     }
 
-        PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
+    //     PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
 
-        earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
-        collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings available
+    //     //earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
+    //     collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings available
 
 
-    }
+    // }
 
     private void CollectEarnings()
     {
@@ -160,7 +162,7 @@ public class BusinessManager : MonoBehaviour
             int playerMoney = PlayerPrefs.GetInt("total_money", 0);
             playerMoney += earningsToCollect;
             PlayerPrefs.SetInt("total_money", playerMoney);
-
+            earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
             currentEarnings = 0;
             PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
             PlayerPrefs.SetString($"{businessName}_lastCollectedTime", DateTime.Now.ToString());
@@ -211,7 +213,7 @@ public class BusinessManager : MonoBehaviour
         levelText.text = currentLevel.ToString();
         profitText.text = "Profit/Day: $" + (currentLevel > 0 ? currentProfit.ToString("N0") : "0");
         upgradeCostText.text = (currentLevel < maxLevel ? FormatPrice(currentUpgradeCost).ToString() : "Max Level");
-
+        earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
         buyButton.gameObject.SetActive(currentLevel == 0);
         upgradeButton.gameObject.SetActive(currentLevel > 0 && currentLevel < maxLevel);
         collectButton.gameObject.SetActive(currentEarnings >= 1);
@@ -276,5 +278,28 @@ public class BusinessManager : MonoBehaviour
 
         // Destroy the whole parent object once all icons reach the money bar
         Destroy(parentObject);
+    }
+
+    private IEnumerator CalculateEarningsCoroutine()
+    {
+        while (currentLevel > 0)
+        {
+            yield return new WaitForSeconds(10f); // Wait for 10 seconds
+
+            // Calculate earnings for the last 10 seconds
+            float earningsToAdd = 10f * profitPerSecond;
+            currentEarnings += earningsToAdd;
+
+            if (currentEarnings >= currentProfit)
+            {
+                currentEarnings = currentProfit; // Cap earnings to current profit
+            }
+
+            PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
+
+            // Update the UI
+            earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
+            collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings are available
+        }
     }
 }

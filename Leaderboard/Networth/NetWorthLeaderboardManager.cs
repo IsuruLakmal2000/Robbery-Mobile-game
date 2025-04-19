@@ -8,6 +8,7 @@ public class NetWorthLeaderoardManager : MonoBehaviour
     [SerializeField] private GameObject leaderboardBarPrefab; // Prefab for leaderboard bar
 
     [SerializeField] private TextMeshProUGUI networthLoading; // Panel to show leaderboard
+
     [SerializeField] private Button xpLeaderboardBtn;
     [SerializeField] private Button networthLeaderbardBtn;
     [SerializeField] private GameObject xpLeaderboardPanel; // Panel to show XP leaderboard

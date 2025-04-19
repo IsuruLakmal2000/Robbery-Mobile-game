@@ -66,11 +66,11 @@ public class BillionareClubController : MonoBehaviour
             {
                 SoundManager.instance.PlayButtonClick();
                 //100000000
-                if (currentMoney >= 80000000)
+                if (currentMoney >= 800000000)
                 {
                     if (totalgem >= 500)
                     {
-                        currentMoney -= 80000000;
+                        currentMoney -= 800000000;
                         PlayerPrefs.SetInt("total_money", currentMoney);
                         totalgem -= 500;
                         PlayerPrefs.SetInt("total_gem", totalgem);
