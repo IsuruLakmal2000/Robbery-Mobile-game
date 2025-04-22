@@ -28,6 +28,22 @@ public class RewardPanelController : MonoBehaviour
         rewardCoundText.text = rewardCount.ToString();
         StartCoroutine(AnimateRewardCount(rewardCount));
     }
+    public void SetAvatarFrameUnlockingDetails(string imgName)
+    {
+        if (imgName.StartsWith("a"))
+        {
+            rewardImg.sprite = Resources.Load<Sprite>("Sprites/avatars/" + imgName);
+            rewardCoundText.text = "You unlocked a new avatar!";
+        }
+        else if (imgName.StartsWith("f"))
+        {
+            rewardImg.sprite = Resources.Load<Sprite>("Sprites/frames/" + imgName);
+            rewardCoundText.text = "You unlocked a new frame!";
+        }
+
+        // rewardCoundText.text = rewardCount.ToString();
+        //  StartCoroutine(AnimateRewardCount(rewardCount));
+    }
 
     private IEnumerator AnimateRewardCount(int targetValue)
     {

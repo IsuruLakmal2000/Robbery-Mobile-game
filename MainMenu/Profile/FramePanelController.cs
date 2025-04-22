@@ -91,42 +91,34 @@ public class FramePanelController : MonoBehaviour
 
         switch (gridCell.gameObject.name)
         {
-            case "avatar1":
-                unlockMessage = "Unlock avatar1 by completing level 1.";
+            case "frame1":
+                unlockMessage = "Unlock this frame by Opening coffe shop business.";
                 break;
-            case "avatar2":
-                unlockMessage = "Unlock avatar2 by collecting 100 coins.";
+            case "frame2":
+                unlockMessage = "Unlock  this frame  by collecting first 1M money.";
                 break;
-            case "avatar3":
-                unlockMessage = "Unlock avatar3 by logging in for 7 consecutive days.";
+            case "frame3":
+                unlockMessage = "Unlock  this frame  logging in for 7 consecutive days.";
                 break;
-            case "avatar4":
-                unlockMessage = "Unlock avatar4 by purchasing the premium pack.";
+            case "frame4":
+                unlockMessage = "Unlock this frame by Reaching XP level 5.";
                 break;
-            case "avatar5":
-                unlockMessage = "Unlock avatar5 by sharing the app with a friend.";
+            case "frame5":
+                unlockMessage = "Unlock  this frame  by Purchasing premium version or any in-app purchase.";
                 break;
-            case "avatar6":
-                unlockMessage = "Unlock avatar6 by completing the special event.";
+            case "frame6":
+                unlockMessage = "Unlock this frame by Reaching XP level 35.";
                 break;
-            case "avatar7":
-                unlockMessage = "Unlock avatar7 by reaching level 10.";
+            case "frame7":
+                unlockMessage = "Unlock this frame by Reaching XP level 20.";
                 break;
-            case "avatar8":
-                unlockMessage = "Unlock avatar8 by watching 5 ads.";
+            case "frame8":
+                unlockMessage = "Unlock  this frame  by collecting first 100k money.";
                 break;
-            case "avatar9":
-                unlockMessage = "Unlock avatar9 by earning 500 points.";
+            case "frame9":
+                unlockMessage = "Unlock this frame by Reaching XP level 50.";
                 break;
-            case "avatar10":
-                unlockMessage = "Unlock avatar10 by completing the daily challenge.";
-                break;
-            case "avatar11":
-                unlockMessage = "Unlock avatar11 by inviting 3 friends.";
-                break;
-            case "avatar12":
-                unlockMessage = "Unlock avatar12 by achieving a high score of 1000.";
-                break;
+
             default:
                 unlockMessage = "Unlock this avatar by completing the required task.";
                 break;
