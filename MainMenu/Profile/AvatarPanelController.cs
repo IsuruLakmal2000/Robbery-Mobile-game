@@ -12,10 +12,10 @@ public class AvatarPanelController : MonoBehaviour
     [SerializeField] private GameObject popupPrefab;
     void Start()
     {
-        PlayerPrefs.SetInt("is_unlock_avatar_avatar1", 1); // Example of setting the unlock status for avatar1
-        PlayerPrefs.SetInt("is_unlock_avatar_avatar2", 1); // Example of setting the unlock status for avatar2
-        PlayerPrefs.SetInt("is_unlock_avatar_avatar4", 1); // Example of setting the unlock status for avatar3
-        PlayerPrefs.SetInt("is_unlock_avatar_avatar9", 1); // Example of setting the unlock status for avatar4
+        // PlayerPrefs.SetInt("is_unlock_avatar_avatar1", 1); // Example of setting the unlock status for avatar1
+        // PlayerPrefs.SetInt("is_unlock_avatar_avatar2", 1); // Example of setting the unlock status for avatar2
+        // PlayerPrefs.SetInt("is_unlock_avatar_avatar4", 1); // Example of setting the unlock status for avatar3
+        // PlayerPrefs.SetInt("is_unlock_avatar_avatar9", 1); // Example of setting the unlock status for avatar4
         // Add listeners to all buttons in the grid
         foreach (Transform gridCell in gridContainer)
         {
@@ -85,40 +85,40 @@ public class AvatarPanelController : MonoBehaviour
         switch (gridCell.gameObject.name)
         {
             case "avatar1":
-                avatarDescription = "Avatar1: A brave warrior from the ancient lands.";
+                avatarDescription = "Unlock this Avatar by reaching XP Level 2.";
                 break;
             case "avatar2":
-                avatarDescription = "Avatar2: A cunning rogue with unmatched agility.";
+                avatarDescription = "Unlock this Avatar by Collecting 10 Gems.";
                 break;
             case "avatar3":
-                avatarDescription = "Avatar3: A wise mage with powerful spells.";
+                avatarDescription = " Unlock this Avatar by destroying 5 police cars.";
                 break;
             case "avatar4":
-                avatarDescription = "Avatar4: A noble knight with a strong sense of justice.";
+                avatarDescription = "Unlock this Avatar by Unlocking Coffe business.";
                 break;
             case "avatar5":
-                avatarDescription = "Avatar5: A mysterious assassin from the shadows.";
+                avatarDescription = "Unlock this Avatar by destroying 50 police cars.";
                 break;
             case "avatar6":
-                avatarDescription = "Avatar6: A cheerful bard spreading joy and music.";
+                avatarDescription = "Unlock this Avatar by Unlocking Millionaire Club.";
                 break;
             case "avatar7":
-                avatarDescription = "Avatar7: A fierce barbarian with unmatched strength.";
+                avatarDescription = " Unlock this Avatar by reaching XP Level 20";
                 break;
             case "avatar8":
-                avatarDescription = "Avatar8: A skilled archer with deadly precision.";
+                avatarDescription = "Unlock this Avatar by Unlocking Billionare Club.";
                 break;
             case "avatar9":
-                avatarDescription = "Avatar9: A stealthy ninja with incredible speed.";
+                avatarDescription = "Unlock this Avatar by Destroying 500 police cars.";
                 break;
             case "avatar10":
-                avatarDescription = "Avatar10: A fearless adventurer seeking glory.";
+                avatarDescription = "Unlock this Avatar by Unlocking secondary gun.";
                 break;
             case "avatar11":
-                avatarDescription = "Avatar11: A powerful sorcerer mastering the elements.";
+                avatarDescription = "Unlock this Avatar by reaching XP Level 100";
                 break;
             case "avatar12":
-                avatarDescription = "Avatar12: A legendary hero of ancient myths.";
+                avatarDescription = "Unlock this Avatar by collecting 100M worth of money.";
                 break;
             default:
                 avatarDescription = "A unique avatar with its own story.";

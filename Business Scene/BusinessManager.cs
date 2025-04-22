@@ -162,8 +162,8 @@ public class BusinessManager : MonoBehaviour
             int playerMoney = PlayerPrefs.GetInt("total_money", 0);
             playerMoney += earningsToCollect;
             PlayerPrefs.SetInt("total_money", playerMoney);
-            earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
             currentEarnings = 0;
+            earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
             PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
             PlayerPrefs.SetString($"{businessName}_lastCollectedTime", DateTime.Now.ToString());
             SoundManager.instance.PlayMoneyIncreaseSound();

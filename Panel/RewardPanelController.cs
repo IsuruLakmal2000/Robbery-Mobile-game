@@ -30,6 +30,7 @@ public class RewardPanelController : MonoBehaviour
     }
     public void SetAvatarFrameUnlockingDetails(string imgName)
     {
+        Debug.Log("anlocking inside rewardpanel control" + imgName);
         if (imgName.StartsWith("a"))
         {
             rewardImg.sprite = Resources.Load<Sprite>("Sprites/avatars/" + imgName);

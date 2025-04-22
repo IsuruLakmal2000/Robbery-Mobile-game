@@ -11,10 +11,10 @@ public class FramePanelController : MonoBehaviour
     [SerializeField] private GameObject popupPrefab;
     void Start()
     {
-        PlayerPrefs.SetInt("is_unlock_frame_frame1", 1); // Example of setting the unlock status for avatar1
-        PlayerPrefs.SetInt("is_unlock_frame_frame2", 1); // Example of setting the unlock status for avatar2
-        PlayerPrefs.SetInt("is_unlock_frame_frame4", 1); // Example of setting the unlock status for avatar3
-        PlayerPrefs.SetInt("is_unlock_frame_frame9", 1); // Example of setting the unlock status for avatar4
+        // PlayerPrefs.SetInt("is_unlock_frame_frame1", 1); // Example of setting the unlock status for avatar1
+        // PlayerPrefs.SetInt("is_unlock_frame_frame2", 1); // Example of setting the unlock status for avatar2
+        // PlayerPrefs.SetInt("is_unlock_frame_frame4", 1); // Example of setting the unlock status for avatar3
+        // PlayerPrefs.SetInt("is_unlock_frame_frame9", 1); // Example of setting the unlock status for avatar4
         // Add listeners to all buttons in the grid
         foreach (Transform gridCell in gridContainer)
         {
@@ -92,7 +92,7 @@ public class FramePanelController : MonoBehaviour
         switch (gridCell.gameObject.name)
         {
             case "frame1":
-                unlockMessage = "Unlock this frame by Opening coffe shop business.";
+                unlockMessage = "Unlock this frame by Opening Hotel  business.";
                 break;
             case "frame2":
                 unlockMessage = "Unlock  this frame  by collecting first 1M money.";

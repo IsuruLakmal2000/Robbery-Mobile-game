@@ -28,6 +28,7 @@ public class MainMenuPanelController : MonoBehaviour
 
     void Start()
     {
+
         canvas = FindFirstObjectByType<Canvas>();
         if (PlayerPrefs.GetInt("IsFirstTime", 1) == 1)
         {
@@ -37,7 +38,7 @@ public class MainMenuPanelController : MonoBehaviour
 
         }
 
-
+        AvatarAndFrameUnlocking();
     }
 
 
@@ -50,78 +51,172 @@ public class MainMenuPanelController : MonoBehaviour
 
     private void AvatarAndFrameUnlocking()
     {
-        int currentLevel = PlayerPrefs.GetInt("current_level", 1);
+        CheckConsecutiveLogins();
+        int currentLevel = PlayerPrefs.GetInt("XP_Level", 1);
         int totalMoney = PlayerPrefs.GetInt("total_money", 0);
         int consecutiveLogins = PlayerPrefs.GetInt("consecutive_logins", 0);
-        bool isPremium = PlayerPrefs.GetInt("is_premium", 0) == 1;
+        int totalGems = PlayerPrefs.GetInt("total_gems", 0);
+        int policeCarsDestroyed = PlayerPrefs.GetInt("total_destroyed_police_car", 0);
+        bool isCoffeShopOpen = PlayerPrefs.GetInt("coffeShop_level", 0) >= 1;
+        bool isHotelBusinessUnlocked = PlayerPrefs.GetInt("hotel_level", 0) >= 1;
+        bool isMillionaireClubUnlocked = PlayerPrefs.GetInt("is_unlock_millionare_club", 0) == 1;
+        bool isBillionaireClubUnlocked = PlayerPrefs.GetInt("is_unlock_billionare_club", 0) == 1;
+        bool isSecondaryGunUnlocked = PlayerPrefs.GetInt("is_unlock_V2", 0) == 1;
 
-        // Frame 1: Unlock by opening coffee shop business
-        if (PlayerPrefs.GetInt("is_coffee_shop_opened", 0) == 1 && PlayerPrefs.GetInt("is_unlock_frame_frame1", 0) == 0)
+        // Frame Unlocking Conditions (Existing)
+        if (PlayerPrefs.GetInt("hotel_level", 0) >= 1 && PlayerPrefs.GetInt("is_unlock_frame_frame1", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame1", 1);
             ShowRewardPanel("frame1");
         }
-
-        // Frame 2: Unlock by collecting first 1M money
         if (totalMoney >= 1000000 && PlayerPrefs.GetInt("is_unlock_frame_frame2", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame2", 1);
             ShowRewardPanel("frame2");
         }
-
-        // Frame 3: Unlock by logging in for 7 consecutive days
         if (consecutiveLogins >= 7 && PlayerPrefs.GetInt("is_unlock_frame_frame3", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame3", 1);
             ShowRewardPanel("frame3");
         }
-
-        // Frame 4: Unlock by reaching XP level 5
         if (currentLevel >= 5 && PlayerPrefs.GetInt("is_unlock_frame_frame4", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame4", 1);
             ShowRewardPanel("frame4");
         }
-
-        // Frame 5: Unlock by purchasing premium version or any in-app purchase
-        if (isPremium && PlayerPrefs.GetInt("is_unlock_frame_frame5", 0) == 0)
+        if (PlayerPrefs.GetInt("is_premium", 0) == 1 && PlayerPrefs.GetInt("is_unlock_frame_frame5", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame5", 1);
             ShowRewardPanel("frame5");
         }
-
-        // Frame 6: Unlock by reaching XP level 35
         if (currentLevel >= 35 && PlayerPrefs.GetInt("is_unlock_frame_frame6", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame6", 1);
             ShowRewardPanel("frame6");
         }
-
-        // Frame 7: Unlock by reaching XP level 20
         if (currentLevel >= 20 && PlayerPrefs.GetInt("is_unlock_frame_frame7", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame7", 1);
             ShowRewardPanel("frame7");
         }
-
-        // Frame 8: Unlock by collecting first 100k money
         if (totalMoney >= 100000 && PlayerPrefs.GetInt("is_unlock_frame_frame8", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame8", 1);
             ShowRewardPanel("frame8");
         }
-
-        // Frame 9: Unlock by reaching XP level 50
         if (currentLevel >= 50 && PlayerPrefs.GetInt("is_unlock_frame_frame9", 0) == 0)
         {
             PlayerPrefs.SetInt("is_unlock_frame_frame9", 1);
             ShowRewardPanel("frame9");
         }
+
+        // Avatar Unlocking Conditions (New)
+        if (currentLevel >= 2 && PlayerPrefs.GetInt("is_unlock_avatar_avatar1", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar1", 1);
+            ShowRewardPanel("avatar1");
+        }
+        if (totalGems >= 10 && PlayerPrefs.GetInt("is_unlock_avatar_avatar2", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar2", 1);
+            ShowRewardPanel("avatar2");
+        }
+        if (policeCarsDestroyed >= 5 && PlayerPrefs.GetInt("is_unlock_avatar_avatar3", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar3", 1);
+            ShowRewardPanel("avatar3");
+        }
+        if (isCoffeShopOpen && PlayerPrefs.GetInt("is_unlock_avatar_avatar4", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar4", 1);
+            ShowRewardPanel("avatar4");
+        }
+        if (policeCarsDestroyed >= 50 && PlayerPrefs.GetInt("is_unlock_avatar_avatar5", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar5", 1);
+            ShowRewardPanel("avatar5");
+        }
+        if (isMillionaireClubUnlocked && PlayerPrefs.GetInt("is_unlock_avatar_avatar6", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar6", 1);
+            ShowRewardPanel("avatar6");
+        }
+        if (currentLevel >= 20 && PlayerPrefs.GetInt("is_unlock_avatar_avatar7", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar7", 1);
+            ShowRewardPanel("avatar7");
+        }
+        if (isBillionaireClubUnlocked && PlayerPrefs.GetInt("is_unlock_avatar_avatar8", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar8", 1);
+            ShowRewardPanel("avatar8");
+        }
+        if (policeCarsDestroyed >= 500 && PlayerPrefs.GetInt("is_unlock_avatar_avatar9", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar9", 1);
+            ShowRewardPanel("avatar9");
+        }
+        if (isSecondaryGunUnlocked && PlayerPrefs.GetInt("is_unlock_avatar_avatar10", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar10", 1);
+            ShowRewardPanel("avatar10");
+        }
+        if (currentLevel >= 100 && PlayerPrefs.GetInt("is_unlock_avatar_avatar11", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar11", 1);
+            ShowRewardPanel("avatar11");
+        }
+        if (totalMoney >= 100000000 && PlayerPrefs.GetInt("is_unlock_avatar_avatar12", 0) == 0)
+        {
+            PlayerPrefs.SetInt("is_unlock_avatar_avatar12", 1);
+            ShowRewardPanel("avatar12");
+        }
+    }
+    void CheckConsecutiveLogins()
+    {
+        string lastLoginDate = PlayerPrefs.GetString("last_login_date", "");
+        string currentDate = System.DateTime.Now.ToString("yyyy-MM-dd");
+
+        if (lastLoginDate == currentDate)
+        {
+            // User already logged in today, do nothing
+            return;
+
+        }
+
+        if (!string.IsNullOrEmpty(lastLoginDate))
+        {
+            System.DateTime lastDate = System.DateTime.Parse(lastLoginDate);
+            System.DateTime today = System.DateTime.Now;
+
+            if ((today - lastDate).Days == 1)
+            {
+                // Increment consecutive logins
+                int consecutiveLogins = PlayerPrefs.GetInt("consecutive_logins", 0);
+                PlayerPrefs.SetInt("consecutive_logins", consecutiveLogins + 1);
+            }
+            else
+            {
+                // Reset consecutive logins
+                PlayerPrefs.SetInt("consecutive_logins", 1);
+            }
+        }
+        else
+        {
+            // First login, set consecutive logins to 1
+            PlayerPrefs.SetInt("consecutive_logins", 1);
+        }
+
+        // Update the last login date
+        PlayerPrefs.SetString("last_login_date", currentDate);
+        PlayerPrefs.Save();
     }
 
-    private void ShowRewardPanel(string frameId)
+    private void ShowRewardPanel(string rewardName)
     {
+        Debug.Log($"Unlocking {rewardName}");
         GameObject rewardPanelInstance = Instantiate(rewardPanelPrefab, canvas.transform);
-        rewardPanelInstance.GetComponent<RewardPanelController>().SetAvatarFrameUnlockingDetails(frameId);
+        rewardPanelInstance.transform.SetAsLastSibling();
+        rewardPanelInstance.GetComponent<RewardPanelController>().SetAvatarFrameUnlockingDetails(rewardName);
     }
 }
