@@ -26,7 +26,11 @@ public class AvatarPanelController : MonoBehaviour
                 button.interactable = true;
                 if (button != null)
                 {
-                    button.onClick.AddListener(() => { OnAvatarSelected(gridCell); }); // Add listener to the button
+                    button.onClick.AddListener(() =>
+                    {
+                        SoundManager.instance.PlayButtonClick();
+                        OnAvatarSelected(gridCell);
+                    }); // Add listener to the button
                 }
             }
             else
@@ -43,11 +47,20 @@ public class AvatarPanelController : MonoBehaviour
                 lockIconRect.anchoredPosition = new Vector2(-10, -10); // Adjust padding as needed
 
                 lockIconInstance.transform.SetAsLastSibling();
-                button.onClick.AddListener(() => { HowToUnlockPopup(gridCell); }); // Add listener to the button
+                button.onClick.AddListener(() =>
+                {
+                    SoundManager.instance.PlayButtonClick();
+                    SoundManager.instance.PlayButtonClick();
+                    HowToUnlockPopup(gridCell);
+                }); // Add listener to the button
             }
         }
 
-        closeBtn.onClick.AddListener(() => Destroy(gameObject)); // Close the avatar panel when the close button is clicked
+        closeBtn.onClick.AddListener(() =>
+        {
+            SoundManager.instance.PlayButtonClick();
+            Destroy(gameObject);
+        }); // Close the avatar panel when the close button is clicked
     }
     private void HowToUnlockPopup(Transform gridCell)
     {

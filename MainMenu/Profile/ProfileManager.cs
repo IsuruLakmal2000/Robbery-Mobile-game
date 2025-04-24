@@ -37,6 +37,7 @@ public class ProfileManager : MonoBehaviour
         UpdateProfileUI(currentAvatar, currentFrame);
         gameObject.GetComponent<Button>().onClick.AddListener(() =>
         {
+            SoundManager.instance.PlayButtonClick(); // Play button click sound
             GameObject profilePanelInstance = Instantiate(profilePanelPrefab, canvas.transform);
             profilePanelInstance.transform.SetAsLastSibling(); // Bring the profile panel to the front
             // profilePanelInstance.
@@ -69,10 +70,11 @@ public class ProfileManager : MonoBehaviour
         if (newFrame == "none")
         {
             frame.gameObject.SetActive(false); // Hide the frame if it's "none"
-            return;
+
         }
         else
         {
+            frame.gameObject.SetActive(true);
             frame.sprite = LoadSprite(newFrame);
         }
 
@@ -84,14 +86,15 @@ public class ProfileManager : MonoBehaviour
         if (framename == "none")
         {
             frame.gameObject.SetActive(false); // Hide the frame if it's "none"
-            return;
+
         }
         else
         {
+            frame.gameObject.SetActive(true);
             frame.sprite = Resources.Load<Sprite>("Sprites/frames/" + framename);
         }
 
-        avatar.sprite = Resources.Load<Sprite>("Sprites/avatars/" + PlayerPrefs.GetString("CurrentAvatar", "defaul_avatar"));
+        avatar.sprite = Resources.Load<Sprite>("Sprites/avatars/" + PlayerPrefs.GetString("CurrentAvatar", "defaultAvatar"));
     }
 
     private Sprite LoadSprite(string spriteName)

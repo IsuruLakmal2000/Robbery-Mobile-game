@@ -37,14 +37,15 @@ public class ProfilePanelController : MonoBehaviour
         if (framename == "none")
         {
             frame.gameObject.SetActive(false); // Hide the frame if it's "none"
-            return;
+
         }
         else
         {
+            frame.gameObject.SetActive(true);
             frame.sprite = Resources.Load<Sprite>("Sprites/frames/" + framename);
         }
 
-        avatar.sprite = Resources.Load<Sprite>("Sprites/avatars/" + PlayerPrefs.GetString("CurrentAvatar", "default_avatar"));
+        avatar.sprite = Resources.Load<Sprite>("Sprites/avatars/" + PlayerPrefs.GetString("CurrentAvatar", "defaultAvatar"));
     }
 
     private void OnNameFieldEdited(string newName)
@@ -64,6 +65,7 @@ public class ProfilePanelController : MonoBehaviour
     private void OnChangeAvatarBtnClicked()
     {
         // Logic to change avatar
+        SoundManager.instance.PlayButtonClick();
         GameObject avatarPanelInstance = Instantiate(avatarPanel, canvas.transform);
         avatarPanelInstance.transform.SetAsLastSibling(); // Bring the avatar panel to the front
 
@@ -73,6 +75,7 @@ public class ProfilePanelController : MonoBehaviour
     private void OnChangeFrameBtnClicked()
     {
         // Logic to change frame
+        SoundManager.instance.PlayButtonClick();
         GameObject framePanelInstance = Instantiate(framePanel, canvas.transform);
         framePanelInstance.transform.SetAsLastSibling(); // Bring the frame panel to the front
         Debug.Log("Change Frame button clicked.");
@@ -80,6 +83,7 @@ public class ProfilePanelController : MonoBehaviour
 
     private void OnCloseBtnClicked()
     {
+        SoundManager.instance.PlayButtonClick();
         ProfileManager.instance.ChangeProfile(nameField.text, PlayerPrefs.GetString("CurrentAvatar", "default_avatar"), PlayerPrefs.GetString("CurrentFrame", "none"));
         Destroy(gameObject); // Close the profile panel by destroying it
     }

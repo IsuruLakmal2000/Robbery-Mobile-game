@@ -74,6 +74,7 @@ public class BottomBarController : MonoBehaviour
         leaderboardPanelInstance.transform.SetAsLastSibling();
         leaderboardPanelInstance.transform.Find("Back Button").GetComponent<Button>().onClick.AddListener(() =>
         {
+            SoundManager.instance.PlayButtonClick();
             Destroy(leaderboardPanelInstance);
         });
     }
@@ -84,6 +85,7 @@ public class BottomBarController : MonoBehaviour
         shopPanelInstance.transform.SetSiblingIndex(4);
         shopPanelInstance.transform.Find("Back Button").GetComponent<Button>().onClick.AddListener(() =>
         {
+            SoundManager.instance.PlayButtonClick();
             Destroy(shopPanelInstance);
         });
     }
