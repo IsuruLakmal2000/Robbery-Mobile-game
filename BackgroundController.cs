@@ -7,6 +7,7 @@ public class BackgroundController : MonoBehaviour
     private float stopDuration = 1f; // Duration to stop smoothly
     private bool isStopping = false; // Flag to indicate if stopping
     private float targetSpeed;
+    public  Material[] materials;
     public static BackgroundController instance;
 
     void Awake()
@@ -17,7 +18,30 @@ public class BackgroundController : MonoBehaviour
     void Start()
     {
         speed = GameManager.instance.levelConfig.mapRotationSpeed;
+        int levelNumber = PlayerPrefs.GetInt("current_level", 1); // Get the level number from PlayerPrefs, default to 1
+      //  Material[] materials = GetComponent<Renderer>().materials;
 
+        // Set the material based on the level number
+        if (levelNumber < 11)
+        {
+            meshRenderer.material = materials[0]; // Access the material corresponding to the level number
+        }
+        else if (levelNumber < 21)
+        {
+            meshRenderer.material = materials[1]; // Access the material corresponding to the level number
+        }
+        else if (levelNumber < 31)
+        {
+            meshRenderer.material = materials[2]; // Access the material corresponding to the level number
+        }
+        else if (levelNumber < 41)
+        {
+            meshRenderer.material = materials[2]; // Access the material corresponding to the level number
+        }
+        else if (levelNumber < 51)
+        {
+            meshRenderer.material = materials[2]; // Access the material corresponding to the level number
+        }
     }
 
     private void Update()
