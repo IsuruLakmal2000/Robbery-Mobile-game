@@ -45,7 +45,7 @@ public class BusinessManager : MonoBehaviour
         else
         {
             upgradeButton.gameObject.transform.parent.gameObject.SetActive(false);
-            buyButton.gameObject.transform.Find("price").GetComponent<TextMeshProUGUI>().text = "50k";
+            buyButton.gameObject.transform.Find("price").GetComponent<TextMeshProUGUI>().text = FormatPrice(InitialCost).ToString();
             buyButton.onClick.AddListener(BuyBusiness);
         }
     }
@@ -211,9 +211,9 @@ public class BusinessManager : MonoBehaviour
     private void UpdateUI()
     {
         levelText.text = currentLevel.ToString();
-        profitText.text = "Profit/Day: $" + (currentLevel > 0 ? currentProfit.ToString("N0") : "0");
+        profitText.text = "Profit/Day: " + (currentLevel > 0 ? currentProfit.ToString("N0") : "0");
         upgradeCostText.text = (currentLevel < maxLevel ? FormatPrice(currentUpgradeCost).ToString() : "Max Level");
-        earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
+        earningsText.text = currentEarnings.ToString("F2") + "/" + FormatPrice(currentProfit) + "$";
         buyButton.gameObject.SetActive(currentLevel == 0);
         upgradeButton.gameObject.SetActive(currentLevel > 0 && currentLevel < maxLevel);
         collectButton.gameObject.SetActive(currentEarnings >= 1);
@@ -298,7 +298,7 @@ public class BusinessManager : MonoBehaviour
             PlayerPrefs.SetFloat($"{businessName}_earnings", currentEarnings);
 
             // Update the UI
-            earningsText.text = currentEarnings.ToString("F2") + "/" + currentProfit.ToString() + "$";
+            earningsText.text = currentEarnings.ToString("F2") + "/" + FormatPrice(currentProfit) + "$";
             collectButton.gameObject.SetActive(currentEarnings >= 1); // Show collect button if earnings are available
         }
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using System;
+using Firebase.Auth;
 
 public class FirebaseController : MonoBehaviour
 {
@@ -167,6 +168,7 @@ public class FirebaseController : MonoBehaviour
 
     public async Task<List<LeaderboardPlayerDetails>> GetTopUsersByNetworth()
     {
+        string currentUserId = PlayerPrefs.GetString("UserId");
         try
         {
             if (databaseReference == null)
@@ -175,20 +177,20 @@ public class FirebaseController : MonoBehaviour
                 return null;
             }
 
-
-            // Query to get top 50 users sorted by totalNetworth
+            // Query to get top 50 users sorted by currentNetWorth
             var snapshot = await databaseReference.Child("users")
                 .OrderByChild("currentNetWorth")
                 .LimitToLast(50) // Get the top 50 users
                 .GetValueAsync();
 
+            List<LeaderboardPlayerDetails> users = new List<LeaderboardPlayerDetails>();
+            LeaderboardPlayerDetails currentUserDetails = null;
+
             if (snapshot.Exists)
             {
-                List<LeaderboardPlayerDetails> users = new List<LeaderboardPlayerDetails>();
                 foreach (var childSnapshot in snapshot.Children)
                 {
                     string json = childSnapshot.GetRawJsonValue();
-
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
                     user.userId = childSnapshot.Key;
                     users.Add(user);
@@ -197,14 +199,40 @@ public class FirebaseController : MonoBehaviour
                 // Sort in descending order (Firebase returns ascending order by default)
                 users.Sort((a, b) => b.currentNetWorth.CompareTo(a.currentNetWorth));
 
-                return users;
+                // Assign ranks to the top 50 users
+                for (int i = 0; i < users.Count; i++)
+                {
+                    users[i].rank = i + 1; // Rank is 1-based
+                }
             }
-            else
-            {
 
-                Debug.LogWarning("No users found in the database.");
-                return null;
+            // Fetch current user details if not already in the top 50
+            if (users.Find(u => u.userId == currentUserId) == null)
+            {
+                var userSnapshot = await databaseReference.Child("users").Child(currentUserId).GetValueAsync();
+                if (userSnapshot.Exists)
+                {
+                    string json = userSnapshot.GetRawJsonValue();
+                    currentUserDetails = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
+                    currentUserDetails.userId = currentUserId;
+
+                    // Query to calculate the rank of the current user
+                    var rankSnapshot = await databaseReference.Child("users")
+                        .OrderByChild("currentNetWorth")
+                        .StartAt(currentUserDetails.currentNetWorth)
+                        .GetValueAsync();
+
+                    if (rankSnapshot.Exists)
+                    {
+                        currentUserDetails.rank = (int)rankSnapshot.ChildrenCount; // Rank is the count of users with equal or greater net worth
+                    }
+
+                    // Add the current user as the 51st element
+                    users.Add(currentUserDetails);
+                }
             }
+
+            return users;
         }
         catch (System.Exception ex)
         {
@@ -212,9 +240,9 @@ public class FirebaseController : MonoBehaviour
             return null;
         }
     }
-
     public async Task<List<LeaderboardPlayerDetails>> GetTopUsersByXPLevel()
     {
+        string currentUserId = PlayerPrefs.GetString("UserId");
         try
         {
             if (databaseReference == null)
@@ -229,33 +257,59 @@ public class FirebaseController : MonoBehaviour
                 .LimitToLast(50) // Get the top 50 users
                 .GetValueAsync();
 
+            List<LeaderboardPlayerDetails> users = new List<LeaderboardPlayerDetails>();
+            LeaderboardPlayerDetails currentUserDetails = null;
+
             if (snapshot.Exists)
             {
-                List<LeaderboardPlayerDetails> users = new List<LeaderboardPlayerDetails>();
                 foreach (var childSnapshot in snapshot.Children)
                 {
                     string json = childSnapshot.GetRawJsonValue();
                     LeaderboardPlayerDetails user = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
                     user.userId = childSnapshot.Key; // Assign the user ID from the snapshot key
-                    print("json: " + json);
-                    print("userId: " + user.userId + " username: " + user.username + " xpLevel: " + user.xpLevel.ToString() + " currentNetWorth: " + user.currentNetWorth.ToString());
                     users.Add(user);
                 }
 
                 // Sort in descending order (Firebase returns ascending order by default)
                 users.Sort((a, b) => b.xpLevel.CompareTo(a.xpLevel));
-                return users;
-            }
-            else
-            {
 
-                Debug.LogWarning("No users found in the database.");
-                return null;
+                // Assign ranks to the top 50 users
+                for (int i = 0; i < users.Count; i++)
+                {
+                    users[i].rank = i + 1; // Rank is 1-based
+                }
             }
+
+            // Fetch current user details if not already in the top 50
+            if (users.Find(u => u.userId == currentUserId) == null)
+            {
+                var userSnapshot = await databaseReference.Child("users").Child(currentUserId).GetValueAsync();
+                if (userSnapshot.Exists)
+                {
+                    string json = userSnapshot.GetRawJsonValue();
+                    currentUserDetails = JsonUtility.FromJson<LeaderboardPlayerDetails>(json);
+                    currentUserDetails.userId = currentUserId;
+
+                    // Query to calculate the rank of the current user
+                    var rankSnapshot = await databaseReference.Child("users")
+                        .OrderByChild("xpLevel")
+                        .StartAt(currentUserDetails.xpLevel)
+                        .GetValueAsync();
+
+                    if (rankSnapshot.Exists)
+                    {
+                        currentUserDetails.rank = (int)rankSnapshot.ChildrenCount; // Rank is the count of users with equal or greater XP level
+                    }
+
+                    // Add the current user as the 51st element
+                    users.Add(currentUserDetails);
+                }
+            }
+
+            return users;
         }
         catch (System.Exception ex)
         {
-
             Debug.LogError("Error retrieving top users by XP Level: " + ex.Message);
             return null;
         }

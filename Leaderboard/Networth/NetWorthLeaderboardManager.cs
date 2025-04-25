@@ -47,7 +47,7 @@ public class NetWorthLeaderoardManager : MonoBehaviour
             {
                 GameObject bar = Instantiate(leaderboardBarPrefab, transform);
                 Debug.Log("User: " + user.username + " Net Worth: " + user.currentNetWorth.ToString());
-                bar.GetComponent<LeaderboardBarNetWorth>().SetLeaderboardDetails(user, index);
+                bar.GetComponent<LeaderboardBarNetWorth>().SetLeaderboardDetails(user, user.rank);
                 index++;
             }
         }

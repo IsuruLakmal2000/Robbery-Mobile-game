@@ -45,7 +45,7 @@ public class XpLeaderboardManager : MonoBehaviour
 
                 GameObject bar = Instantiate(leaderboardBarPrefab, transform);
                 Debug.Log("User: " + user.username + " Net Worth: " + user.currentNetWorth.ToString() + " XP Level: " + user.xpLevel.ToString());
-                bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(user, index);
+                bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(user, user.rank);
                 index++;
 
             }

@@ -13,7 +13,7 @@ public class MillionareClubController : MonoBehaviour
     [SerializeField] private GameObject profitAvailableVBtn;
     [SerializeField] private GameObject profitCollectAnim;
 
-    private const int DAILY_LIMIT = 1000000; // 1M
+    private const int DAILY_LIMIT = 10000000; // 10M
     private const int EARN_PER_MINUTE = DAILY_LIMIT / (24 * 60); // Earnings per minute
     private const int EARN_PER_SECOND = EARN_PER_MINUTE / 60; // Earnings per second
     private const int EARN_PER_TEN_SECONDS = EARN_PER_SECOND * 10; // Earnings every 10 seconds
@@ -31,7 +31,7 @@ public class MillionareClubController : MonoBehaviour
     {
         int currentMoney = PlayerPrefs.GetInt("total_money", 0);
         int totalGem = PlayerPrefs.GetInt("total_gem", 0);
-        profitAmount.text = FormatPrice(1000000) + "/per day income";
+        profitAmount.text = FormatPrice(10000000) + "/per day income";
         if (PlayerPrefs.GetInt("is_unlock_millionare_club", 0) == 1)
         {
 

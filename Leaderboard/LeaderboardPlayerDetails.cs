@@ -8,9 +8,9 @@ public class LeaderboardPlayerDetails
     ;     // The name of the task
     public int currentNetWorth;
     public int xpLevel;
+    public int rank;
 
-
-    public LeaderboardPlayerDetails(string userId, string avatarId, string frameId, string username, int currentNetWorth, int xpLevel)
+    public LeaderboardPlayerDetails(string userId, string avatarId, string frameId, string username, int currentNetWorth, int xpLevel, int rank)
     {
         this.userId = userId;
         this.avatarId = avatarId;
@@ -18,6 +18,7 @@ public class LeaderboardPlayerDetails
         this.username = username;
         this.currentNetWorth = currentNetWorth;
         this.xpLevel = xpLevel;
+        this.rank = rank;
 
     }
 }
