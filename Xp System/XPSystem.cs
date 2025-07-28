@@ -52,7 +52,7 @@ public class XPSystem : MonoBehaviour
         currentXP -= xpToNextLevel; // Carry over extra XP
         currentLevel++;
         xpToNextLevel = Mathf.RoundToInt(xpToNextLevel * 1.2f); // Increase next level XP
-
+        PlayerPrefs.SetInt("XP_Level", currentLevel);
         Debug.Log($"🎉 Level Up! New Level: {currentLevel} | Next XP Target: {xpToNextLevel}");
 
         OnLevelUp?.Invoke(currentLevel); // Update UI
@@ -61,20 +61,23 @@ public class XPSystem : MonoBehaviour
 
     private async Task SaveXPData()
     {
-        PlayerPrefs.SetInt("XP_Level", currentLevel);
-        await FirebaseController.instance.UpdateXPLevel(PlayerPrefs.GetString("UserId"), currentLevel);
+        // Save XP system level (XP_Level) and related data
+        PlayerPrefs.SetInt("XP_Level", currentLevel); // Save XP system level
         PlayerPrefs.SetInt("XP_Amount", currentXP);
         PlayerPrefs.SetInt("XP_NextLevel", xpToNextLevel);
+
         PlayerPrefs.Save();
         Debug.Log("XP Data Saved!");
     }
 
     private void LoadXPData()
     {
-        currentLevel = PlayerPrefs.GetInt("XP_Level", 1);
+        // Load XP system level (XP_Level) and related data
+        currentLevel = PlayerPrefs.GetInt("XP_Level", 1); // Load XP system level
         currentXP = PlayerPrefs.GetInt("XP_Amount", 0);
         xpToNextLevel = PlayerPrefs.GetInt("XP_NextLevel", 200);
-        Debug.Log($"XP Data Loaded: Level {currentLevel}, XP {currentXP}/{xpToNextLevel}");
+
+        Debug.Log($"XP Data Loaded: XP Level {currentLevel}, XP {currentXP}/{xpToNextLevel}");
     }
     private void ShowLevelUpPanel()
     {

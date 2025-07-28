@@ -35,6 +35,7 @@ public class MainMenuPanelController : MonoBehaviour
 
             GameObject createAccInstance = Instantiate(createAccountPanel, canvas.transform);
             createAccInstance.transform.SetAsLastSibling();
+           
 
         }
 

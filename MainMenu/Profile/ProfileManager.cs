@@ -44,18 +44,18 @@ public class ProfileManager : MonoBehaviour
         });
     }
 
-    public async void ChangeProfile(string name, string newAvatar, string newFrame)
+    public void ChangeProfile(string name, string newAvatar, string newFrame)
     {
         string userId = PlayerPrefs.GetString("UserId"); // Retrieve the user ID from PlayerPrefs
 
         if (!string.IsNullOrEmpty(userId))
         {
-            // Update the profile in Firebase
-
-            await FirebaseController.instance.UpdateProfile(userId, newAvatar, newFrame);
+            // Update the profile in PlayerPrefs
+            PlayerPrefs.SetString("avatar", newAvatar);
+            PlayerPrefs.SetString("frame", newFrame);
 
             // Update the local UI
-
+            UpdateProfileUI(newAvatar, newFrame);
         }
         else
         {

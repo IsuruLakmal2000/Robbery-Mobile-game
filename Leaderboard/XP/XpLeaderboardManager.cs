@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class XpLeaderboardManager : MonoBehaviour
     [SerializeField] private Button networthLeaderbardBtn;
     [SerializeField] private GameObject xpLeaderboardPanel; // Panel to show XP leaderboard
     [SerializeField] private GameObject networthLeaderboardPanel; // Panel to show net worth leaderboard
-    [SerializeField] private TextMeshProUGUI xpLoading; // Panel to show leaderboard
+    //[SerializeField] private TextMeshProUGUI xpLoading; // Panel to show leaderboard
 
     void Start()
     {
@@ -20,40 +21,42 @@ public class XpLeaderboardManager : MonoBehaviour
         xpLeaderboardBtn.onClick.AddListener(LoadXpLeaderboard);
         networthLeaderbardBtn.onClick.AddListener(LoadNetworthLeaderboard);
     }
-    public async void LoadXpLeaderboard()
+    public void LoadXpLeaderboard()
     {
-        xpLoading.text = "Loading...";
-        // Clear existing leaderboard bars
+       // xpLoading.text = "Loading...";
         foreach (Transform child in gameObject.transform)
         {
             Destroy(child.gameObject);
         }
-
-        // Get the top 50 users by XP level
-        List<LeaderboardPlayerDetails> topUsers = await FirebaseController.instance.GetTopUsersByXPLevel();
-        foreach (var user in topUsers)
+        var users = LeaderboardPlayerDetails.GetHardcodedLeaderboard();
+        string userId = PlayerPrefs.GetString("UserId", "current");
+        string username = PlayerPrefs.GetString("UserName", "You");
+        string avatarId = PlayerPrefs.GetString("CurrentAvatar", "avatar1");
+        string frameId = PlayerPrefs.GetString("CurrentFrame", "frame1");
+        int netWorth = PlayerPrefs.GetInt("total_networth", 0);
+        int xpLevel = PlayerPrefs.GetInt("XP_Level", 1);
+        var currentUser = new LeaderboardPlayerDetails(userId, avatarId, frameId, username, netWorth, xpLevel, 0);
+        users.Add(currentUser);
+        users = users.OrderByDescending(u => u.xpLevel).ToList();
+        int currentUserRank = users.FindIndex(u => u.userId == userId) + 1;
+        currentUser.rank = currentUserRank;
+        int rank = 1;
+        foreach (var user in users.Take(20))
         {
-            Debug.Log($"Player Name- in xo: {user.username}, Net Worth: {user.currentNetWorth}");
+            GameObject bar = Instantiate(leaderboardBarPrefab, transform);
+            bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(user, rank);
+            rank++;
         }
-        xpLoading.gameObject.SetActive(false);
-        if (topUsers != null)
-        {
-            int index = 1;
-            // Populate the leaderboard UI
-            foreach (var user in topUsers)
-            {
 
-                GameObject bar = Instantiate(leaderboardBarPrefab, transform);
-                Debug.Log("User: " + user.username + " Net Worth: " + user.currentNetWorth.ToString() + " XP Level: " + user.xpLevel.ToString());
-                bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(user, user.rank);
-                index++;
-
-            }
-        }
-        else
+        // Ensure current user is displayed as the 21st element if not in the top 20
+        if (currentUserRank > 20)
         {
-            Debug.LogWarning("No users found for the XP leaderboard.");
+            GameObject bar = Instantiate(leaderboardBarPrefab, transform);
+            bar.GetComponent<LeaderboardBarXp>().SetLeaderboardDetails(currentUser, currentUserRank);
         }
+
+        Debug.Log($"Current User: {username}, Rank: {currentUserRank}");
+       // xpLoading.gameObject.SetActive(false);
     }
 
     private void LoadNetworthLeaderboard()

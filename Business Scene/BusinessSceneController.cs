@@ -13,9 +13,10 @@ public class BusinessSceneController : MonoBehaviour
 
         backBtn.onClick.AddListener(async () =>
         {
+            AdManager.instance.ShowInterstitialAd();
             loadingPanel.gameObject.SetActive(true); // Show the loading text
             int totalMoney = PlayerPrefs.GetInt("total_money", 0);
-            await FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
+            PlayerPrefs.SetInt("total_networth", totalMoney);
             SoundManager.instance.PlayButtonClick();
             await LoadMenuSceneAsync(); // Load the scene asynchronously
         });

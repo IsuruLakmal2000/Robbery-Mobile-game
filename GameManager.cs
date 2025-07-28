@@ -44,19 +44,19 @@ public class GameManager : MonoBehaviour
         totalCoinCount = PlayerPrefs.GetInt("total_coin_count", 0);
         levelNumber = PlayerPrefs.GetInt("current_level", 1);
         policeSpawnInterval = GetPoliceSpawnInterval(levelNumber);
-        if (levelNumber % 10 == 0)
-        {
-            //load boss levels from configs
-            Debug.Log("Boss Level -----level no --" + levelNumber);
-            LoadBossLevelConfig(levelNumber);
-
-        }
-        else
-        {
-            //load normal levels
-            Debug.Log("Normal Level -----level no --" + levelNumber);
-            LoadNormalLevels();
-        }
+       
+            // Username already set, continue as normal
+            if (levelNumber % 10 == 0)
+            {
+                Debug.Log("Boss Level -----level no --" + levelNumber);
+                LoadBossLevelConfig(levelNumber);
+            }
+            else
+            {
+                Debug.Log("Normal Level -----level no --" + levelNumber);
+                LoadNormalLevels();
+            }
+        
 
     }
     private IEnumerator LevelStartCountdown(GameObject levelInitializePanelInstance)
@@ -168,7 +168,8 @@ public class GameManager : MonoBehaviour
 
         robbedMoney = CalculateRobbedMoney(levelNumber);
         levelDistance = baseLevelDistance + (levelMultiplier * 3);
-        levelBonusXp = Mathf.RoundToInt(baseLevelBonusXp + (levelMultiplier * 40));
+
+        levelBonusXp = Mathf.RoundToInt(baseLevelBonusXp + (levelMultiplier * (40 * levelNumber * 0.1f)));
         otherVehicleSpawnInterval = Mathf.Max(1f, baseOtherVehicleSpawnInterval - (0.1f * levelMultiplier));
         rideExpences = Mathf.RoundToInt(baseRideExpences + (levelMultiplier * 40));
 
@@ -202,22 +203,22 @@ public class GameManager : MonoBehaviour
 
     private float GetPoliceSpawnInterval(int levelNumber)
     {
-        if (levelNumber >= 1 && levelNumber <= 5)
+        if (levelNumber >= 1 && levelNumber <= 3)
         {
-            return 100f;
+            return 6f;
         }
-        else if (levelNumber > 5 && levelNumber <= 10)
+        else if (levelNumber > 3 && levelNumber <= 10)
         {
-            return 7f;
+            return 4f;
 
         }
         else if (levelNumber > 10 && levelNumber <= 15)
         {
-            return 5f;
+            return 3f;
         }
         else if (levelNumber > 15 && levelNumber <= 20)
         {
-            return 4f;
+            return 2f;
         }
         else if (levelNumber > 20 && levelNumber <= 30)
         {
@@ -225,11 +226,11 @@ public class GameManager : MonoBehaviour
         }
         else if (levelNumber > 30 && levelNumber <= 50)
         {
-            return 2.5f;
+            return 2f;
         }
         else
         {
-            return 2f;
+            return 1.5f;
         }
     }
     int CalculateRobbedMoney(int level)
@@ -258,6 +259,8 @@ public class GameManager : MonoBehaviour
             Debug.LogError("Failed to load level configuration file!");
         }
     }
+
+    
 }
 
 

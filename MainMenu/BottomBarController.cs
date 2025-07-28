@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 public class BottomBarController : MonoBehaviour
 {
     private Button startBtn;
-    private Button leaderboardBtn;
     private Button garageBtn;
     private Button shopBtn;
     private Button businessBtn;
+    private Button leaderboardBtn;
     private Animator animator;
     [SerializeField] private Canvas canvas;
     private bool isPanelVisible = true;
@@ -17,9 +17,23 @@ public class BottomBarController : MonoBehaviour
     [SerializeField] private GameObject backBtnOnGarage;
     [SerializeField] private GameObject garagePropSidePanelPrefab;
     [SerializeField] private GameObject leftSidePanelPrefab;
-    [SerializeField] private GameObject leaderboardPanelPrefab;
     [SerializeField] private GameObject shopPanelPrefab;
     [SerializeField] private GameObject loadingPanel;
+    [SerializeField] private GameObject leaderboardPanelPrefab;
+
+    public static BottomBarController instance;
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
     void Start()
     {
         loadingPanel.SetActive(false);
@@ -28,10 +42,10 @@ public class BottomBarController : MonoBehaviour
         startBtn = transform.Find("Start Btn").GetComponent<Button>();
         businessBtn = transform.Find("Business Btn").GetComponent<Button>();
         shopBtn = transform.Find("Shop Btn").GetComponent<Button>();
-        leaderboardBtn = transform.Find("Leaderboard Btn").GetComponent<Button>();
         garageBtn = transform.Find("Garage Btn").GetComponent<Button>();
-        startBtn.onClick.AddListener(OnStartBtnClick);
+        leaderboardBtn = transform.Find("Leaderboard Btn").GetComponent<Button>();
         leaderboardBtn.onClick.AddListener(OnLeaderboardBtnClick);
+        startBtn.onClick.AddListener(OnStartBtnClick);
         shopBtn.onClick.AddListener(OnShopBtnClick);
         garageBtn.onClick.AddListener(OnGarageBtnClick);
         businessBtn.onClick.AddListener(OnBusinessBtnClick);
@@ -67,18 +81,7 @@ public class BottomBarController : MonoBehaviour
 
 
     }
-    private void OnLeaderboardBtnClick()
-    {
-        SoundManager.instance.PlayButtonClick();
-        GameObject leaderboardPanelInstance = Instantiate(leaderboardPanelPrefab, canvas.transform);
-        leaderboardPanelInstance.transform.SetAsLastSibling();
-        leaderboardPanelInstance.transform.Find("Back Button").GetComponent<Button>().onClick.AddListener(() =>
-        {
-            SoundManager.instance.PlayButtonClick();
-            Destroy(leaderboardPanelInstance);
-        });
-    }
-    private void OnShopBtnClick()
+    public void OnShopBtnClick()
     {
         SoundManager.instance.PlayButtonClick();
         GameObject shopPanelInstance = Instantiate(shopPanelPrefab, canvas.transform);
@@ -124,11 +127,7 @@ public class BottomBarController : MonoBehaviour
     {
         AdManager.instance.ShowInterstitialAd();
         int totalMoney = PlayerPrefs.GetInt("total_money", 0);
-        var updateTask = FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
-        while (!updateTask.IsCompleted)
-        {
-            yield return null;
-        }
+        PlayerPrefs.SetInt("total_networth", totalMoney);
         SoundManager.instance.PlayButtonClick();
         garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().TogglePanel();
         if (garagePropSidePanelPrefab.GetComponent<GarageSidePanelController>().healthBarInstance != null)
@@ -141,6 +140,21 @@ public class BottomBarController : MonoBehaviour
         //vehiclePanelPrefab.GetComponent<VehiclePanelController>().TogglePanel();
         TogglePanel();
         backBtnOnGarage.SetActive(false);
+        yield break;
+    }
+
+    private void OnLeaderboardBtnClick()
+    {
+        SoundManager.instance.PlayButtonClick();
+        Debug.Log("Leaderboard button clicked");
+        // Assuming you have a prefab for the leaderboard panel
+        GameObject leaderboardPanelInstance = Instantiate(leaderboardPanelPrefab, canvas.transform);
+        leaderboardPanelInstance.transform.SetAsLastSibling();
+        leaderboardPanelInstance.transform.Find("Back Button").GetComponent<Button>().onClick.AddListener(() =>
+        {
+            SoundManager.instance.PlayButtonClick();
+            Destroy(leaderboardPanelInstance);
+        });
     }
 
 }

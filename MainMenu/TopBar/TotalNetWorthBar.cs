@@ -1,15 +1,22 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class TotalNetWorthBar : MonoBehaviour
 {
 
     [SerializeField] private TextMeshProUGUI totalNetWorthTxt;
+    [SerializeField] private Button moreBtn;
 
     private void Start()
     {
         totalNetWorthTxt.text = FormatPrice(PlayerPrefs.GetInt("total_money", 0));
+        moreBtn.onClick.AddListener(() =>
+        {
+            SoundManager.instance.PlayButtonClick();
+            BottomBarController.instance.OnShopBtnClick();
+        });
     }
 
     public void UpdateTotalNetWorthBar(int totalMoney)

@@ -6,12 +6,10 @@ public class LeaderboardBarXp : MonoBehaviour
 {
     [SerializeField] private Image avatarImage;
     [SerializeField] private Image frameImage;
-
     [SerializeField] private TextMeshProUGUI playerNameText;
     [SerializeField] private TextMeshProUGUI playerNetworthText;
     [SerializeField] private TextMeshProUGUI playerRankText;
     [SerializeField] private TextMeshProUGUI playerXpLevelText;
-
 
     public void SetLeaderboardDetails(LeaderboardPlayerDetails leaderboardConfig, int rank)
     {
@@ -24,26 +22,30 @@ public class LeaderboardBarXp : MonoBehaviour
         {
             frameImage.gameObject.SetActive(false);
         }
-
-        if (leaderboardConfig.userId == PlayerPrefs.GetString("UserId"))
-        {
-            print("iside current user");
-            gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>().color = new Color(255, 205, 0, 255);
-        }
-
         playerNameText.text = leaderboardConfig.username;
-        playerNetworthText.text = "Net Worth:" + FormatPrice(leaderboardConfig.currentNetWorth).ToString();
+        playerNetworthText.text = "Net Worth: " + FormatPrice(leaderboardConfig.currentNetWorth);
         playerRankText.text = rank.ToString();
         playerXpLevelText.text = leaderboardConfig.xpLevel.ToString();
+
+        // Highlight current user
+        if (leaderboardConfig.userId == PlayerPrefs.GetString("UserId", "current"))
+        {
+            // Set background color for current user (customize as needed)
+            GetComponent<Image>().color = new Color(1f, 0.92f, 0.23f, 1f); // Gold/yellow
+        }
+        else
+        {
+            GetComponent<Image>().color = Color.white;
+        }
     }
 
     private string FormatPrice(int price)
     {
-        if (price >= 1000000) // 1M and above
+        if (price >= 1000000)
             return (price / 1000000f).ToString("0.##") + "M";
-        else if (price >= 1000) // 1K and above
+        else if (price >= 1000)
             return (price / 1000f).ToString("0.##") + "K";
         else
-            return price.ToString(); // If less than 1K, show as is
+            return price.ToString();
     }
 }

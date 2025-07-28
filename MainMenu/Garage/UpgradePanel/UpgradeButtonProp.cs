@@ -71,7 +71,7 @@ public class UpgradeButtonProp : MonoBehaviour
                 break;
             case "PrimaryFireRateUpgradeButton":
                 SoundManager.instance.PlayUpgradeSound();
-                float CurrentfireRate = PlayerPrefs.GetFloat("PrimaryGunFireRate", 0.3f);
+                float CurrentfireRate = PlayerPrefs.GetFloat("PrimaryGunFireRate",0.22f);
                 CurrentfireRate -= 0.01f;
                 PlayerPrefs.SetFloat("PrimaryGunFireRate", CurrentfireRate);
 
@@ -79,7 +79,7 @@ public class UpgradeButtonProp : MonoBehaviour
                 break;
             case "SecondaryFireRateUpgradeButton":
                 SoundManager.instance.PlayUpgradeSound();
-                float CurrentfireRate2 = PlayerPrefs.GetFloat("SecondaryGunFireRate", 0.3f);
+                float CurrentfireRate2 = PlayerPrefs.GetFloat("SecondaryGunFireRate", 0.22f);
                 CurrentfireRate2 -= 0.01f;
                 PlayerPrefs.SetFloat("SecondaryGunFireRate", CurrentfireRate2);
 

@@ -81,13 +81,6 @@ public class IAPManager : MonoBehaviour, IStoreListener
             totalCoinCount += 100000000;
             // Add 100m coins
 
-            // Update Firebase asynchronously
-            string userId = PlayerPrefs.GetString("UserId");
-            if (!string.IsNullOrEmpty(userId))
-            {
-                UpdateNetworthAsync(userId, totalCoinCount); // Call an async void helper method
-            }
-
             PlayerPrefs.SetInt("total_money", totalCoinCount);
             PlayerPrefs.Save();
             Debug.Log("total_money: " + totalCoinCount);
@@ -104,7 +97,7 @@ public class IAPManager : MonoBehaviour, IStoreListener
         else if (args.purchasedProduct.definition.id == REMOVE_ADS)
         {
             Debug.Log("Ads removed!");
-            PlayerPrefs.SetInt("ads_removed", 1);
+            PlayerPrefs.SetInt("is_premium", 1);
 
             int totalGemCount = PlayerPrefs.GetInt("total_gem", 0);
             totalGemCount += 400;
@@ -118,20 +111,6 @@ public class IAPManager : MonoBehaviour, IStoreListener
         }
 
         return PurchaseProcessingResult.Complete;
-    }
-
-    // Helper method to handle Firebase updates asynchronously
-    private async void UpdateNetworthAsync(string userId, int totalCoinCount)
-    {
-        try
-        {
-            await FirebaseController.instance.UpdateCurrentNetworth(userId, totalCoinCount);
-            Debug.Log("Firebase net worth updated successfully.");
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Error updating Firebase net worth: " + ex.Message);
-        }
     }
 
     public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)

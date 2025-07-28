@@ -84,12 +84,12 @@ public class GunController : MonoBehaviour
 
     void Update()
     {
-        // Find all police cars in the scene
+        // Cache police cars once to avoid multiple calls to GameObject.FindGameObjectsWithTag
+        GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
+
         if (gunArm != null)
         {
-            GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
-
-            // // Find the nearest police car within range
+            // Find the nearest police car within range
             nearestPolice = FindNearestPolice(policeCars);
 
             if (nearestPolice != null)
@@ -99,11 +99,10 @@ public class GunController : MonoBehaviour
             }
             isFiring = true;
         }
+
         if (gunArm2 != null)
         {
-            GameObject[] policeCars = GameObject.FindGameObjectsWithTag("PoliceCar");
-
-            // // Find the nearest police car within range
+            // Find the nearest police car within range
             nearestPolice2 = FindNearestPolice2(policeCars);
 
             if (nearestPolice2 != null)

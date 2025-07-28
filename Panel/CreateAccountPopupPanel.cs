@@ -34,20 +34,13 @@ public class CreateAccountPopupPanel : MonoBehaviour
             warningTxt.gameObject.SetActive(true);
             warningTxt.text = "saving details.Please wait...";
             Debug.Log("nameee---------" + userInput);
-            if (FirebaseController.instance != null)
-            {
-                await FirebaseController.instance.SaveNewUser(userInput);
-            }
-            else
-            {
-                Debug.LogError("FirebaseController instance is null. Ensure it is initialized properly.");
-            }
+            PlayerPrefs.SetString("UserName", userInput);
             OnLoginComplete();
 
         }
         else
         {
-            warningTxt.gameObject.SetActive(false);
+            warningTxt.gameObject.SetActive(true);
             warningTxt.text = "Please Enter valid name !";
             Debug.Log("Input is invalid!");
         }
@@ -56,6 +49,8 @@ public class CreateAccountPopupPanel : MonoBehaviour
     {
         Debug.Log("user data saved !!");
         warningTxt.text = "success !";
+
+        PlayerPrefs.SetInt("IsFirstTime", 0);
         warningTxt.color = Color.green;
         Destroy(gameObject);
         // waitingTxt.gameObject.SetActive(false);

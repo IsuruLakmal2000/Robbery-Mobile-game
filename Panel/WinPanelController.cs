@@ -17,6 +17,7 @@ public class WinPanelController : MonoBehaviour
     [SerializeField] private GameObject vfxPrefabConfetti2;
     [SerializeField] private TextMeshProUGUI earnedXpTxt;
     [SerializeField] private TextMeshProUGUI currentLevelTxt;
+    [SerializeField] private GameObject loadingPanel;
     private Coroutine xpAnimationCoroutine;
     private int displayedXP = 0;
     public static WinPanelController instance;
@@ -52,14 +53,16 @@ public class WinPanelController : MonoBehaviour
 
     private async void OnNextBtnClick()
     {
-
+        GameObject loadingPanelInstance = Instantiate(loadingPanel, transform.parent);
+        loadingPanelInstance.SetActive(true);
         await LevelUp();
         Time.timeScale = 1f;
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Menu");
-        while (!asyncLoad.isDone)
-        {
-            await Task.Yield();
-        }
+        await LoadMenuSceneAsync();
+        // AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Menu");
+        // while (!asyncLoad.isDone)
+        // {
+        //     await Task.Yield();
+        // }
 
     }
 
@@ -80,7 +83,7 @@ public class WinPanelController : MonoBehaviour
         PlayerPrefs.SetInt("total_gem", PlayerPrefs.GetInt("total_gem", 0) + totalGemsEarnedInthisLevel);
         int totalMoney = PlayerPrefs.GetInt("total_money", 0) + totalMoneyInthisLevel;
         PlayerPrefs.SetInt("total_money", totalMoney);
-        await FirebaseController.instance.UpdateCurrentNetworth(PlayerPrefs.GetString("UserId"), totalMoney);
+        PlayerPrefs.SetInt("total_networth", totalMoney);
 
         PlayerPrefs.SetInt("current_level", currentLevel + 1);
         PlayerPrefs.SetFloat("watch_ads_current_price", 1000 * (currentLevel + 1));
@@ -113,5 +116,16 @@ public class WinPanelController : MonoBehaviour
         // Ensure final XP is correctly set
         displayedXP = targetXP;
         earnedXpTxt.text = displayedXP.ToString();
+    }
+
+    private async System.Threading.Tasks.Task LoadMenuSceneAsync()
+    {
+        var asyncOperation = SceneManager.LoadSceneAsync("Menu");
+        while (!asyncOperation.isDone)
+        {
+            // Optionally, you can update a progress bar here using asyncOperation.progress
+            await System.Threading.Tasks.Task.Yield(); // Wait for the next frame
+        }
+
     }
 }

@@ -153,6 +153,18 @@ public class AchievementBar : MonoBehaviour
             case "ach_9":
                 int hotelLevel = PlayerPrefs.GetInt("hotel_level", 0);
                 return hotelLevel;
+            case "ach_10":
+                int isUnlockBurgerShop = PlayerPrefs.GetInt("BurgerShop_level", 0);
+                return isUnlockBurgerShop;
+            case "ach_11":
+                int burgerShopLevel = PlayerPrefs.GetInt("BurgerShop_level", 0);
+                return burgerShopLevel;
+            case "ach_12":
+                int isUnlockRealState = PlayerPrefs.GetInt("RealState_level", 0);
+                return isUnlockRealState;
+            case "ach_13":
+                int RealStateLevel = PlayerPrefs.GetInt("RealState_level", 0);
+                return RealStateLevel;
 
             default:
                 return 0;
@@ -175,7 +187,7 @@ public class AchievementBar : MonoBehaviour
                 XPSystem.Instance.AddXP(rewardCount);
 
                 break;
-            case "Gem":
+            case "gem":
                 int currentGem = PlayerPrefs.GetInt("total_gem", 0);
                 currentGem += rewardCount;
                 PlayerPrefs.SetInt("total_gem", currentGem);

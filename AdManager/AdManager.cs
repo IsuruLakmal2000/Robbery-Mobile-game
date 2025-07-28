@@ -4,8 +4,8 @@ using GoogleMobileAds.Api;
 
 public class AdManager : MonoBehaviour
 {
-    private string _adUnitId = "ca-app-pub-3940256099942544/4411468910";
-    private string _rewardAdUnitId = "ca-app-pub-3940256099942544/5354046379";
+    private string _adUnitId = "ca-app-pub-9764584713102923/9314619367";
+    private string _rewardAdUnitId = "ca-app-pub-9764584713102923/9554888985";
     private InterstitialAd _interstitialAd;
     private RewardedInterstitialAd _rewardedInterstitialAd;
 
@@ -101,15 +101,25 @@ public class AdManager : MonoBehaviour
 
     public void ShowInterstitialAd()
     {
-        if (_interstitialAd != null && _interstitialAd.CanShowAd())
+        bool is_premium = PlayerPrefs.GetInt("is_premium", 0) == 1;
+        if (is_premium)
         {
-            Debug.Log("Showing interstitial ad.");
-            _interstitialAd.Show();
+            Debug.Log("is premium");
+            return;
         }
         else
         {
-            Debug.LogError("Interstitial ad is not ready yet.");
-            LoadInterstitialAd();
+            if (_interstitialAd != null && _interstitialAd.CanShowAd())
+            {
+                Debug.Log("Showing interstitial ad.");
+                _interstitialAd.Show();
+            }
+            else
+            {
+                Debug.LogError("Interstitial ad is not ready yet.");
+                LoadInterstitialAd();
+            }
+
         }
     }
 
